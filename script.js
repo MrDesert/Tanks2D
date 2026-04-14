@@ -42,28 +42,31 @@ function tick(time){
     if(time - (tick.lastTime || 0) >= 100){
         for (const key in keysDown){
             if(key == "W" && keysDown[key]){
-                let degrees = (360 + curTankRotate) % 360;
-                let X;
-                let Y;
-                console.log(degrees)
-                let fixYgol = curTankRotate % 90;
-                if(fixYgol === 0){fixYgol = 90};
-                if(degrees > 0 && degrees <= 90){X = 1; Y = -1;
-                    curPositionY += (1 / 90 * (90 - fixYgol) * speed) * Y; 
-                    curPositionX += (1 / 90 * fixYgol * speed) * X;
-                }
-                else if (degrees > 90 && degrees <= 180){X = 1; Y = 1;
-                    curPositionY += (1 / 90 * fixYgol * speed) * Y; 
-                    curPositionX += (1 / 90 * (90 - fixYgol) * speed) * X;
-                }
-                else if (degrees > 180 && degrees <= 270){X = -1; Y = 1;
-                    curPositionY += (1 / 90 * (90 - fixYgol) * speed) * Y; 
-                    curPositionX += (1 / 90 * fixYgol * speed) * X;
-                }
-                else if (degrees > 270 || degrees == 0){X = -1; Y = -1;
-                    curPositionY += (1 / 90 * fixYgol * speed) * Y; 
-                    curPositionX += (1 / 90 * (90 - fixYgol) * speed) * X;
-                }
+                // let degrees = (360 + curTankRotate) % 360;
+                // let X;
+                // let Y;
+                // console.log(degrees)
+                // let fixYgol = curTankRotate % 90;
+                // if(fixYgol === 0){fixYgol = 90};
+                // if(degrees > 0 && degrees <= 90){X = 1; Y = -1;
+                //     curPositionY += (1 / 90 * (90 - fixYgol) * speed) * Y; 
+                //     curPositionX += (1 / 90 * fixYgol * speed) * X;
+                // }
+                // else if (degrees > 90 && degrees <= 180){X = 1; Y = 1;
+                //     curPositionY += (1 / 90 * fixYgol * speed) * Y; 
+                //     curPositionX += (1 / 90 * (90 - fixYgol) * speed) * X;
+                // }
+                // else if (degrees > 180 && degrees <= 270){X = -1; Y = 1;
+                //     curPositionY += (1 / 90 * (90 - fixYgol) * speed) * Y; 
+                //     curPositionX += (1 / 90 * fixYgol * speed) * X;
+                // }
+                // else if (degrees > 270 || degrees == 0){X = -1; Y = -1;
+                //     curPositionY += (1 / 90 * fixYgol * speed) * Y; 
+                //     curPositionX += (1 / 90 * (90 - fixYgol) * speed) * X;
+                // }
+                const radian = curTankRotate * Math.PI / 180;
+curPositionX += speed * Math.sin(radian);
+curPositionY += speed * Math.cos(radian);
             } 
             if(key == "S" && keysDown[key]){
                 let degrees = (360 + curTankRotate) % 360;
