@@ -7,16 +7,19 @@ footer {
 }
 #playerTank {
     position: absolute;
+    top: 49%;
+    left: 49%;
     height: 50px;
     width: 50px;
     border:  2px black solid;
 }
 #playerTankTurret {
     position: relative;
-    left: 18px;
-    top: 18px;
+    left: 24px;
+    top: 24px;
     height: 10px;
     width: 50px;
+    rotate: -90deg;
     border:  2px black solid;
     transform-origin: left center;
 }
