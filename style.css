@@ -1,0 +1,22 @@
+footer {
+    position: absolute;
+    bottom: 1rem;
+    text-align: center;
+    color: #475569;
+    font-size: 0.8rem;
+}
+#playerTank {
+    position: absolute;
+    height: 50px;
+    width: 50px;
+    border:  2px black solid;
+}
+#playerTankTurret {
+    position: relative;
+    left: 15px;
+    top: 15px;
+    height: 10px;
+    width: 50px;
+    border:  2px black solid;
+    transform-origin: left center;
+}
