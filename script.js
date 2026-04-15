@@ -1,6 +1,6 @@
 const playerTank = document.getElementById("playerTank")
 const playerTankTurret = document.getElementById("playerTankTurret")
-const speed = 6;
+const speed = 4;
 const rotateTank = 6;
 const rotateTurret = 8;
 let speedX = 0;
@@ -53,6 +53,8 @@ tick(performance.now());
 function tick(time){
     tick.count = (tick.count || 0)
     if(time - (tick.lastTime || 0) >= 20){
+        let oldX = curPositionX;
+        let oldY = curPositionY;
         for (const key in keysDown){
             if(key == "W" && keysDown[key]){
                 const radian = curTankRotate * Math.PI / 180;
@@ -71,27 +73,36 @@ function tick(time){
             if(tick.count % bulletRecharge === 0){
                 if(key == "Space" && keysDown[key]){createBullet();}
             }
-            const tankCoor = tank.getBoundingClientRect();
             
-            if(Math.abs((wall.top + wall.height) - tankCoor.top) < 10){
-                console.log((wall.top + wall.height) - tankCoor.top)
-                playerTank.style.transform = "translate("+curPositionX +"px) rotate("+curTankRotate+"deg)";
-            } else {
+            const tankCoor = tank.getBoundingClientRect();
+            if(tankCoor.right > wall.left && 
+                tankCoor.left < wall.right && 
+                tankCoor.bottom > wall.top && 
+                tankCoor.top < wall.bottom){
+                curPositionX = oldX;
+                curPositionY = oldY;
+            } 
             playerTank.style.transform = "translate("+curPositionX +"px, "+curPositionY+"px) rotate("+curTankRotate+"deg)";
             playerTankTurret.style.transform = "rotate("+curTurretRotate+"deg)";
-            }
         }
-        const delBul = [];
         bullets.forEach(bul => {
             const bullet = document.getElementById(bul[0]);
-            if(bul[3] >= 0){
+            if(bul[3] >= 0 && bullet){
                 bul[3]--;
                 const radian = (bul[4] + bul[5]) * Math.PI / 180;
                 bul[1] += speedBullets * Math.sin(radian);
                 bul[2] -= speedBullets * Math.cos(radian);
-                bullet.style.transform = "translate("+bul[1] +"px, "+bul[2]+"px)";
+                bullet.style.transform = "translate("+bul[1] +"px, "+bul[2]+"px) rotate("+(bul[4]+bul[5])%360+"deg)";
             } 
-
+            const bulCoor = bullet.getBoundingClientRect();
+            if(bulCoor.right > wall.left && 
+                bulCoor.left < wall.right && 
+                bulCoor.bottom > wall.top && 
+                bulCoor.top < wall.bottom){
+                bul[3]=0;
+                console.log()
+                 bullet?.remove();
+            } 
             bullet?.addEventListener('transitionend', function opacity(e){
                 bullet?.remove();
             })
@@ -116,7 +127,7 @@ function createBullet(turret){
             const objectX = object.left + window.scrollX;
             const objectY = object.top + window.scrollY;
             const parent = document.getElementById("body");
-            parent['append'](Object.assign(document.createElement("div"), {id: "bull" + createBullet.count, className: "bullet", style: "transform: translate(" + objectX + "px, " + objectY + "px)"}));
+            parent['append'](Object.assign(document.createElement("div"), {id: "bull" + createBullet.count, className: "bullet", style: "transform: translate(" + objectX + "px, " + objectY + "px) rotate("+(curTurretRotate+curTankRotate)%360+"deg)"}));
             bullets.push(["bull" + createBullet.count, objectX, objectY, 10, curTurretRotate, curTankRotate])
             createBullet.count++;
         }
