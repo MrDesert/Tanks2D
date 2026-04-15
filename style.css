@@ -7,19 +7,47 @@ footer {
 }
 #playerTank {
     position: absolute;
-    top: 49%;
-    left: 49%;
-    height: 50px;
+    top: 20%;
+    left: 20%;
+    height: 60px;
     width: 50px;
     border:  2px black solid;
+    background: linear-gradient(135deg, #3ecc2b, #19770d);
 }
 #playerTankTurret {
     position: relative;
-    left: 24px;
-    top: 24px;
-    height: 10px;
-    width: 50px;
-    rotate: -90deg;
+    left: 17px;
+    top: -30px;
+    height: 60px;
+    width: 10px;
     border:  2px black solid;
-    transform-origin: left center;
+    transform-origin: bottom center;
+    background: linear-gradient(135deg, #19770d, #3ecc2b);
+}
+.bullet {
+    position: absolute;
+    height: 10px;
+    width: 3px;
+    border: 2px black solid;
+    background: linear-gradient(135deg, #e6e6e6, #000000, #e6e6e6);
+    transition: transform, 0.7s;
+}
+#gunpointTank {
+    position: relative;
+    border:  2px black solid;
+    left: -3px;
+    top: -8px;
+    height: 13px;
+    width: 13px;
+    background: linear-gradient(135deg, #19770d, #3ecc2b);
+}
+#stone{
+    position: absolute;
+    height: 20px;
+    width: 300px;
+    top: 50px;
+    left: 100px;
+    border: 2px black solid;
+    background: linear-gradient(135deg, #b9b9b9, #868686, #919191);
+    transition: transform, 0.7s;
 }
