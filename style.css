@@ -30,7 +30,7 @@ footer {
     width: 3px;
     border: 2px black solid;
     background: linear-gradient(135deg, #e6e6e6, #000000, #e6e6e6);
-    transition: transform, 1s;
+    /* transition: transform, 1s; */
 }
 #gunpointTank {
     position: relative;
@@ -41,13 +41,20 @@ footer {
     width: 13px;
     background: linear-gradient(135deg, #19770d, #3ecc2b);
 }
-#stone{
+.cement{
     position: absolute;
-    height: 20px;
-    width: 300px;
-    top: 50px;
-    left: 100px;
     border: 2px black solid;
     background: linear-gradient(135deg, #b9b9b9, #868686, #919191);
-    transition: transform, 0.7s;
+}
+#wall1{
+    height: 40px;
+    width: 300px;
+    top: 200px;
+    left: 100px;
+}
+#wall2{
+    height: 40px;
+    width: 300px;
+    top: 500px;
+    left: 400px;
 }

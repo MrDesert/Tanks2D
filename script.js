@@ -1,8 +1,8 @@
 const playerTank = document.getElementById("playerTank")
 const playerTankTurret = document.getElementById("playerTankTurret")
 const speed = 4;
-const rotateTank = 6;
-const rotateTurret = 8;
+const rotateTank = 5;
+const rotateTurret = 6;
 let speedX = 0;
 let speedY = 1;
             const tank = document.getElementById("playerTank");
@@ -13,7 +13,7 @@ let curPositionX = objectX ;
 let curPositionY = objectY;
 let curTankRotate = 0;
 let curTurretRotate = 0;
-const speedBullets = 25;
+const speedBullets = 40;
 const bulletRecharge = 10;
 let bulletRechargeCur = 10;
 const bullets = [];
@@ -27,7 +27,10 @@ const keysDown = {
     Space: false
 };
 
-const wall = document.getElementById("stone").getBoundingClientRect()
+const walls = [
+    document.getElementById("wall1").getBoundingClientRect(), 
+    document.getElementById("wall2").getBoundingClientRect()
+]
 
 document.addEventListener('keydown', (e)=> {
         if(e.code === 'KeyD' || e.code === 'ArrowRight'){keysDown.D = true} 
@@ -73,18 +76,29 @@ function tick(time){
             if(tick.count % bulletRecharge === 0){
                 if(key == "Space" && keysDown[key]){createBullet();}
             }
-            
-            const tankCoor = tank.getBoundingClientRect();
-            if(tankCoor.right > wall.left && 
-                tankCoor.left < wall.right && 
-                tankCoor.bottom > wall.top && 
-                tankCoor.top < wall.bottom){
-                curPositionX = oldX;
-                curPositionY = oldY;
-            } 
+            colliziia(tank)
+
             playerTank.style.transform = "translate("+curPositionX +"px, "+curPositionY+"px) rotate("+curTankRotate+"deg)";
             playerTankTurret.style.transform = "rotate("+curTurretRotate+"deg)";
         }
+
+            function colliziia(object){
+                const Object = object.getBoundingClientRect();
+                for (const wall of walls) {
+                    if(Object.right > (wall.left+speed) && 
+                        Object.left < (wall.right-speed) && 
+                        Object.bottom > (wall.top+speed) && 
+                        Object.top < (wall.bottom-speed)){
+                            if(object == tank){
+                                curPositionX = oldX;
+                                curPositionY = oldY;  
+                            } else {
+                                return true;
+                            }
+                    } 
+                }
+            }
+
         bullets.forEach(bul => {
             const bullet = document.getElementById(bul[0]);
             if(bul[3] >= 0 && bullet){
@@ -94,15 +108,13 @@ function tick(time){
                 bul[2] -= speedBullets * Math.cos(radian);
                 bullet.style.transform = "translate("+bul[1] +"px, "+bul[2]+"px) rotate("+(bul[4]+bul[5])%360+"deg)";
             } 
-            const bulCoor = bullet.getBoundingClientRect();
-            if(bulCoor.right > wall.left && 
-                bulCoor.left < wall.right && 
-                bulCoor.bottom > wall.top && 
-                bulCoor.top < wall.bottom){
-                bul[3]=0;
-                console.log()
-                 bullet?.remove();
-            } 
+            if(colliziia(bullet)){
+                const radian = (bul[4] + bul[5]) * Math.PI / 180;
+                bul[1] += speedBullets * Math.sin(radian);
+                bul[2] -= speedBullets * Math.cos(radian);
+                bullet.style.transform = "translate("+bul[1] +"px, "+bul[2]+"px) rotate("+(bul[4]+bul[5])%360+"deg)";
+                bul[3] = 0;
+            }
             bullet?.addEventListener('transitionend', function opacity(e){
                 bullet?.remove();
             })
