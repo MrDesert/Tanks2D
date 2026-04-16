@@ -1,20 +1,18 @@
 const playerTank = document.getElementById("playerTank")
 const playerTankTurret = document.getElementById("playerTankTurret")
-const speed = 4;
-const rotateTank = 5;
-const rotateTurret = 6;
+const speed = 1.5;
+const rotateTank = 1;
+const rotateTurret = 2;
 let speedX = 0;
 let speedY = 1;
             const tank = document.getElementById("playerTank");
             const object =  tank.getBoundingClientRect();
-            const objectX = object.left;
-            const objectY = object.top;
-let curPositionX = objectX ;
-let curPositionY = objectY;
+let curPositionX = 40;
+let curPositionY = 40;
 let curTankRotate = 0;
 let curTurretRotate = 0;
-const speedBullets = 40;
-const bulletRecharge = 10;
+const speedBullets = 4;
+const bulletRecharge = 70;
 let bulletRechargeCur = 10;
 const bullets = [];
 const keysDown = {
@@ -29,10 +27,17 @@ const keysDown = {
 
 const walls = [
     document.getElementById("wall1").getBoundingClientRect(), 
-    document.getElementById("wall2").getBoundingClientRect()
+    document.getElementById("wall2").getBoundingClientRect(),
+    document.getElementById("wall3").getBoundingClientRect(),
+    document.getElementById("wall4").getBoundingClientRect(),
+    document.getElementById("wall5").getBoundingClientRect(),
+    document.getElementById("wall6").getBoundingClientRect(),
+    document.getElementById("wall7").getBoundingClientRect(),
+    document.getElementById("wall8").getBoundingClientRect()
 ]
 
 document.addEventListener('keydown', (e)=> {
+        e.preventDefault();
         if(e.code === 'KeyD' || e.code === 'ArrowRight'){keysDown.D = true} 
         else if(e.code === 'KeyA' || e.code === 'ArrowLeft'){keysDown.A = true} 
         else if(e.code === 'KeyW' || e.code === 'ArrowUp'){keysDown.W = true} 
@@ -54,8 +59,8 @@ document.addEventListener('keyup', (e)=> {
 
 tick(performance.now());
 function tick(time){
-    tick.count = (tick.count || 0)
-    if(time - (tick.lastTime || 0) >= 20){
+    tick.countTank = (tick.countTank || 0)
+    if(time - (tick.lastTime || 0) >= 12){
         let oldX = curPositionX;
         let oldY = curPositionY;
         for (const key in keysDown){
@@ -73,34 +78,27 @@ function tick(time){
             if(key == "D" && keysDown[key]){curTankRotate += rotateTank} 
             if(key == "Z" && keysDown[key]){curTurretRotate -= rotateTurret} 
             if(key == "X" && keysDown[key]){curTurretRotate += rotateTurret}
-            if(tick.count % bulletRecharge === 0){
-                if(key == "Space" && keysDown[key]){createBullet();}
+            if(colliziia(tank)){
+                curPositionX = oldX;
+                curPositionY = oldY; 
             }
-            colliziia(tank)
 
             playerTank.style.transform = "translate("+curPositionX +"px, "+curPositionY+"px) rotate("+curTankRotate+"deg)";
             playerTankTurret.style.transform = "rotate("+curTurretRotate+"deg)";
         }
-
-            function colliziia(object){
-                const Object = object.getBoundingClientRect();
-                for (const wall of walls) {
-                    if(Object.right > (wall.left+speed) && 
-                        Object.left < (wall.right-speed) && 
-                        Object.bottom > (wall.top+speed) && 
-                        Object.top < (wall.bottom-speed)){
-                            if(object == tank){
-                                curPositionX = oldX;
-                                curPositionY = oldY;  
-                            } else {
-                                return true;
-                            }
-                    } 
-                }
+        tick.countTank++;
+    }
+    if(time - (tick.lastTime || 0) >= 2){
+        tick.countBul = (tick.countBul || 0)
+        for (const key in keysDown){
+            if(tick.countBul >= bulletRecharge){
+                if(key == "Space" && keysDown[key]){createBullet(); tick.countBul = 0;}
             }
-
+        }
         bullets.forEach(bul => {
             const bullet = document.getElementById(bul[0]);
+            const oldBul1 = bul[1];
+            const oldBul2 = bul[2];
             if(bul[3] >= 0 && bullet){
                 bul[3]--;
                 const radian = (bul[4] + bul[5]) * Math.PI / 180;
@@ -110,26 +108,35 @@ function tick(time){
             } 
             if(colliziia(bullet)){
                 const radian = (bul[4] + bul[5]) * Math.PI / 180;
-                bul[1] += speedBullets * Math.sin(radian);
-                bul[2] -= speedBullets * Math.cos(radian);
+                bul[1] = oldBul1;
+                bul[2] = oldBul2;
                 bullet.style.transform = "translate("+bul[1] +"px, "+bul[2]+"px) rotate("+(bul[4]+bul[5])%360+"deg)";
                 bul[3] = 0;
             }
-            bullet?.addEventListener('transitionend', function opacity(e){
-                bullet?.remove();
-            })
         });
         for(let i = bullets.length - 1; i >= 0; i--) {
-            if(bullets[i][3] < 0) {
+            if(bullets[i][3] <= 0) {
+                // console.log(bullets[i][0])
+                document.getElementById(bullets[i][0])?.remove();
                 bullets.splice(i, 1);
             }
         }
-        console.log(bullets[0])
-
-        tick.count++;
-        tick.lastTime = time;
+        tick.countBul++
     }
+    tick.lastTime = time;
     requestAnimationFrame(tick);
+}
+
+function colliziia(object){
+    const Object = object.getBoundingClientRect();
+    for (const wall of walls) {
+        if(Object.right > (wall.left) && 
+            Object.left < (wall.right) && 
+            Object.bottom > (wall.top) && 
+            Object.top < (wall.bottom)){
+            return true;
+        } 
+    }
 }
 
 function createBullet(turret){
@@ -140,6 +147,6 @@ function createBullet(turret){
             const objectY = object.top + window.scrollY;
             const parent = document.getElementById("body");
             parent['append'](Object.assign(document.createElement("div"), {id: "bull" + createBullet.count, className: "bullet", style: "transform: translate(" + objectX + "px, " + objectY + "px) rotate("+(curTurretRotate+curTankRotate)%360+"deg)"}));
-            bullets.push(["bull" + createBullet.count, objectX, objectY, 10, curTurretRotate, curTankRotate])
+            bullets.push(["bull" + createBullet.count, objectX, objectY, 150, curTurretRotate, curTankRotate])
             createBullet.count++;
         }
