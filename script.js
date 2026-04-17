@@ -2,7 +2,7 @@ const playerTank = document.getElementById("playerTank")
 const playerTankTurret = document.getElementById("playerTankTurret")
 const speed = 1.5;
 const rotateTank = 1;
-const rotateTurret = 2;
+const rotateTurret = 1.5;
 let speedX = 0;
 let speedY = 1;
             const tank = document.getElementById("playerTank");
@@ -11,7 +11,7 @@ let curPositionX = 40;
 let curPositionY = 40;
 let curTankRotate = 0;
 let curTurretRotate = 0;
-const speedBullets = 4;
+const speedBullets = 8;
 const bulletRecharge = 70;
 let bulletRechargeCur = 10;
 const bullets = [];
@@ -84,7 +84,7 @@ function tick(time){
             }
 
             playerTank.style.transform = "translate("+curPositionX +"px, "+curPositionY+"px) rotate("+curTankRotate+"deg)";
-            playerTankTurret.style.transform = "rotate("+curTurretRotate+"deg)";
+            playerTankTurret.style.transform = "translateX(-50%) rotate("+curTurretRotate+"deg)";
         }
         tick.countTank++;
     }
@@ -143,8 +143,8 @@ function createBullet(turret){
     createBullet.count = (createBullet.count || 0)
             turret = document.getElementById("gunpointTank");
             const object =  turret.getBoundingClientRect();
-            const objectX = object.left + window.scrollX;
-            const objectY = object.top + window.scrollY;
+            const objectX = object.left- object.width;
+            const objectY = object.top- object.height;
             const parent = document.getElementById("body");
             parent['append'](Object.assign(document.createElement("div"), {id: "bull" + createBullet.count, className: "bullet", style: "transform: translate(" + objectX + "px, " + objectY + "px) rotate("+(curTurretRotate+curTankRotate)%360+"deg)"}));
             bullets.push(["bull" + createBullet.count, objectX, objectY, 150, curTurretRotate, curTankRotate])
