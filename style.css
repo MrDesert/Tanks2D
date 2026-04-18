@@ -5,7 +5,14 @@ footer {
     color: #475569;
     font-size: 0.8rem;
 }
-#playerTank {
+#playerTank{
+    position: absolute;
+    height: 80px;
+    width: 43px;
+    /* border:  1px black solid; */
+}
+#playerTankBody {
+    /* top: -100px; */
     position: absolute;
     height: 80px;
     width: 43px;
@@ -16,7 +23,7 @@ footer {
     /* object-fit: cover; */
 }
 #playerTankTurret {
-    position: relative;
+    position: absolute;
     left: 50%;
     top: -5px;
     height: 56px;
@@ -27,6 +34,43 @@ footer {
     background-size: contain;
     background-repeat: no-repeat;
     transform: translateX(-50%);
+}
+.playerTankTrack {
+    position: absolute;
+    top:4px;
+    width: 15px;
+    height: 72px;
+    /* border:  1px black solid; */
+    background-image: url('img/tank_tracks.png');
+    background-repeat: no-repeat;
+    background-size: 140px 101px;
+}
+.trackFrame1 {
+    background-position: -11px -13px;
+}
+.trackFrame2 {
+    background-position: -30px -13px;
+}
+.trackFrame3 {
+    background-position: -48px -13px;
+}
+.trackFrame4 {
+    background-position: -67px -13px;
+}
+.trackFrame5 {
+    background-position: -85px -13px;
+}
+.trackFrame6 {
+    background-position: -103px -13px;
+}
+.trackFrame7 {
+    background-position: -122px -13px;
+}
+#leftTrack {
+    left: -4px;
+}
+#rightTrack {
+    left: 33px;
 }
 .bullet {
     position: absolute;

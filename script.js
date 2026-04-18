@@ -3,6 +3,8 @@ const playerTankTurret = document.getElementById("playerTankTurret")
 const speed = 1.5;
 const rotateTank = 1;
 const rotateTurret = 1.5;
+let trackFrameLeft = 1;
+let trackFrameRight = 1;
 let speedX = 0;
 let speedY = 1;
             const tank = document.getElementById("playerTank");
@@ -60,7 +62,7 @@ document.addEventListener('keyup', (e)=> {
 tick(performance.now());
 function tick(time){
     tick.countTank = (tick.countTank || 0)
-    if(time - (tick.lastTime || 0) >= 12){
+    if(time - (tick.lastTime || 0) >= 16){
         let oldX = curPositionX;
         let oldY = curPositionY;
         for (const key in keysDown){
@@ -68,14 +70,50 @@ function tick(time){
                 const radian = curTankRotate * Math.PI / 180;
                 curPositionX += speed * Math.sin(radian);
                 curPositionY -= speed * Math.cos(radian);
+                if(trackFrameLeft >= 7){trackFrameLeft = 1;
+                }else{trackFrameLeft++;}
+                if(trackFrameRight >= 7){trackFrameRight = 1;
+                }else{trackFrameRight++;}
+                document.getElementById("leftTrack").classList.remove("trackFrame1", "trackFrame2", "trackFrame3", "trackFrame4", "trackFrame5", "trackFrame6", "trackFrame7")
+                document.getElementById("leftTrack").classList.add("trackFrame"+trackFrameLeft);
+                document.getElementById("rightTrack").classList.remove("trackFrame1", "trackFrame2", "trackFrame3", "trackFrame4", "trackFrame5", "trackFrame6", "trackFrame7")
+                document.getElementById("rightTrack").classList.add("trackFrame"+trackFrameRight);
             } 
             if(key == "S" && keysDown[key]){
                 const radian = curTankRotate * Math.PI / 180;
                 curPositionX -= speed * Math.sin(radian);
                 curPositionY += speed * Math.cos(radian);
+                if(trackFrameLeft <= 1){trackFrameLeft = 7;
+                }else{trackFrameLeft--;}
+                if(trackFrameRight <= 1){trackFrameRight = 7;
+                }else{trackFrameRight--;}
+                document.getElementById("leftTrack").classList.remove("trackFrame1", "trackFrame2", "trackFrame3", "trackFrame4", "trackFrame5", "trackFrame6", "trackFrame7")
+                document.getElementById("leftTrack").classList.add("trackFrame"+trackFrameLeft);
+                document.getElementById("rightTrack").classList.remove("trackFrame1", "trackFrame2", "trackFrame3", "trackFrame4", "trackFrame5", "trackFrame6", "trackFrame7")
+                document.getElementById("rightTrack").classList.add("trackFrame"+trackFrameRight);
             } 
-            if(key == "A" && keysDown[key]){curTankRotate -= rotateTank} 
-            if(key == "D" && keysDown[key]){curTankRotate += rotateTank} 
+            if(key == "A" && keysDown[key]){
+                curTankRotate -= rotateTank;
+                if(trackFrameLeft <= 1){trackFrameLeft = 7;
+                }else{trackFrameLeft--;}
+                if(trackFrameRight >= 7){trackFrameRight = 1;
+                }else{trackFrameRight++;}
+                document.getElementById("leftTrack").classList.remove("trackFrame1", "trackFrame2", "trackFrame3", "trackFrame4", "trackFrame5", "trackFrame6", "trackFrame7")
+                document.getElementById("leftTrack").classList.add("trackFrame"+trackFrameLeft);
+                document.getElementById("rightTrack").classList.remove("trackFrame1", "trackFrame2", "trackFrame3", "trackFrame4", "trackFrame5", "trackFrame6", "trackFrame7")
+                document.getElementById("rightTrack").classList.add("trackFrame"+trackFrameRight);
+            } 
+            if(key == "D" && keysDown[key]){
+                curTankRotate += rotateTank;
+                if(trackFrameLeft >= 7){trackFrameLeft = 1;
+                }else{trackFrameLeft++;}
+                if(trackFrameRight <= 1){trackFrameRight = 7;
+                }else{trackFrameRight--;}
+                document.getElementById("leftTrack").classList.remove("trackFrame1", "trackFrame2", "trackFrame3", "trackFrame4", "trackFrame5", "trackFrame6", "trackFrame7")
+                document.getElementById("leftTrack").classList.add("trackFrame"+trackFrameLeft);
+                document.getElementById("rightTrack").classList.remove("trackFrame1", "trackFrame2", "trackFrame3", "trackFrame4", "trackFrame5", "trackFrame6", "trackFrame7")
+                document.getElementById("rightTrack").classList.add("trackFrame"+trackFrameRight);
+            } 
             if(key == "Z" && keysDown[key]){curTurretRotate -= rotateTurret} 
             if(key == "X" && keysDown[key]){curTurretRotate += rotateTurret}
             if(colliziia(tank)){
