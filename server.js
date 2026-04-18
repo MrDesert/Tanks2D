@@ -18,6 +18,7 @@ app.get('/', (req, res) => {
     </html>
   `;
   res.send(html);
+  console.log(`Кто то подключился к серверу!`);
 }); //Когда кто то заходить на сервер выводит
 
 app.listen(port, () => {
