@@ -221,9 +221,9 @@ if (data.type === 'welcome') {
     numberDiv.innerHTML = `Номер: ${data.number}`;
   }
 } else if (data.type === 'startposition') {
-    console.log(data.X + " " + data.Y)
     curPositionX = data.X;
     curPositionY = data.Y;
+    curTankRotate = data.Rotate;
 }  else if (data.type === 'allTanks') {
   const currentTankIds = new Set();
   

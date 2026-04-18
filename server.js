@@ -19,7 +19,7 @@ app.get('/stats', (req, res) => {
 
 const server = http.createServer(app);
 const wss = new WebSocket.Server({ server });
-const spawnPoints = [[60, 40], [380, 40], [700, 40], [60, 470], [380, 470], [700, 470], [220, 250], [550, 250]];
+const spawnPoints = [[60, 40, 180], [380, 40, 180], [700, 40, 180], [60, 470, 0], [380, 470, 0], [700, 470, 0], [220, 250, 180], [550, 250, 0]];
 
 wss.on('connection', (ws, req) => {
   // При подключении выдаём новый ID и номер
@@ -28,7 +28,7 @@ wss.on('connection', (ws, req) => {
   nextUserId++;
   activeConnections++;
   const randomSpawnPoint = Math.floor(Math.random()*spawnPoints.length)
-  ws.send(JSON.stringify({type:'startposition', X:spawnPoints[randomSpawnPoint][0], Y:spawnPoints[randomSpawnPoint][1]}))
+  ws.send(JSON.stringify({type:'startposition', X:spawnPoints[randomSpawnPoint][0], Y:spawnPoints[randomSpawnPoint][1], Rotate:spawnPoints[randomSpawnPoint][2]}))
   console.log(`Новый пользователь: ID=${userId}, Номер=${userNumber}. Активных: ${activeConnections}`);
   
   // Отправляем приветствие с номером
