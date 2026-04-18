@@ -26,7 +26,7 @@ wss.on('connection', (ws, req) => {
   const userNumber = nextUserId;
   nextUserId++;
   activeConnections++;
-  
+  ws.send(JSON.stringify({type:'startposition', X:60, Y:60}))
   console.log(`Новый пользователь: ID=${userId}, Номер=${userNumber}. Активных: ${activeConnections}`);
   
   // Отправляем приветствие с номером

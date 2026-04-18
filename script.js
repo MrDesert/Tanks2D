@@ -220,8 +220,11 @@ if (data.type === 'welcome') {
   if (numberDiv) {
     numberDiv.innerHTML = `Номер: ${data.number}`;
   }
-}
-  else if (data.type === 'allTanks') {
+} else if (data.type === 'startposition') {
+    console.log(data.X + " " + data.Y)
+    curPositionX = data.X;
+    curPositionY = data.Y;
+}  else if (data.type === 'allTanks') {
   const currentTankIds = new Set();
   
   data.tanks.forEach(tankData => {
