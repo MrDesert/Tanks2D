@@ -63,6 +63,18 @@ tick(performance.now());
 function tick(time){
     tick.countTank = (tick.countTank || 0)
     if(time - (tick.lastTime || 0) >= 16){
+        // Отправляем данные о танке на сервер
+if (socket.readyState === WebSocket.OPEN) {
+  const tankData = {
+    type: 'tankState',
+    positionX: curPositionX,
+    positionY: curPositionY,
+    tankRotate: curTankRotate,
+    turretRotate: curTurretRotate,
+    timestamp: time
+  };
+  socket.send(JSON.stringify(tankData));
+}
         let oldX = curPositionX;
         let oldY = curPositionY;
         for (const key in keysDown){

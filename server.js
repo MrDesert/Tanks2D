@@ -85,6 +85,19 @@ wss.on('connection', (ws, req) => {
   
   ws.send(JSON.stringify({ type: 'welcome', number: userNumber }));
   
+  // Внутри wss.on('connection', ...), после ws.send(...)
+ws.on('message', (message) => {
+  try {
+    const data = JSON.parse(message);
+    if (data.type === 'tankState') {
+      // Пока просто выводим в лог (для отладки)
+      console.log(`Пользователь ${userId}: позиция (${data.positionX}, ${data.positionY}), поворот танка ${data.tankRotate}°`);
+    }
+  } catch (err) {
+    console.error('Ошибка парсинга сообщения:', err);
+  }
+});
+
   activeConnections++;
   console.log(`Активных соединений: ${activeConnections}`);
 
