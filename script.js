@@ -1,3 +1,5 @@
+// Подключение к серверу на Render
+const socket = new WebSocket('wss://tanks2d.onrender.com');
 const playerTank = document.getElementById("playerTank")
 const playerTankTurret = document.getElementById("playerTankTurret")
 let speed = 1.5;
@@ -201,8 +203,7 @@ function createBullet(turret){
             createBullet.count++;
         }
 
-// Подключение к серверу на Render
-const socket = new WebSocket('wss://tanks2d.onrender.com');
+
 
 socket.onopen = () => {
   console.log('Соединение с сервером установлено');
