@@ -12,6 +12,7 @@ app.use(cookieParser());
 let totalUniqueUsers = 0;
 let activeConnections = 0;
 const seenUsers = new Set();
+const tanks = new Map(); // userId -> данные танка
 
 app.get('/', (req, res) => {
   let userId = req.cookies.userId;
@@ -90,8 +91,29 @@ ws.on('message', (message) => {
   try {
     const data = JSON.parse(message);
     if (data.type === 'tankState') {
-      // Пока просто выводим в лог (для отладки)
-      console.log(`Пользователь ${userId}: позиция (${data.positionX}, ${data.positionY}), поворот танка ${data.tankRotate}°`);
+      // Сохраняем данные танка этого пользователя
+      tanks.set(userId, {
+        userId: userId,
+        userNumber: userNumber,
+        positionX: data.positionX,
+        positionY: data.positionY,
+        tankRotate: data.tankRotate,
+        turretRotate: data.turretRotate,
+        timestamp: data.timestamp
+      });
+      
+      // Рассылаем данные о ВСЕХ танках ВСЕМ подключённым клиентам
+      const allTanksData = {
+        type: 'allTanks',
+        tanks: Array.from(tanks.values())
+      };
+      
+      // Отправляем каждому подключённому клиенту
+      wss.clients.forEach(client => {
+        if (client.readyState === WebSocket.OPEN) {
+          client.send(JSON.stringify(allTanksData));
+        }
+      });
     }
   } catch (err) {
     console.error('Ошибка парсинга сообщения:', err);
@@ -101,10 +123,23 @@ ws.on('message', (message) => {
   activeConnections++;
   console.log(`Активных соединений: ${activeConnections}`);
 
-  ws.on('close', () => {
-    activeConnections--;
-    console.log(`Активных соединений: ${activeConnections}`);
+ws.on('close', () => {
+  activeConnections--;
+  // Удаляем танк отключившегося игрока
+  tanks.delete(userId);
+  console.log(`Пользователь ${userId} отключился. Активных: ${activeConnections}`);
+  
+  // Рассылаем обновлённый список (без отключившегося)
+  const allTanksData = {
+    type: 'allTanks',
+    tanks: Array.from(tanks.values())
+  };
+  wss.clients.forEach(client => {
+    if (client.readyState === WebSocket.OPEN) {
+      client.send(JSON.stringify(allTanksData));
+    }
   });
+});
 });
 
 server.listen(port, () => {
