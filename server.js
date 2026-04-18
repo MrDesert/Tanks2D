@@ -29,11 +29,17 @@ app.get('/', (req, res) => {
       </head>
       <body>
         <h1>Клиентская страница</h1>
-        <p>Здесь позже появится номер подключения</p>
+        <div id="message">Ожидание подключения...</div>
         <script>
           const socket = new WebSocket('wss://' + window.location.host);
           socket.onopen = () => {
             console.log('WebSocket соединение открыто');
+          };
+          socket.onmessage = (event) => {
+            const data = JSON.parse(event.data);
+            if (data.type === 'welcome') {
+              document.getElementById('message').innerHTML = 'Вы подключились под номером ' + data.number;
+            }
           };
         </script>
       </body>
@@ -59,13 +65,18 @@ wss.on('connection', (ws, req) => {
   const cookies = parseCookies(req.headers.cookie);
   const userId = cookies.userId;
   
+  let userNumber = null;
   if (!seenUsers.has(userId)) {
     seenUsers.add(userId);
     totalUniqueUsers++;
-    console.log(`Новый уникальный пользователь: ${userId}. Всего уникальных: ${totalUniqueUsers}`);
+    userNumber = totalUniqueUsers;
+    console.log(`Новый уникальный пользователь: ${userId}. Номер: ${userNumber}. Всего уникальных: ${totalUniqueUsers}`);
   } else {
-    console.log(`Известный пользователь: ${userId}`);
+    userNumber = [...seenUsers].indexOf(userId) + 1;
+    console.log(`Известный пользователь: ${userId}. Номер: ${userNumber}`);
   }
+  
+  ws.send(JSON.stringify({ type: 'welcome', number: userNumber }));
   
   activeConnections++;
   console.log(`Активных соединений: ${activeConnections}`);
@@ -77,5 +88,5 @@ wss.on('connection', (ws, req) => {
 });
 
 server.listen(port, () => {
-  console.log(`Сервер запущен на порту ${port}`);
+  console.log(`Сервер запущеныв на порту ${port}`);
 });
