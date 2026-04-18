@@ -44,10 +44,25 @@ app.get('/', (req, res) => {
 const server = http.createServer(app);
 const wss = new WebSocket.Server({ server });
 
+function parseCookies(cookieHeader) {
+  const cookies = {};
+  if (!cookieHeader) return cookies;
+  cookieHeader.split(';').forEach(cookie => {
+    const [name, value] = cookie.trim().split('=');
+    if (name && value) cookies[name] = value;
+  });
+  return cookies;
+}
+
 wss.on('connection', (ws, req) => {
+  const cookies = parseCookies(req.headers.cookie);
+  const userId = cookies.userId;
+  
+  console.log(`WebSocket подключение от пользователя: ${userId}`);
+  
   totalConnections++;
   activeConnections++;
-  console.log(`Подключение открыто. Всего: ${totalConnections}, Активных: ${activeConnections}`);
+  console.log(`Всего: ${totalConnections}, Активных: ${activeConnections}`);
 
   ws.on('close', () => {
     activeConnections--;
