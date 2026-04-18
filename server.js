@@ -19,7 +19,7 @@ app.get('/stats', (req, res) => {
 
 const server = http.createServer(app);
 const wss = new WebSocket.Server({ server });
-const spawnPoints = [[40, 40], [80, 40], [120, 40]];
+const spawnPoints = [[60, 40], [380, 40], [700, 40], [60, 470], [380, 470], [700, 470], [220, 250], [550, 250]];
 
 wss.on('connection', (ws, req) => {
   // При подключении выдаём новый ID и номер
