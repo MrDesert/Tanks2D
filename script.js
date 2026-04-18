@@ -1,6 +1,6 @@
 const playerTank = document.getElementById("playerTank")
 const playerTankTurret = document.getElementById("playerTankTurret")
-const speed = 1.5;
+let speed = 1.5;
 const rotateTank = 1;
 const rotateTurret = 1.5;
 let trackFrameLeft = 1;
@@ -40,8 +40,8 @@ const walls = [
 
 document.addEventListener('keydown', (e)=> {
         e.preventDefault();
-        if(e.code === 'KeyD' || e.code === 'ArrowRight'){keysDown.D = true} 
-        else if(e.code === 'KeyA' || e.code === 'ArrowLeft'){keysDown.A = true} 
+        if(e.code === 'KeyD' || e.code === 'ArrowRight'){keysDown.D = true;  speed = 1;} 
+        else if(e.code === 'KeyA' || e.code === 'ArrowLeft'){keysDown.A = true;  speed = 1;} 
         else if(e.code === 'KeyW' || e.code === 'ArrowUp'){keysDown.W = true} 
         else if(e.code === 'KeyS' || e.code === 'ArrowDown'){keysDown.S = true} 
         else if(e.code === 'Period' || e.code === 'KeyX'){keysDown.X = true}
@@ -50,8 +50,8 @@ document.addEventListener('keydown', (e)=> {
 });
 
 document.addEventListener('keyup', (e)=> {
-        if(e.code === 'KeyD' || e.code === 'ArrowRight'){keysDown.D = false} 
-        else if(e.code === 'KeyA' || e.code === 'ArrowLeft'){keysDown.A = false}
+        if(e.code === 'KeyD' || e.code === 'ArrowRight'){keysDown.D = false;  speed = 1.5;} 
+        else if(e.code === 'KeyA' || e.code === 'ArrowLeft'){keysDown.A = false;  speed = 1.5;}
         else if(e.code === 'KeyW' || e.code === 'ArrowUp'){keysDown.W = false} 
         else if(e.code === 'KeyS' || e.code === 'ArrowDown'){keysDown.S = false}
         else if(e.code === 'Period' || e.code === 'KeyX'){keysDown.X = false}

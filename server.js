@@ -16,6 +16,12 @@ app.get('/', (req, res) => {
       <body>
         <h1>Клиентская страница</h1>
         <p>Здесь позже появится номер подключения</p>
+        <script>
+          const socket = new WebSocket('wss://' + window.location.host);
+          socket.onopen = () => {
+            console.log('WebSocket соединение открыто');
+          };
+        </script>
       </body>
     </html>
   `;
