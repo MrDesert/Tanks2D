@@ -188,3 +188,26 @@ function createBullet(turret){
             bullets.push(["bull" + createBullet.count, objectX, objectY, 150, curTurretRotate, curTankRotate])
             createBullet.count++;
         }
+
+// Подключение к серверу на Render
+const socket = new WebSocket('wss://tanks2d.onrender.com');
+
+socket.onopen = () => {
+  console.log('Соединение с сервером установлено');
+};
+
+socket.onmessage = (event) => {
+  const data = JSON.parse(event.data);
+  if (data.type === 'welcome') {
+    console.log(`Сервер сказал: ${data.number}`);
+    // Пока просто выводим в консоль, потом выведем на экран
+  }
+};
+
+socket.onerror = (error) => {
+  console.error('Ошибка WebSocket:', error);
+};
+
+socket.onclose = () => {
+  console.log('Соединение с сервером закрыто');
+};
