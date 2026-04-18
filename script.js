@@ -1,5 +1,6 @@
 // Подключение к серверу на Render
 const socket = new WebSocket('wss://tanks2d.onrender.com');
+let myUserId = null;
 const otherTanks = new Map(); // id -> элемент DOM
 const playerTank = document.getElementById("playerTank")
 const playerTankTurret = document.getElementById("playerTankTurret")
@@ -212,56 +213,53 @@ socket.onopen = () => {
 
 socket.onmessage = (event) => {
   const data = JSON.parse(event.data);
-  if (data.type === 'welcome') {
-    console.log(`Сервер сказал: ${data.number}`);
-    // Показываем номер на экране
-    const numberDiv = document.getElementById('connectionNumber');
-    if (numberDiv) {
-      numberDiv.innerHTML = `Номер: ${data.number}`;
-    }
+if (data.type === 'welcome') {
+  console.log(`Сервер сказал: ${data.number}`);
+  myUserId = data.userId;
+  const numberDiv = document.getElementById('connectionNumber');
+  if (numberDiv) {
+    numberDiv.innerHTML = `Номер: ${data.number}`;
   }
+}
   else if (data.type === 'allTanks') {
-    // Обновляем или создаём танки других игроков
-    const currentTankIds = new Set();
+  const currentTankIds = new Set();
+  
+  data.tanks.forEach(tankData => {
+    currentTankIds.add(tankData.userId);
     
-    data.tanks.forEach(tankData => {
-      currentTankIds.add(tankData.userId);
-      
-      // Не создаём танк для самого себя
-      // (нужно передать свой userId с сервера, пока пропустим)
-      
-      if (!otherTanks.has(tankData.userId)) {
-        // Создаём новый элемент танка для другого игрока
-        const tankDiv = document.createElement('div');
-        tankDiv.className = 'otherTank';
-        tankDiv.id = `otherTank_${tankData.userId}`;
-        tankDiv.innerHTML = `
-          <div class="otherTankBody"></div>
-          <div class="otherTankTurret"></div>
-        `;
-        document.getElementById('body').appendChild(tankDiv);
-        otherTanks.set(tankData.userId, tankDiv);
-      }
-      
-      // Обновляем позицию и поворот
-      const tankElement = otherTanks.get(tankData.userId);
-      if (tankElement) {
-        tankElement.style.transform = `translate(${tankData.positionX}px, ${tankData.positionY}px) rotate(${tankData.tankRotate}deg)`;
-        const turret = tankElement.querySelector('.otherTankTurret');
-        if (turret) {
-          turret.style.transform = `translateX(-50%) rotate(${tankData.turretRotate}deg)`;
-        }
-      }
-    });
+    // НЕ создаём танк для самого себя
+    if (tankData.userId === myUserId) return;
     
-    // Удаляем танки игроков, которые отключились
-    for (const [id, element] of otherTanks.entries()) {
-      if (!currentTankIds.has(id)) {
-        element.remove();
-        otherTanks.delete(id);
+    if (!otherTanks.has(tankData.userId)) {
+      const tankDiv = document.createElement('div');
+      tankDiv.className = 'otherTank';
+      tankDiv.id = `otherTank_${tankData.userId}`;
+      tankDiv.innerHTML = `
+        <div class="otherTankBody"></div>
+        <div class="otherTankTurret"></div>
+      `;
+      document.getElementById('body').appendChild(tankDiv);
+      otherTanks.set(tankData.userId, tankDiv);
+    }
+    
+    const tankElement = otherTanks.get(tankData.userId);
+    if (tankElement) {
+      tankElement.style.transform = `translate(${tankData.positionX}px, ${tankData.positionY}px) rotate(${tankData.tankRotate}deg)`;
+      const turret = tankElement.querySelector('.otherTankTurret');
+      if (turret) {
+        turret.style.transform = `translateX(-50%) rotate(${tankData.turretRotate}deg)`;
       }
     }
+  });
+  
+  // Удаляем танки отключившихся
+  for (const [id, element] of otherTanks.entries()) {
+    if (!currentTankIds.has(id)) {
+      element.remove();
+      otherTanks.delete(id);
+    }
   }
+}
 };
 
 socket.onerror = (error) => {
