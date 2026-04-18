@@ -5,6 +5,9 @@ const WebSocket = require('ws');
 const app = express();
 const port = process.env.PORT || 3000;
 
+let totalConnections = 0;
+let activeConnections = 0;
+
 app.get('/', (req, res) => {
   const html = `
     <!DOCTYPE html>
@@ -32,7 +35,14 @@ const server = http.createServer(app);
 const wss = new WebSocket.Server({ server });
 
 wss.on('connection', (ws, req) => {
-  console.log('Кто-то подключился по WebSocket');
+  totalConnections++;
+  activeConnections++;
+  console.log(`Подключение открыто. Всего: ${totalConnections}, Активных: ${activeConnections}`);
+
+  ws.on('close', () => {
+    activeConnections--;
+    console.log(`Подключение закрыто. Активных: ${activeConnections}`);
+  });
 });
 
 server.listen(port, () => {
