@@ -1,0 +1,50 @@
+{
+  "wall_kontur_top": {
+    "Height": 30,
+    "Width": 800,
+    "Top": 0,
+    "left": 0
+  },
+  "wall_kontur_right": {
+    "height": 590,
+    "width": 30,
+    "top": 0,
+    "left": 800
+  },
+  "wall_kontur_bottom": {
+    "Height": 30,
+    "Width": 800,
+    "Top": 570,
+    "left": 0
+  },
+  "wall_kontur_left": {
+    "Height": 590,
+    "Width": 30,
+    "Top": 0,
+    "left": 0
+  },
+  "wall_inner_top": {
+    "Height": 30,
+    "Width": 360,
+    "Top": 140,
+    "left": 150
+  },
+  "wall_inner_right": {
+    "Height": 290,
+    "Width": 30,
+    "Top": 140,
+    "left": 650
+  },
+  "wall_inner_bottom": {
+    "Height": 30,
+    "Width": 360,
+    "Top": 420,
+    "left": 320
+  },
+  "wall_inner_left": {
+    "Height": 290,
+    "Width": 30,
+    "Top": 170,
+    "left": 150
+  }
+}

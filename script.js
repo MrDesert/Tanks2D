@@ -15,7 +15,7 @@ let speedY = 1;
             const object =  tank.getBoundingClientRect();
 let curPositionX;
 let curPositionY;
-let curTankRotate = 0;
+let curTankRotate;
 let curTurretRotate = 0;
 const speedBullets = 8;
 const bulletRecharge = 70;
@@ -238,6 +238,8 @@ if (data.type === 'welcome') {
       tankDiv.className = 'otherTank';
       tankDiv.id = `otherTank_${tankData.userId}`;
       tankDiv.innerHTML = `
+        <div id="leftTrack" class="playerTankTrack trackFrame7"></div>
+        <div id="rightTrack" class="playerTankTrack trackFrame7"></div>
         <div class="otherTankBody"></div>
         <div class="otherTankTurret"></div>
       `;
