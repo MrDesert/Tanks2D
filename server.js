@@ -9,8 +9,9 @@ const port = process.env.PORT || 3000;
 
 app.use(cookieParser());
 
-let totalConnections = 0;
+let totalUniqueUsers = 0;
 let activeConnections = 0;
+const seenUsers = new Set();
 
 app.get('/', (req, res) => {
   let userId = req.cookies.userId;
@@ -58,15 +59,20 @@ wss.on('connection', (ws, req) => {
   const cookies = parseCookies(req.headers.cookie);
   const userId = cookies.userId;
   
-  console.log(`WebSocket подключение от пользователя: ${userId}`);
+  if (!seenUsers.has(userId)) {
+    seenUsers.add(userId);
+    totalUniqueUsers++;
+    console.log(`Новый уникальный пользователь: ${userId}. Всего уникальных: ${totalUniqueUsers}`);
+  } else {
+    console.log(`Известный пользователь: ${userId}`);
+  }
   
-  totalConnections++;
   activeConnections++;
-  console.log(`Всего: ${totalConnections}, Активных: ${activeConnections}`);
+  console.log(`Активных соединений: ${activeConnections}`);
 
   ws.on('close', () => {
     activeConnections--;
-    console.log(`Подключение закрыто. Активных: ${activeConnections}`);
+    console.log(`Активных соединений: ${activeConnections}`);
   });
 });
 
