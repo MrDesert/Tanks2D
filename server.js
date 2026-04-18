@@ -2,12 +2,11 @@ const express = require('express');
 const http = require('http');
 const WebSocket = require('ws');
 
-const app = express(); //само приложение
+const app = express();
 const port = process.env.PORT || 3000;
 
 app.get('/', (req, res) => {
-  res.send('Сервер работает');
-    const html = `
+  const html = `
     <!DOCTYPE html>
     <html>
       <head>
@@ -21,8 +20,7 @@ app.get('/', (req, res) => {
     </html>
   `;
   res.send(html);
-  console.log(`Кто то подключился к серверу!`);
-}); //Когда кто то заходить на сервер выводит
+});
 
 const server = http.createServer(app);
 const wss = new WebSocket.Server({ server });
@@ -33,4 +31,4 @@ wss.on('connection', (ws, req) => {
 
 server.listen(port, () => {
   console.log(`Сервер запущен на порту ${port}`);
-}); // пишет в консоль сервере на каком порту он запущен
+});
