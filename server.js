@@ -48,6 +48,13 @@ app.get('/', (req, res) => {
   res.send(html);
 });
 
+app.get('/stats', (req, res) => {
+  res.json({
+    totalUniqueUsers: totalUniqueUsers,
+    activeConnections: activeConnections
+  });
+});
+
 const server = http.createServer(app);
 const wss = new WebSocket.Server({ server });
 
@@ -88,5 +95,5 @@ wss.on('connection', (ws, req) => {
 });
 
 server.listen(port, () => {
-  console.log(`Сервер запущеныв на порту ${port}`);
+  console.log(`Сервер запущен на порту ${port}`);
 });
