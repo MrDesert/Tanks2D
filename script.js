@@ -200,7 +200,11 @@ socket.onmessage = (event) => {
   const data = JSON.parse(event.data);
   if (data.type === 'welcome') {
     console.log(`Сервер сказал: ${data.number}`);
-    // Пока просто выводим в консоль, потом выведем на экран
+    // Показываем номер на экране
+    const numberDiv = document.getElementById('connectionNumber');
+    if (numberDiv) {
+      numberDiv.innerHTML = `Номер: ${data.number}`;
+    }
   }
 };
 
