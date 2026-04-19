@@ -88,6 +88,8 @@ wss.on('connection', (ws, req) => {
             client.send(JSON.stringify(broadcastData));
           }
         });
+      } else if (data.type === 'keysDown'){
+        
       }
     } catch (err) {
       console.error('Ошибка парсинга сообщения:', err);

@@ -22,6 +22,7 @@ const bulletRecharge = 70;
 let bulletRechargeCur = 10;
 const bullets = [];
 const keysDown = {
+    type: "keysDown",
     W: false,
     S: false,
     A: false,
@@ -69,7 +70,8 @@ if (socket.readyState === WebSocket.OPEN) {
     timestamp: time
   };
   socket.send(JSON.stringify(tankData));
-}
+}     
+  socket.send(JSON.stringify(keysDown));
         let oldX = curPositionX;
         let oldY = curPositionY;
         for (const key in keysDown){
