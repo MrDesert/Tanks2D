@@ -57,12 +57,12 @@ wss.on('connection', (ws, req) => {
 
         for(let key in mapObj.walls){
           if(data.positionY < 100){
-            console.log(mapObj.walls[key].Top)
+            // console.log(mapObj.walls[key].Top)
           }
-          if(data.positionX+43 > (key.Left) && 
-            data.positionX < (key.Left+key.Width) && 
-            data.positionY+80 > (key.Top) && 
-            data.positionY < (key.Top+key.Height)){
+          if(data.positionX+43 > (mapObj.walls[key].Left) && 
+            data.positionX < (mapObj.walls[key].Left+mapObj.walls[key].Width) && 
+            data.positionY+80 > (mapObj.walls[key].Top) && 
+            data.positionY < (mapObj.walls[key].Top+mapObj.walls[key].Height)){
               console.log("столкновение!")
           } 
         }
