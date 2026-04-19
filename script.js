@@ -175,11 +175,14 @@ if (socket.readyState === WebSocket.OPEN) {
 function colliziia(object){
     const Object = object.getBoundingClientRect();
     for (const wall of walls) {
+          if(Object.top < 100){
+            console.log(Object.top)
+          }
         if(Object.right > (wall.left) && 
             Object.left < (wall.right) && 
             Object.bottom > (wall.top) && 
             Object.top < (wall.bottom)){
-            console.log(Object.top)
+            // console.log(Object.top)
             return true;
         } 
     }
