@@ -179,6 +179,7 @@ function colliziia(object){
             Object.left < (wall.right) && 
             Object.bottom > (wall.top) && 
             Object.top < (wall.bottom)){
+            console.log(Object.top)
             return true;
         } 
     }
