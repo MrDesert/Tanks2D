@@ -31,16 +31,7 @@ const keysDown = {
     Space: false
 };
 
-const walls = [
-    document.getElementById("wall1").getBoundingClientRect(), 
-    document.getElementById("wall2").getBoundingClientRect(),
-    document.getElementById("wall3").getBoundingClientRect(),
-    document.getElementById("wall4").getBoundingClientRect(),
-    document.getElementById("wall5").getBoundingClientRect(),
-    document.getElementById("wall6").getBoundingClientRect(),
-    document.getElementById("wall7").getBoundingClientRect(),
-    document.getElementById("wall8").getBoundingClientRect()
-]
+const walls = [];
 
 document.addEventListener('keydown', (e)=> {
         e.preventDefault();
@@ -225,7 +216,13 @@ if (data.type === 'welcome') {
     curPositionY = data.Y;
     curTankRotate = data.Rotate;
 } else if (data.type === 'map') {
-    console.log(data.map);
+    for(let key in data.map.walls){
+        const parent = document.getElementById("body");
+        parent['append'](Object.assign(document.createElement("div"), {id: "wall"+key, className: "cement", style: "height: " + data.map.walls[key].Height + "px; width: " + data.map.walls[key].Width + "px; top:" + data.map.walls[key].Top + "px; left:" + data.map.walls[key].Left + "px;"}));
+        console.log(document.getElementById("wall"+key).getBoundingClientRect())
+        walls.push(document.getElementById("wall"+key).getBoundingClientRect());
+    }
+
 } else if (data.type === 'allTanks') {
   const currentTankIds = new Set();
   

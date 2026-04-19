@@ -54,6 +54,16 @@ wss.on('connection', (ws, req) => {
       const data = JSON.parse(message);
       if (data.type === 'tankState') {
         // Сохраняем данные танка этого пользователя
+
+        for(let key in mapObj){
+          if(data.positionX+43 > (key.Left) && 
+            data.positionX < (key.Left+key.Width) && 
+            data.positionY+80 > (key.Top) && 
+            data.positionY < (key.Top+key.Height)){
+              console.log("столкновение!")
+          } 
+        }
+
         tanks.set(userId, {
           userId: userId,
           userNumber: userNumber,
