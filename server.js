@@ -57,7 +57,7 @@ wss.on('connection', (ws, req) => {
 
         for(let key in mapObj.walls){
           if(data.positionY < 100){
-            console.log(key)
+            console.log(key.Top)
           }
           if(data.positionX+43 > (key.Left) && 
             data.positionX < (key.Left+key.Width) && 
