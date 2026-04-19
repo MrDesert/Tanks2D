@@ -1,6 +1,7 @@
 const express = require('express');
 const http = require('http');
 const WebSocket = require('ws');
+const fs = require('fs'); //Библиотека для парса JSON
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -19,6 +20,8 @@ app.get('/stats', (req, res) => {
 
 const server = http.createServer(app);
 const wss = new WebSocket.Server({ server });
+const map = fs.readFileSync('map1.json', 'utf8');
+const mapObj = JSON.parse(map);
 const spawnPoints = [[60, 40, 180], [380, 40, 180], [700, 40, 180], [60, 470, 0], [380, 470, 0], [700, 470, 0], [220, 250, 180], [550, 250, 0]];
 
 wss.on('connection', (ws, req) => {
@@ -28,6 +31,7 @@ wss.on('connection', (ws, req) => {
   nextUserId++;
   activeConnections++;
   const randomSpawnPoint = Math.floor(Math.random()*spawnPoints.length)
+  ws.send(JSON.stringify({type: 'map', map: mapObj}))
   ws.send(JSON.stringify({type:'startposition', X:spawnPoints[randomSpawnPoint][0], Y:spawnPoints[randomSpawnPoint][1], Rotate:spawnPoints[randomSpawnPoint][2]}))
   console.log(`Новый пользователь: ID=${userId}, Номер=${userNumber}. Активных: ${activeConnections}`);
   

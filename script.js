@@ -224,7 +224,9 @@ if (data.type === 'welcome') {
     curPositionX = data.X;
     curPositionY = data.Y;
     curTankRotate = data.Rotate;
-}  else if (data.type === 'allTanks') {
+} else if (data.type === 'map') {
+    console.log(data.map);
+} else if (data.type === 'allTanks') {
   const currentTankIds = new Set();
   
   data.tanks.forEach(tankData => {
