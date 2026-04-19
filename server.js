@@ -55,9 +55,9 @@ wss.on('connection', (ws, req) => {
       if (data.type === 'tankState') {
         // Сохраняем данные танка этого пользователя
 
-        for(let key in mapObj){
+        for(let key in mapObj.walls){
           if(data.positionY < 100){
-            console.log(data.positionY)
+            console.log(key.Top+key.Height)
           }
           if(data.positionX+43 > (key.Left) && 
             data.positionX < (key.Left+key.Width) && 
