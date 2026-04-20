@@ -43,10 +43,10 @@ wss.on('connection', (ws, req) => {
   ws.userId = userId;
   ws.userNumber = userNumber;
   ws.turretRotate = 0;
-  ws.tankPositionX = spawnPoints[randomSpawnPoint][0];
-  ws.tankPositionY = spawnPoints[randomSpawnPoint][1];
-  ws.tankRotate = spawnPoints[randomSpawnPoint][2];
-  ws.send(JSON.stringify({type:'startposition', X:ws.tankPositionX, Y:ws.tankPositionY, Rotate:ws.tankTankRotate}))
+  // ws.tankPositionX = spawnPoints[randomSpawnPoint][0];
+  // ws.tankPositionY = spawnPoints[randomSpawnPoint][1];
+  // ws.tankRotate = spawnPoints[randomSpawnPoint][2];
+  ws.send(JSON.stringify({type:'startposition', X:spawnPoints[randomSpawnPoint][0], Y:spawnPoints[randomSpawnPoint][1], Rotate:spawnPoints[randomSpawnPoint][2]}))
   
   // Отправляем новому клиенту данные обо всех существующих танках
   const allTanksData = {
