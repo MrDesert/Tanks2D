@@ -235,11 +235,12 @@ if (data.type === 'welcome') {
   }
   document.getElementById("ping").textContent = "ping: "+ping;
 }else if (data.type === 'movement'){
-    curTurretRotate = data.rotate;
+    curTurretRotate = data.turretRotate;
     curPositionX = data.positionX;
     curPositionY = data.positionY;
     curTankRotate = data.tankRotate;
-    playerTank.style.transform = "translate("+curPositionX +"px, "+curPositionY+"px) rotate("+curTankRotate+"deg)";
+    console.log(data.tankRotate + " R")
+    // playerTank.style.transform = "translate("+curPositionX +"px, "+curPositionY+"px) rotate("+curTankRotate+"deg)";
     playerTankTurret.style.transform = "translateX(-50%) rotate("+curTurretRotate+"deg)";
 }else if (data.type === 'startposition') {
     curPositionX = data.X;
