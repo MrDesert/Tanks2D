@@ -100,18 +100,18 @@ wss.on('connection', (ws, req) => {
       else if (data.type === 'keysDown'){
           const radian = ws.tankRotate * Math.PI / 180;
           if(data.W){
-            ws.positionX += tankSpeed * Math.sin(radian);
-            ws.positionY -= tankSpeed * Math.cos(radian);
+            ws.tankPositionX += tankSpeed * Math.sin(radian);
+            ws.tankPositionY -= tankSpeed * Math.cos(radian);
           };
           if(data.S){
-            ws.positionX -= tankSpeed * Math.sin(radian);
-            ws.positionY += tankSpeed * Math.cos(radian);
+            ws.tankPositionX -= tankSpeed * Math.sin(radian);
+            ws.tankPositionY += tankSpeed * Math.cos(radian);
           };
           if(data.A){ws.tankRotate -= rotateTank;};
           if(data.D){ws.tankRotate += rotateTank;};
           if(data.Z){ws.turretRotate -= rotateTurret;} 
           if(data.X){ws.turretRotate += rotateTurret;}
-          ws.send(JSON.stringify({ type: 'movement', pi: Math.floor(Math.PI), sin: Math.sin(radian), radian: radian, turretRotate: ws.turretRotate, tankRotate: ws.tankRotate, positionX: ws.positionX, positionY: ws.positionY}));
+          ws.send(JSON.stringify({ type: 'movement', pi: Math.PI, sin: Math.sin(radian), radian: radian, turretRotate: ws.turretRotate, tankRotate: ws.tankRotate, positionX: ws.tankPositionX, positionY: ws.tankPositionY}));
       }
     } catch (err) {
       console.error('Ошибка парсинга сообщения:', err);
