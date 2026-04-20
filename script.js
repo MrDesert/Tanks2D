@@ -221,8 +221,8 @@ if (data.type === 'welcome') {
   }
 } else if(data.type === 'pong'){
   const now = Date.now();
-  const ping = (now - data.clientTime)/2;
-  document.getElementById("ping").textContent = ping;
+  const ping = Math.ceil((now - data.clientTime)/2);
+  document.getElementById("ping").textContent = "ping: "+ping;
 }else if (data.type === 'turretRotate'){
     curTurretRotate = data.rotate;
     playerTankTurret.style.transform = "translateX(-50%) rotate("+curTurretRotate+"deg)";
