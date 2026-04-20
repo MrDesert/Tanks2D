@@ -239,7 +239,7 @@ if (data.type === 'welcome') {
     curPositionX = data.positionX;
     curPositionY = data.positionY;
     curTankRotate = data.tankRotate;
-    console.log(radian + " radian")
+    console.log(pi + " pi")
     // playerTank.style.transform = "translate("+curPositionX +"px, "+curPositionY+"px) rotate("+curTankRotate+"deg)";
     playerTankTurret.style.transform = "translateX(-50%) rotate("+curTurretRotate+"deg)";
 }else if (data.type === 'startposition') {
