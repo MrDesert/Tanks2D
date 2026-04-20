@@ -1,3 +1,7 @@
+#ping {
+    background: rgba(100, 100, 100, 0.5);
+    /* z-index: 10; */
+}
 footer {
     position: absolute;
     bottom: 1rem;

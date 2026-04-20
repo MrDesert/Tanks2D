@@ -69,6 +69,8 @@ if (socket.readyState === WebSocket.OPEN) {
     turretRotate: curTurretRotate,
     timestamp: time
   };
+  const pingID = Date.now();
+  socket.send(JSON.stringify({type: "ping", id: pingID, clientTime: pingID}));
   socket.send(JSON.stringify(tankData));
   socket.send(JSON.stringify(keysDown));
 }     
@@ -217,7 +219,11 @@ if (data.type === 'welcome') {
   if (numberDiv) {
     numberDiv.innerHTML = `Номер: ${data.number}`;
   }
-} else if (data.type === 'turretRotate'){
+} else if(data.type === 'pong'){
+  const now = Date.now();
+  const ping = (now - data.clientTime)/2;
+  document.getElementById("ping").textContent = ping;
+}else if (data.type === 'turretRotate'){
     curTurretRotate = data.rotate;
     playerTankTurret.style.transform = "translateX(-50%) rotate("+curTurretRotate+"deg)";
 }else if (data.type === 'startposition') {
