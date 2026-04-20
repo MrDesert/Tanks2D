@@ -24,7 +24,8 @@ const map = fs.readFileSync('map1.json', 'utf8');
 const mapObj = JSON.parse(map);
 const spawnPoints = [[60, 40, 180], [380, 40, 180], [700, 40, 180], [60, 470, 0], [380, 470, 0], [700, 470, 0], [220, 250, 180], [550, 250, 0]];
 const rotateTurret = 1.5;
-
+let tankSpeed = 1.5;
+const rotateTank = 1;
 wss.on('connection', (ws, req) => {
   // При подключении выдаём новый ID и номер
   const userId = nextUserId;
@@ -33,7 +34,6 @@ wss.on('connection', (ws, req) => {
   activeConnections++;
   const randomSpawnPoint = Math.floor(Math.random()*spawnPoints.length)
   ws.send(JSON.stringify({type: 'map', map: mapObj}))
-  ws.send(JSON.stringify({type:'startposition', X:spawnPoints[randomSpawnPoint][0], Y:spawnPoints[randomSpawnPoint][1], Rotate:spawnPoints[randomSpawnPoint][2]}))
   console.log(`Новый пользователь: ID=${userId}, Номер=${userNumber}. Активных: ${activeConnections}`);
   
   // Отправляем приветствие с номером
@@ -43,6 +43,10 @@ wss.on('connection', (ws, req) => {
   ws.userId = userId;
   ws.userNumber = userNumber;
   ws.turretRotate = 0;
+  ws.tankPositionX = spawnPoints[randomSpawnPoint][0];
+  ws.tankPositionY = spawnPoints[randomSpawnPoint][1];
+  ws.tankRotate = spawnPoints[randomSpawnPoint][2];
+  ws.send(JSON.stringify({type:'startposition', X:ws.tankPositionX, Y:ws.tankPositionY, Rotate:ws.tankTankRotate}))
   
   // Отправляем новому клиенту данные обо всех существующих танках
   const allTanksData = {
@@ -93,14 +97,21 @@ wss.on('connection', (ws, req) => {
       } else if(data.type === 'ping'){
          ws.send(JSON.stringify({ type: 'pong', clientTime: data.clientTime, serverTime: Date.now()}));
       } else if (data.type === 'keysDown'){
-          // if(key == "Z" && keysDown[key]){curTurretRotate -= rotateTurret} 
-          // if(key == "X" && keysDown[key]){curTurretRotate += rotateTurret}
-          if(data.Z){
-            ws.turretRotate -= rotateTurret;
-          }else if (data.X){
-            ws.turretRotate += rotateTurret;
-          }
-          ws.send(JSON.stringify({ type: 'turretRotate', rotate: ws.turretRotate}));
+          if(data.W){
+            const radian = ws.tankRotate * Math.PI / 180;
+            ws.positionX += tankSpeed * Math.sin(radian);
+            ws.positionY -= tankSpeed * Math.cos(radian);
+          };
+          if(data.S){
+            const radian = ws.tankRotate * Math.PI / 180;
+            ws.positionX -= tankSpeed * Math.sin(radian);
+            ws.positionY += tankSpeed * Math.cos(radian);
+          };
+          if(data.A){ws.tankRotate -= rotateTank;};
+          if(data.D){ws.tankRotate += rotateTank;};
+          if(data.Z){ws.turretRotate -= rotateTurret;} 
+          if(data.X){ws.turretRotate += rotateTurret;}
+          ws.send(JSON.stringify({ type: 'movement', turretRotate: ws.turretRotate, tankRotate: ws.tankRotate, positionX: ws.positionX, positionY: ws.positionY}));
       }
     } catch (err) {
       console.error('Ошибка парсинга сообщения:', err);

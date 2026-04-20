@@ -76,64 +76,64 @@ if (socket.readyState === WebSocket.OPEN) {
         let oldX = curPositionX;
         let oldY = curPositionY;
         for (const key in keysDown){
-            if(key == "W" && keysDown[key]){
-                const radian = curTankRotate * Math.PI / 180;
-                curPositionX += speed * Math.sin(radian);
-                curPositionY -= speed * Math.cos(radian);
-                if(trackFrameLeft >= 7){trackFrameLeft = 1;
-                }else{trackFrameLeft++;}
-                if(trackFrameRight >= 7){trackFrameRight = 1;
-                }else{trackFrameRight++;}
-                document.getElementById("leftTrack").classList.remove("trackFrame1", "trackFrame2", "trackFrame3", "trackFrame4", "trackFrame5", "trackFrame6", "trackFrame7")
-                document.getElementById("leftTrack").classList.add("trackFrame"+trackFrameLeft);
-                document.getElementById("rightTrack").classList.remove("trackFrame1", "trackFrame2", "trackFrame3", "trackFrame4", "trackFrame5", "trackFrame6", "trackFrame7")
-                document.getElementById("rightTrack").classList.add("trackFrame"+trackFrameRight);
-            } 
-            if(key == "S" && keysDown[key]){
-                const radian = curTankRotate * Math.PI / 180;
-                curPositionX -= speed * Math.sin(radian);
-                curPositionY += speed * Math.cos(radian);
-                if(trackFrameLeft <= 1){trackFrameLeft = 7;
-                }else{trackFrameLeft--;}
-                if(trackFrameRight <= 1){trackFrameRight = 7;
-                }else{trackFrameRight--;}
-                document.getElementById("leftTrack").classList.remove("trackFrame1", "trackFrame2", "trackFrame3", "trackFrame4", "trackFrame5", "trackFrame6", "trackFrame7")
-                document.getElementById("leftTrack").classList.add("trackFrame"+trackFrameLeft);
-                document.getElementById("rightTrack").classList.remove("trackFrame1", "trackFrame2", "trackFrame3", "trackFrame4", "trackFrame5", "trackFrame6", "trackFrame7")
-                document.getElementById("rightTrack").classList.add("trackFrame"+trackFrameRight);
-            } 
-            if(key == "A" && keysDown[key]){
-                curTankRotate -= rotateTank;
-                if(trackFrameLeft <= 1){trackFrameLeft = 7;
-                }else{trackFrameLeft--;}
-                if(trackFrameRight >= 7){trackFrameRight = 1;
-                }else{trackFrameRight++;}
-                document.getElementById("leftTrack").classList.remove("trackFrame1", "trackFrame2", "trackFrame3", "trackFrame4", "trackFrame5", "trackFrame6", "trackFrame7")
-                document.getElementById("leftTrack").classList.add("trackFrame"+trackFrameLeft);
-                document.getElementById("rightTrack").classList.remove("trackFrame1", "trackFrame2", "trackFrame3", "trackFrame4", "trackFrame5", "trackFrame6", "trackFrame7")
-                document.getElementById("rightTrack").classList.add("trackFrame"+trackFrameRight);
-            } 
-            if(key == "D" && keysDown[key]){
-                curTankRotate += rotateTank;
-                if(trackFrameLeft >= 7){trackFrameLeft = 1;
-                }else{trackFrameLeft++;}
-                if(trackFrameRight <= 1){trackFrameRight = 7;
-                }else{trackFrameRight--;}
-                document.getElementById("leftTrack").classList.remove("trackFrame1", "trackFrame2", "trackFrame3", "trackFrame4", "trackFrame5", "trackFrame6", "trackFrame7")
-                document.getElementById("leftTrack").classList.add("trackFrame"+trackFrameLeft);
-                document.getElementById("rightTrack").classList.remove("trackFrame1", "trackFrame2", "trackFrame3", "trackFrame4", "trackFrame5", "trackFrame6", "trackFrame7")
-                document.getElementById("rightTrack").classList.add("trackFrame"+trackFrameRight);
-            }             
-            if(key == "Z" && keysDown[key]){curTurretRotate -= rotateTurret} 
-            if(key == "X" && keysDown[key]){curTurretRotate += rotateTurret}
+            // if(key == "W" && keysDown[key]){
+            //     const radian = curTankRotate * Math.PI / 180;
+            //     curPositionX += speed * Math.sin(radian);
+            //     curPositionY -= speed * Math.cos(radian);
+            //     if(trackFrameLeft >= 7){trackFrameLeft = 1;
+            //     }else{trackFrameLeft++;}
+            //     if(trackFrameRight >= 7){trackFrameRight = 1;
+            //     }else{trackFrameRight++;}
+            //     document.getElementById("leftTrack").classList.remove("trackFrame1", "trackFrame2", "trackFrame3", "trackFrame4", "trackFrame5", "trackFrame6", "trackFrame7")
+            //     document.getElementById("leftTrack").classList.add("trackFrame"+trackFrameLeft);
+            //     document.getElementById("rightTrack").classList.remove("trackFrame1", "trackFrame2", "trackFrame3", "trackFrame4", "trackFrame5", "trackFrame6", "trackFrame7")
+            //     document.getElementById("rightTrack").classList.add("trackFrame"+trackFrameRight);
+            // } 
+            // if(key == "S" && keysDown[key]){
+            //     const radian = curTankRotate * Math.PI / 180;
+            //     curPositionX -= speed * Math.sin(radian);
+            //     curPositionY += speed * Math.cos(radian);
+            //     if(trackFrameLeft <= 1){trackFrameLeft = 7;
+            //     }else{trackFrameLeft--;}
+            //     if(trackFrameRight <= 1){trackFrameRight = 7;
+            //     }else{trackFrameRight--;}
+            //     document.getElementById("leftTrack").classList.remove("trackFrame1", "trackFrame2", "trackFrame3", "trackFrame4", "trackFrame5", "trackFrame6", "trackFrame7")
+            //     document.getElementById("leftTrack").classList.add("trackFrame"+trackFrameLeft);
+            //     document.getElementById("rightTrack").classList.remove("trackFrame1", "trackFrame2", "trackFrame3", "trackFrame4", "trackFrame5", "trackFrame6", "trackFrame7")
+            //     document.getElementById("rightTrack").classList.add("trackFrame"+trackFrameRight);
+            // } 
+            // if(key == "A" && keysDown[key]){
+            //     curTankRotate -= rotateTank;
+            //     if(trackFrameLeft <= 1){trackFrameLeft = 7;
+            //     }else{trackFrameLeft--;}
+            //     if(trackFrameRight >= 7){trackFrameRight = 1;
+            //     }else{trackFrameRight++;}
+            //     document.getElementById("leftTrack").classList.remove("trackFrame1", "trackFrame2", "trackFrame3", "trackFrame4", "trackFrame5", "trackFrame6", "trackFrame7")
+            //     document.getElementById("leftTrack").classList.add("trackFrame"+trackFrameLeft);
+            //     document.getElementById("rightTrack").classList.remove("trackFrame1", "trackFrame2", "trackFrame3", "trackFrame4", "trackFrame5", "trackFrame6", "trackFrame7")
+            //     document.getElementById("rightTrack").classList.add("trackFrame"+trackFrameRight);
+            // } 
+            // if(key == "D" && keysDown[key]){
+            //     curTankRotate += rotateTank;
+            //     if(trackFrameLeft >= 7){trackFrameLeft = 1;
+            //     }else{trackFrameLeft++;}
+            //     if(trackFrameRight <= 1){trackFrameRight = 7;
+            //     }else{trackFrameRight--;}
+            //     document.getElementById("leftTrack").classList.remove("trackFrame1", "trackFrame2", "trackFrame3", "trackFrame4", "trackFrame5", "trackFrame6", "trackFrame7")
+            //     document.getElementById("leftTrack").classList.add("trackFrame"+trackFrameLeft);
+            //     document.getElementById("rightTrack").classList.remove("trackFrame1", "trackFrame2", "trackFrame3", "trackFrame4", "trackFrame5", "trackFrame6", "trackFrame7")
+            //     document.getElementById("rightTrack").classList.add("trackFrame"+trackFrameRight);
+            // }             
+            // if(key == "Z" && keysDown[key]){curTurretRotate -= rotateTurret} 
+            // if(key == "X" && keysDown[key]){curTurretRotate += rotateTurret}
 
-            if(colliziia(tank)){
-                curPositionX = oldX;
-                curPositionY = oldY; 
-            }
+            // if(colliziia(tank)){
+            //     curPositionX = oldX;
+            //     curPositionY = oldY; 
+            // }
 
-            playerTank.style.transform = "translate("+curPositionX +"px, "+curPositionY+"px) rotate("+curTankRotate+"deg)";
-            playerTankTurret.style.transform = "translateX(-50%) rotate("+curTurretRotate+"deg)";
+            // playerTank.style.transform = "translate("+curPositionX +"px, "+curPositionY+"px) rotate("+curTankRotate+"deg)";
+            // playerTankTurret.style.transform = "translateX(-50%) rotate("+curTurretRotate+"deg)";
         }
         tick.countTank++;
     }
@@ -220,9 +220,26 @@ if (data.type === 'welcome') {
   }
 } else if(data.type === 'pong'){
   const ping = Math.ceil((Date.now() - data.clientTime)/2);
+  if(ping < 60){
+    document.getElementById("ping").style.color = "#00ff00";
+  }else if(ping < 100){
+     document.getElementById("ping").style.color = "#aaff00"
+  }else if(ping < 150){
+     document.getElementById("ping").style.color = "#ffdd00"
+  }else if(ping < 250){
+     document.getElementById("ping").style.color = "#ff8800"
+  }else if(ping < 400){
+     document.getElementById("ping").style.color = "#ff3300"
+  }else{
+     document.getElementById("ping").style.color = "#770000"
+  }
   document.getElementById("ping").textContent = "ping: "+ping;
-}else if (data.type === 'turretRotate'){
+}else if (data.type === 'movement'){
     curTurretRotate = data.rotate;
+    curPositionX = data.positionX;
+    curPositionY = data.positionY;
+    curTankRotate = data.tankRotate;
+    playerTank.style.transform = "translate("+curPositionX +"px, "+curPositionY+"px) rotate("+curTankRotate+"deg)";
     playerTankTurret.style.transform = "translateX(-50%) rotate("+curTurretRotate+"deg)";
 }else if (data.type === 'startposition') {
     curPositionX = data.X;
