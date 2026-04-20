@@ -91,7 +91,7 @@ wss.on('connection', (ws, req) => {
           }
         });
       } else if(data.type === 'ping'){
-         ws.send(JSON.stringify({ type: 'pong', id: data.id, clientTime: data.clientTime, serverTime: Date.now()}));
+         ws.send(JSON.stringify({ type: 'pong', clientTime: data.clientTime, serverTime: Date.now()}));
       } else if (data.type === 'keysDown'){
           // if(key == "Z" && keysDown[key]){curTurretRotate -= rotateTurret} 
           // if(key == "X" && keysDown[key]){curTurretRotate += rotateTurret}

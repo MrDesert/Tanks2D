@@ -69,8 +69,7 @@ if (socket.readyState === WebSocket.OPEN) {
     turretRotate: curTurretRotate,
     timestamp: time
   };
-  const pingID = Date.now();
-  socket.send(JSON.stringify({type: "ping", id: pingID, clientTime: pingID}));
+  socket.send(JSON.stringify({type: "ping", clientTime: Date.now()}));
   socket.send(JSON.stringify(tankData));
   socket.send(JSON.stringify(keysDown));
 }     
@@ -220,8 +219,7 @@ if (data.type === 'welcome') {
     numberDiv.innerHTML = `Номер: ${data.number}`;
   }
 } else if(data.type === 'pong'){
-  const now = Date.now();
-  const ping = Math.ceil((now - data.clientTime)/2);
+  const ping = Math.ceil((Date.now() - data.clientTime)/2);
   document.getElementById("ping").textContent = "ping: "+ping;
 }else if (data.type === 'turretRotate'){
     curTurretRotate = data.rotate;
