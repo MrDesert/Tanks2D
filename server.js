@@ -112,7 +112,7 @@ wss.on('connection', (ws, req) => {
             } 
           }
 
-          ws.send(JSON.stringify({ type: 'movement', pi: pi, turretRotate: ws.turretRotate, tankRotate: ws.tankRotate, positionX: ws.tankPositionX, positionY: ws.tankPositionY}));
+          ws.send(JSON.stringify({ type: 'movement', pi: oldX, turretRotate: ws.turretRotate, tankRotate: ws.tankRotate, positionX: ws.tankPositionX, positionY: ws.tankPositionY}));
       }
     } catch (err) {
       console.error('Ошибка парсинга сообщения:', err);
