@@ -111,7 +111,7 @@ wss.on('connection', (ws, req) => {
           if(data.D){ws.tankRotate += rotateTank;};
           if(data.Z){ws.turretRotate -= rotateTurret;} 
           if(data.X){ws.turretRotate += rotateTurret;}
-          ws.send(JSON.stringify({ type: 'movement', speed: tankSpeed, sin: Math.sin(radian), radian: radian, turretRotate: ws.turretRotate, tankRotate: ws.tankRotate, positionX: ws.positionX, positionY: ws.positionY}));
+          ws.send(JSON.stringify({ type: 'movement', pi: Math.PI, sin: Math.sin(radian), radian: radian, turretRotate: ws.turretRotate, tankRotate: ws.tankRotate, positionX: ws.positionX, positionY: ws.positionY}));
       }
     } catch (err) {
       console.error('Ошибка парсинга сообщения:', err);
