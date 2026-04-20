@@ -97,12 +97,12 @@ wss.on('connection', (ws, req) => {
       } else if(data.type === 'ping'){
          ws.send(JSON.stringify({ type: 'pong', clientTime: data.clientTime, serverTime: Date.now()}));
       } 
-      // else if (data.type === 'keysDown'){
-      //     if(data.W){
-      //       const radian = ws.tankRotate * Math.PI / 180;
-      //       ws.positionX += tankSpeed * Math.sin(radian);
-      //       ws.positionY -= tankSpeed * Math.cos(radian);
-      //     };
+      else if (data.type === 'keysDown'){
+          if(data.W){
+            const radian = ws.tankRotate * Math.PI / 180;
+            ws.positionX += tankSpeed * Math.sin(radian);
+            ws.positionY -= tankSpeed * Math.cos(radian);
+          };
       //     if(data.S){
       //       const radian = ws.tankRotate * Math.PI / 180;
       //       ws.positionX -= tankSpeed * Math.sin(radian);
@@ -113,7 +113,7 @@ wss.on('connection', (ws, req) => {
       //     if(data.Z){ws.turretRotate -= rotateTurret;} 
       //     if(data.X){ws.turretRotate += rotateTurret;}
       //     ws.send(JSON.stringify({ type: 'movement', turretRotate: ws.turretRotate, tankRotate: ws.tankRotate, positionX: ws.positionX, positionY: ws.positionY}));
-      // }
+      }
     } catch (err) {
       console.error('Ошибка парсинга сообщения:', err);
     }
