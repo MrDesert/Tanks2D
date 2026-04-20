@@ -61,18 +61,6 @@ wss.on('connection', (ws, req) => {
       if (data.type === 'tankState') {
         // Сохраняем данные танка этого пользователя
 
-        for(let key in mapObj.walls){
-          if(data.positionY < 100){
-            // console.log(mapObj.walls[key].Top)
-          }
-          if(data.positionX+43 > (mapObj.walls[key].Left) && 
-            data.positionX < (mapObj.walls[key].Left+mapObj.walls[key].Width) && 
-            data.positionY+80 > (mapObj.walls[key].Top) && 
-            data.positionY < (mapObj.walls[key].Top+mapObj.walls[key].Height)){
-              console.log("столкновение!")
-          } 
-        }
-
         tanks.set(userId, {
           userId: userId,
           userNumber: userNumber,
@@ -111,7 +99,18 @@ wss.on('connection', (ws, req) => {
           if(data.D){ws.tankRotate += rotateTank;};
           if(data.Z){ws.turretRotate -= rotateTurret;} 
           if(data.X){ws.turretRotate += rotateTurret;}
-          ws.send(JSON.stringify({ type: 'movement', pi: Math.PI, sin: Math.sin(radian), radian: radian, turretRotate: ws.turretRotate, tankRotate: ws.tankRotate, positionX: ws.tankPositionX, positionY: ws.tankPositionY}));
+          
+          let pi = "Нет коллизии";
+          for(let key in mapObj.walls){
+            if(ws.tankPositionX+43 > (mapObj.walls[key].Left) && 
+              ws.tankPositionX < (mapObj.walls[key].Left+mapObj.walls[key].Width) && 
+              ws.tankPositionY+80 > (mapObj.walls[key].Top) && 
+              ws.tankPositionY < (mapObj.walls[key].Top+mapObj.walls[key].Height)){
+              pi = "столкновение!"
+            } 
+          }
+
+          ws.send(JSON.stringify({ type: 'movement', pi: pi, turretRotate: ws.turretRotate, tankRotate: ws.tankRotate, positionX: ws.tankPositionX, positionY: ws.tankPositionY}));
       }
     } catch (err) {
       console.error('Ошибка парсинга сообщения:', err);
