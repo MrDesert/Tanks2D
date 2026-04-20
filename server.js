@@ -86,6 +86,8 @@ wss.on('connection', (ws, req) => {
          ws.send(JSON.stringify({ type: 'pong', clientTime: data.clientTime, serverTime: Date.now()}));
       } 
       else if (data.type === 'keysDown'){
+          const oldX = ws.tankPositionX;
+          const oldY = ws.tankPositionY;
           const radian = ws.tankRotate * Math.PI / 180;
           if(data.W){
             ws.tankPositionX += tankSpeed * Math.sin(radian);
@@ -100,13 +102,13 @@ wss.on('connection', (ws, req) => {
           if(data.Z){ws.turretRotate -= rotateTurret;} 
           if(data.X){ws.turretRotate += rotateTurret;}
           
-          let pi = "Нет коллизии";
           for(let key in mapObj.walls){
             if(ws.tankPositionX+43 > (mapObj.walls[key].Left) && 
               ws.tankPositionX < (mapObj.walls[key].Left+mapObj.walls[key].Width) && 
               ws.tankPositionY+80 > (mapObj.walls[key].Top) && 
               ws.tankPositionY < (mapObj.walls[key].Top+mapObj.walls[key].Height)){
-              pi = "столкновение!"
+              ws.tankPositionX = oldX;
+              ws.tankPositionY = oldY;
             } 
           }
 
