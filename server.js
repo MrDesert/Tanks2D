@@ -42,6 +42,7 @@ wss.on('connection', (ws, req) => {
   // Сохраняем userId на сокете
   ws.userId = userId;
   ws.userNumber = userNumber;
+  ws.turretRotate = 0;
   
   // Отправляем новому клиенту данные обо всех существующих танках
   const allTanksData = {
@@ -93,10 +94,11 @@ wss.on('connection', (ws, req) => {
           // if(key == "Z" && keysDown[key]){curTurretRotate -= rotateTurret} 
           // if(key == "X" && keysDown[key]){curTurretRotate += rotateTurret}
           if(data.Z){
-            ws.send(JSON.stringify({ type: 'turretRotate', rotate: (rotateTurret*-1)}));
+            ws.turretRotate -= rotateTurret;
           }else if (data.X){
-            ws.send(JSON.stringify({ type: 'turretRotate', rotate: rotateTurret}));
+            ws.turretRotate += rotateTurret;
           }
+          ws.send(JSON.stringify({ type: 'turretRotate', rotate: ws.turretRotate}));
       }
     } catch (err) {
       console.error('Ошибка парсинга сообщения:', err);

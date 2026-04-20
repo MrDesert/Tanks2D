@@ -217,8 +217,7 @@ if (data.type === 'welcome') {
     numberDiv.innerHTML = `Номер: ${data.number}`;
   }
 } else if (data.type === 'turretRotate'){
-    curTurretRotate -= rotateTurret;
-    playerTankTurret.style.transform = "translateX(-50%) rotate("+curTurretRotate+"deg)";
+    playerTankTurret.style.transform = "translateX(-50%) rotate("+data.rotate+"deg)";
 }else if (data.type === 'startposition') {
     curPositionX = data.X;
     curPositionY = data.Y;
