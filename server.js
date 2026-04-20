@@ -23,6 +23,7 @@ const wss = new WebSocket.Server({ server });
 const map = fs.readFileSync('map1.json', 'utf8');
 const mapObj = JSON.parse(map);
 const spawnPoints = [[60, 40, 180], [380, 40, 180], [700, 40, 180], [60, 470, 0], [380, 470, 0], [700, 470, 0], [220, 250, 180], [550, 250, 0]];
+const rotateTurret = 1.5;
 
 wss.on('connection', (ws, req) => {
   // При подключении выдаём новый ID и номер
@@ -89,7 +90,13 @@ wss.on('connection', (ws, req) => {
           }
         });
       } else if (data.type === 'keysDown'){
-        
+          // if(key == "Z" && keysDown[key]){curTurretRotate -= rotateTurret} 
+          // if(key == "X" && keysDown[key]){curTurretRotate += rotateTurret}
+          if(data.Z){
+            ws.send(JSON.stringify({ type: 'turretRotate', rotate: (rotateTurret*-1)}));
+          }else if (data.X){
+            ws.send(JSON.stringify({ type: 'turretRotate', rotate: rotateTurret}));
+          }
       }
     } catch (err) {
       console.error('Ошибка парсинга сообщения:', err);

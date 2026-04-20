@@ -70,8 +70,8 @@ if (socket.readyState === WebSocket.OPEN) {
     timestamp: time
   };
   socket.send(JSON.stringify(tankData));
+  socket.send(JSON.stringify(keysDown));
 }     
-//   socket.send(JSON.stringify(keysDown));
         let oldX = curPositionX;
         let oldY = curPositionY;
         for (const key in keysDown){
@@ -123,15 +123,15 @@ if (socket.readyState === WebSocket.OPEN) {
                 document.getElementById("rightTrack").classList.remove("trackFrame1", "trackFrame2", "trackFrame3", "trackFrame4", "trackFrame5", "trackFrame6", "trackFrame7")
                 document.getElementById("rightTrack").classList.add("trackFrame"+trackFrameRight);
             } 
-            if(key == "Z" && keysDown[key]){curTurretRotate -= rotateTurret} 
-            if(key == "X" && keysDown[key]){curTurretRotate += rotateTurret}
+            // if(key == "Z" && keysDown[key]){curTurretRotate -= rotateTurret} 
+            // if(key == "X" && keysDown[key]){curTurretRotate += rotateTurret}
             if(colliziia(tank)){
                 curPositionX = oldX;
                 curPositionY = oldY; 
             }
 
             playerTank.style.transform = "translate("+curPositionX +"px, "+curPositionY+"px) rotate("+curTankRotate+"deg)";
-            playerTankTurret.style.transform = "translateX(-50%) rotate("+curTurretRotate+"deg)";
+            // playerTankTurret.style.transform = "translateX(-50%) rotate("+curTurretRotate+"deg)";
         }
         tick.countTank++;
     }
@@ -154,7 +154,6 @@ if (socket.readyState === WebSocket.OPEN) {
                 bullet.style.transform = "translate("+bul[1] +"px, "+bul[2]+"px) rotate("+(bul[4]+bul[5])%360+"deg)";
             } 
             if(colliziia(bullet)){
-                const radian = (bul[4] + bul[5]) * Math.PI / 180;
                 bul[1] = oldBul1;
                 bul[2] = oldBul2;
                 bullet.style.transform = "translate("+bul[1] +"px, "+bul[2]+"px) rotate("+(bul[4]+bul[5])%360+"deg)";
@@ -217,7 +216,10 @@ if (data.type === 'welcome') {
   if (numberDiv) {
     numberDiv.innerHTML = `Номер: ${data.number}`;
   }
-} else if (data.type === 'startposition') {
+} else if (data.type === 'turretRotate'){
+    curTurretRotate -= rotateTurret;
+    playerTankTurret.style.transform = "translateX(-50%) rotate("+curTurretRotate+"deg)";
+}else if (data.type === 'startposition') {
     curPositionX = data.X;
     curPositionY = data.Y;
     curTankRotate = data.Rotate;
