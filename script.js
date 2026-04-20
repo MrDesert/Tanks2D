@@ -71,7 +71,7 @@ if (socket.readyState === WebSocket.OPEN) {
   };
   socket.send(JSON.stringify(tankData));
 }     
-  socket.send(JSON.stringify(keysDown));
+//   socket.send(JSON.stringify(keysDown));
         let oldX = curPositionX;
         let oldY = curPositionY;
         for (const key in keysDown){
