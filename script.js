@@ -122,16 +122,17 @@ if (socket.readyState === WebSocket.OPEN) {
                 document.getElementById("leftTrack").classList.add("trackFrame"+trackFrameLeft);
                 document.getElementById("rightTrack").classList.remove("trackFrame1", "trackFrame2", "trackFrame3", "trackFrame4", "trackFrame5", "trackFrame6", "trackFrame7")
                 document.getElementById("rightTrack").classList.add("trackFrame"+trackFrameRight);
-            } 
+            }             
             if(key == "Z" && keysDown[key]){curTurretRotate -= rotateTurret} 
             if(key == "X" && keysDown[key]){curTurretRotate += rotateTurret}
+
             if(colliziia(tank)){
                 curPositionX = oldX;
                 curPositionY = oldY; 
             }
 
             playerTank.style.transform = "translate("+curPositionX +"px, "+curPositionY+"px) rotate("+curTankRotate+"deg)";
-            // playerTankTurret.style.transform = "translateX(-50%) rotate("+curTurretRotate+"deg)";
+            playerTankTurret.style.transform = "translateX(-50%) rotate("+curTurretRotate+"deg)";
         }
         tick.countTank++;
     }
