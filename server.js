@@ -105,7 +105,10 @@ wss.on('connection', (ws, req) => {
           const tankVertices = OBB(ws.tankPositionX, ws.tankPositionY, tankWidth, tankHeight, ws.tankRotate)
           const wallVertices = OBB(mapGame.walls.kontur_top.Left, mapGame.walls.kontur_top.Top, mapGame.walls.kontur_top.Width, mapGame.walls.kontur_top.Height, 0)
 
-          console.log("Столкновение - " + SAT(tankVertices, wallVertices));
+          if(SAT(tankVertices, wallVertices)){
+            ws.tankPositionX = oldX;
+            ws.tankPositionY = oldY;
+          };
 
           function OBB(X, Y, Width, Height, Rotate){
             //Переводим в OBB
@@ -182,17 +185,17 @@ function SAT(verticesA, verticesB) {
 
 
 
-          for(let key in mapGame.walls){
-            if(ws.tankPositionX+43 > (mapGame.walls[key].Left) && 
-              ws.tankPositionX < (mapGame.walls[key].Left+mapGame.walls[key].Width) && 
-              ws.tankPositionY+80 > (mapGame.walls[key].Top) && 
-              ws.tankPositionY < (mapGame.walls[key].Top+mapGame.walls[key].Height)){
-              ws.tankPositionX = oldX;
-              ws.tankPositionY = oldY;
-            } 
-          }
+          // for(let key in mapGame.walls){
+          //   if(ws.tankPositionX+43 > (mapGame.walls[key].Left) && 
+          //     ws.tankPositionX < (mapGame.walls[key].Left+mapGame.walls[key].Width) && 
+          //     ws.tankPositionY+80 > (mapGame.walls[key].Top) && 
+          //     ws.tankPositionY < (mapGame.walls[key].Top+mapGame.walls[key].Height)){
+          //     ws.tankPositionX = oldX;
+          //     ws.tankPositionY = oldY;
+          //   } 
+          // }
 
-          ws.send(JSON.stringify({ type: 'movement', pi: oldX, turretRotate: ws.turretRotate, tankRotate: ws.tankRotate, positionX: ws.tankPositionX, positionY: ws.tankPositionY}));
+          ws.send(JSON.stringify({ type: 'movement', turretRotate: ws.turretRotate, tankRotate: ws.tankRotate, positionX: ws.tankPositionX, positionY: ws.tankPositionY}));
       }
     } catch (err) {
       console.error('Ошибка парсинга сообщения:', err);
