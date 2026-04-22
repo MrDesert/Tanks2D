@@ -55,10 +55,26 @@ document.addEventListener('keyup', (e)=> {
         else if(e.code === 'Space'){keysDown.Space = false}
 });
 
+const fps = document.getElementById("fps");
 tick(performance.now());
 function tick(time){
     tick.countTank = (tick.countTank || 0)
-    if(time - (tick.lastTime || 0) >= 16){
+
+    if(time - (tick.lastFPS || 0) >= 1000){
+      fps.textContent = "fps: " + tick.FPScount;
+      tick.FPScount = 0;
+      tick.lastFPS = time;
+    }
+    tick.FPScount = (tick.FPScount || 0) + 1;
+
+    if(time - (tick.lastTimePing || 0) >= 500){
+      if (socket.readyState === WebSocket.OPEN) {
+  socket.send(JSON.stringify({type: "ping", clientTime: Date.now()}));
+      }   
+       tick.lastTimePing = time; 
+}
+
+    if(time - (tick.lastTimeMove || 0) >= 16){
         // Отправляем данные о танке на сервер
 if (socket.readyState === WebSocket.OPEN) {
   const tankData = {
@@ -69,7 +85,6 @@ if (socket.readyState === WebSocket.OPEN) {
     turretRotate: curTurretRotate,
     timestamp: time
   };
-  socket.send(JSON.stringify({type: "ping", clientTime: Date.now()}));
   socket.send(JSON.stringify(tankData));
   socket.send(JSON.stringify(keysDown));
 }     
@@ -136,8 +151,9 @@ if (socket.readyState === WebSocket.OPEN) {
         //     playerTankTurret.style.transform = "translateX(-50%) rotate("+curTurretRotate+"deg)";
         // }
         tick.countTank++;
+        tick.lastTimeMove = time;
     }
-    if(time - (tick.lastTime || 0) >= 2){
+    if(time - (tick.lastTimeBull || 0) >= 2){
         tick.countBul = (tick.countBul || 0)
         for (const key in keysDown){
             if(tick.countBul >= bulletRecharge){
@@ -170,8 +186,8 @@ if (socket.readyState === WebSocket.OPEN) {
             }
         }
         tick.countBul++
+        tick.lastTimeBull = time;
     }
-    tick.lastTime = time;
     requestAnimationFrame(tick);
 }
 

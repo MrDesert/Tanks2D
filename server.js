@@ -104,11 +104,18 @@ wss.on('connection', (ws, req) => {
           
           const tankVertices = OBB(ws.tankPositionX, ws.tankPositionY, tankWidth, tankHeight, ws.tankRotate)
           const wallVertices = OBB(mapGame.walls.kontur_top.Left, mapGame.walls.kontur_top.Top, mapGame.walls.kontur_top.Width, mapGame.walls.kontur_top.Height, 0)
+          const wallVertices1 = OBB(mapGame.walls.kontur_right.Left, mapGame.walls.kontur_right.Top, mapGame.walls.kontur_right.Width, mapGame.walls.kontur_right.Height, 0)
+          const wallVertices2 = OBB(mapGame.walls.kontur_bottom.Left, mapGame.walls.kontur_bottom.Top, mapGame.walls.kontur_bottom.Width, mapGame.walls.kontur_bottom.Height, 0)
+          const wallVertices3 = OBB(mapGame.walls.kontur_left.Left, mapGame.walls.kontur_left.Top, mapGame.walls.kontur_left.Width, mapGame.walls.kontur_left.Height, 0)
+          const wallVertices4 = OBB(mapGame.walls.inner_top.Left, mapGame.walls.inner_top.Top, mapGame.walls.inner_top.Width, mapGame.walls.inner_top.Height, 0)
+          const wallVertices5 = OBB(mapGame.walls.inner_right.Left, mapGame.walls.inner_right.Top, mapGame.walls.inner_right.Width, mapGame.walls.inner_right.Height, 0)
+          const wallVertices6 = OBB(mapGame.walls.inner_bottom.Left, mapGame.walls.inner_bottom.Top, mapGame.walls.inner_bottom.Width, mapGame.walls.inner_bottom.Height, 0)
+          const wallVertices7 = OBB(mapGame.walls.inner_left.Left, mapGame.walls.inner_left.Top, mapGame.walls.inner_left.Width, mapGame.walls.inner_left.Height, 0)
 
-          if(SAT(tankVertices, wallVertices)){
+          if(SAT(tankVertices, wallVertices) || SAT(tankVertices, wallVertices1) || SAT(tankVertices, wallVertices2) || SAT(tankVertices, wallVertices3) || SAT(tankVertices, wallVertices4) || SAT(tankVertices, wallVertices5) || SAT(tankVertices, wallVertices6) || SAT(tankVertices, wallVertices7)){
             ws.tankPositionX = oldX;
             ws.tankPositionY = oldY;
-          };
+          }
 
           function OBB(X, Y, Width, Height, Rotate){
             //Переводим в OBB
