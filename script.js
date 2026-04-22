@@ -241,10 +241,12 @@ if (data.type === 'welcome') {
     curTankRotate = data.tankRotate;
     playerTank.style.transform = "translate("+curPositionX +"px, "+curPositionY+"px) rotate("+curTankRotate+"deg)";
     playerTankTurret.style.transform = "translateX(-50%) rotate("+curTurretRotate+"deg)";
-}else if (data.type === 'startposition') {
+}else if (data.type === 'startposition'){
     curPositionX = data.X;
     curPositionY = data.Y;
     curTankRotate = data.Rotate;
+    const parent = document.getElementById("body");
+    parent['append'](Object.assign(document.createElement("div"), {id: "playerTank", style: "height: " + data.Height + "px; width: " + data.Width + "px; top:" + curPositionY + "px; left:" + curPositionX + "px; transform: rotate(" + curTankRotate + ")"}));
 } else if (data.type === 'map') {
     for(let key in data.map.walls){
         const parent = document.getElementById("body");

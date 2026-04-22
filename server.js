@@ -6,11 +6,6 @@ const fs = require('fs'); //Библиотека для парса JSON
 const app = express();
 const port = process.env.PORT || 3000;
 
-let nextUserId = 1;
-let activeConnections = 0;
-const tanks = new Map(); // userId -> данные танка
-const userNumbers = new Map(); // userId -> номер для отображения
-
 app.get('/stats', (req, res) => {
   res.json({
     totalUniqueUsers: nextUserId - 1,
@@ -18,37 +13,42 @@ app.get('/stats', (req, res) => {
   });
 });
 
+//Сервер
 const server = http.createServer(app);
 const wss = new WebSocket.Server({ server });
+let nextUserId = 0;
+let activeConnections = 0;
+const tanks = new Map(); // userId -> данные танка
 
-// const map = fs.readFileSync('map1.json', 'utf8');
-// const mapObj = JSON.parse(map);
-const mapObj = JSON.parse(fs.readFileSync('map1.json', 'utf8'));
-const spawnPoints = Object.keys(mapObj.spawnPoints);
-const rotateTurret = 1.5;
+//Карта
+const mapGame = JSON.parse(fs.readFileSync('map1.json', 'utf8'));
+const spawnPoints = Object.keys(mapGame.spawnPoints);
+
+//Танк
+const tankHeight = 80;
+const tankWidth = 43;
 let tankSpeed = 1.5;
 const rotateTank = 1;
+const rotateTurret = 1.5;
+
 wss.on('connection', (ws, req) => {
-  // При подключении выдаём новый ID и номер
-  const userId = nextUserId;
-  const userNumber = nextUserId;
-  nextUserId++;
+
+  //Пользователь
+  const userId = nextUserId++;   //При подключении выдаём новый ID и номер
   activeConnections++;
+  console.log(`Новый пользователь: ID=${userId}, Активных: ${activeConnections}`);
+  ws.send(JSON.stringify({ type: 'welcome', userId: userId }));    // Отправляем приветствие с номером
+
   const randomSpawnPoint = Math.floor(Math.random()*spawnPoints.length)
-  ws.send(JSON.stringify({type: 'map', map: mapObj}))
-  console.log(`Новый пользователь: ID=${userId}, Номер=${userNumber}. Активных: ${activeConnections}`);
-  
-  // Отправляем приветствие с номером
-  ws.send(JSON.stringify({ type: 'welcome', number: userNumber, userId: userId }));
+  ws.send(JSON.stringify({type: 'map', map: mapGame}))
   
   // Сохраняем userId на сокете
   ws.userId = userId;
-  ws.userNumber = userNumber;
+  ws.tankPositionY = mapGame.spawnPoints[spawnPoints[randomSpawnPoint]].Top;
+  ws.tankPositionX = mapGame.spawnPoints[spawnPoints[randomSpawnPoint]].Left;
+  ws.tankRotate = mapGame.spawnPoints[spawnPoints[randomSpawnPoint]].Rotate;
   ws.turretRotate = 0;
-  ws.tankPositionY = mapObj.spawnPoints[spawnPoints[randomSpawnPoint]].Top;
-  ws.tankPositionX = mapObj.spawnPoints[spawnPoints[randomSpawnPoint]].Left;
-  ws.tankRotate = mapObj.spawnPoints[spawnPoints[randomSpawnPoint]].Rotate;
-  ws.send(JSON.stringify({type:'startposition', X:ws.tankPositionX, Y:ws.tankPositionY, Rotate:ws.tankRotate}))
+  ws.send(JSON.stringify({type:'startposition', X:ws.tankPositionX, Y:ws.tankPositionY, Rotate:ws.tankRotate, Height:tankHeight, Width:tankWidth}))
   
   // Отправляем новому клиенту данные обо всех существующих танках
   const allTanksData = {
@@ -65,7 +65,6 @@ wss.on('connection', (ws, req) => {
 
         tanks.set(userId, {
           userId: userId,
-          userNumber: userNumber,
           positionX: data.positionX,
           positionY: data.positionY,
           tankRotate: data.tankRotate,
@@ -104,11 +103,11 @@ wss.on('connection', (ws, req) => {
           if(data.Z){ws.turretRotate -= rotateTurret;} 
           if(data.X){ws.turretRotate += rotateTurret;}
           
-          for(let key in mapObj.walls){
-            if(ws.tankPositionX+43 > (mapObj.walls[key].Left) && 
-              ws.tankPositionX < (mapObj.walls[key].Left+mapObj.walls[key].Width) && 
-              ws.tankPositionY+80 > (mapObj.walls[key].Top) && 
-              ws.tankPositionY < (mapObj.walls[key].Top+mapObj.walls[key].Height)){
+          for(let key in mapGame.walls){
+            if(ws.tankPositionX+43 > (mapGame.walls[key].Left) && 
+              ws.tankPositionX < (mapGame.walls[key].Left+mapGame.walls[key].Width) && 
+              ws.tankPositionY+80 > (mapGame.walls[key].Top) && 
+              ws.tankPositionY < (mapGame.walls[key].Top+mapGame.walls[key].Height)){
               ws.tankPositionX = oldX;
               ws.tankPositionY = oldY;
             } 
