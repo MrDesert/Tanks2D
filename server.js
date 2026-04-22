@@ -46,7 +46,7 @@ wss.on('connection', (ws, req) => {
   ws.tankPositionX = mapObj.spawnPoints[randomSpawnPoint][0];
   ws.tankPositionY = mapObj.spawnPoints[randomSpawnPoint][1];
   ws.tankRotate = mapObj.spawnPoints[randomSpawnPoint][2];
-  ws.send(JSON.stringify({type:'startposition', X:spawnPoints[randomSpawnPoint][0], Y:spawnPoints[randomSpawnPoint][1], Rotate:spawnPoints[randomSpawnPoint][2]}))
+  ws.send(JSON.stringify({type:'startposition', X:ws.tankPositionX, Y:ws.tankPositionY, Rotate:ws.tankRotate}))
   
   // Отправляем новому клиенту данные обо всех существующих танках
   const allTanksData = {
