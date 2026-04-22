@@ -102,27 +102,85 @@ wss.on('connection', (ws, req) => {
           if(data.Z){ws.turretRotate -= rotateTurret;} 
           if(data.X){ws.turretRotate += rotateTurret;}
           
-          //Переводим в OBB
-          const centerX = ws.tankPositionX + tankWidth/2;
-          const centerY = ws.tankPositionY + tankHeight/2;
-          const halfWidth = width / 2;
-          const halfHeight = height / 2;
-          const angleRad = radian;
+          const tankVertices = OBB(ws.tankPositionX, ws.tankPositionY, tankWidth, tankHeight, ws.tankRotate)
+          const wallVertices = OBB(mapGame.walls.kontur_top.Left, mapGame.walls.kontur_top.Top, mapGame.walls.kontur_top.Width, mapGame.walls.kontur_top.Height, 0)
 
-          // Локальные вершины (до поворота)
-          const localVertices = [
-            { x: -halfWidth, y: -halfHeight },  // левый верхний
-            { x:  halfWidth, y: -halfHeight },  // правый верхний
-            { x:  halfWidth, y:  halfHeight },  // правый нижний
-            { x: -halfWidth, y:  halfHeight }   // левый нижний
-          ];
+          console.log("Столкновение - " + SAT(tankVertices, wallVertices));
 
-          const localVerticesRotate = []
-          for(let i = 0; i < 4; i++){
-            const newX = localVertices[i].x * cos(angleRad) - localVertices[i].y * sin(angleRad);
-            const newY = localVertices[i].x * sin(angleRad) + localVertices[i].y * cos(angleRad);
-            localVerticesRotate.push({x: newX, y: newY});
+          function OBB(X, Y, Width, Height, Rotate){
+            //Переводим в OBB
+            const halfWidth = Width / 2;
+            const halfHeight = Height / 2;
+            const centerX = X + halfWidth;
+            const centerY = Y + halfHeight;
+            const angleRad = Rotate * Math.PI / 180;
+            const cos = Math.cos(angleRad);
+            const sin = Math.sin(angleRad);
+
+            // Локальные вершины (до поворота)
+            const local = [
+              { x: -halfWidth, y: -halfHeight },  // левый верхний
+              { x:  halfWidth, y: -halfHeight },  // правый верхний
+              { x:  halfWidth, y:  halfHeight },  // правый нижний
+              { x: -halfWidth, y:  halfHeight }   // левый нижний
+            ];
+
+            const world = [];
+            for(let i = 0; i < 4; i++){
+              const newX = local[i].x * cos - local[i].y * sin + centerX;
+              const newY = local[i].x * sin + local[i].y * cos + centerY;
+              world.push({x: newX, y: newY});
+            }
+            return world
           }
+
+          function getAxes(vertices) {
+    const axes = [];
+    for (let i = 0; i < vertices.length; i++) {
+        const p1 = vertices[i];
+        const p2 = vertices[(i + 1) % vertices.length];
+        const edgeX = p2.x - p1.x;
+        const edgeY = p2.y - p1.y;
+        const axisX = -edgeY;
+        const axisY = edgeX;
+        const length = Math.sqrt(axisX * axisX + axisY * axisY);
+        if (length !== 0) {
+            axes.push({ x: axisX / length, y: axisY / length });
+        }
+    }
+    return axes;
+}
+
+function project(vertices, axisX, axisY) {
+    let min = Infinity;
+    let max = -Infinity;
+    for (let i = 0; i < vertices.length; i++) {
+        const projection = vertices[i].x * axisX + vertices[i].y * axisY;
+        min = Math.min(min, projection);
+        max = Math.max(max, projection);
+    }
+    return { min, max };
+}
+
+function overlap(proj1, proj2) {
+    return !(proj1.max < proj2.min || proj2.max < proj1.min);
+}
+
+function SAT(verticesA, verticesB) {
+    const axes = [...getAxes(verticesA), ...getAxes(verticesB)];
+    for (let i = 0; i < axes.length; i++) {
+        const projA = project(verticesA, axes[i].x, axes[i].y);
+        const projB = project(verticesB, axes[i].x, axes[i].y);
+        if (!overlap(projA, projB)) {
+            return false;
+        }
+    }
+    return true;
+}
+
+
+
+
 
           for(let key in mapGame.walls){
             if(ws.tankPositionX+43 > (mapGame.walls[key].Left) && 
