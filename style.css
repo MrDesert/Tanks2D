@@ -11,15 +11,15 @@ footer {
 }
 #playerTank{
     position: absolute;
-    height: 80px;
-    width: 43px;
+    /* height: 80px; */
+    /* width: 43px; */
     /* border:  1px black solid; */
 }
 #playerTankBody {
     /* top: -100px; */
     position: absolute;
-    height: 80px;
-    width: 43px;
+    /* height: 80px; */
+    /* width: 43px; */
     /* border:  2px black solid; */
     background: url("img/tank_body.png");
     background-size: contain;

@@ -2,8 +2,8 @@
 const socket = new WebSocket('wss://tanks2d.onrender.com');
 let myUserId = null;
 const otherTanks = new Map(); // id -> элемент DOM
-const playerTank = document.getElementById("playerTank")
-const playerTankTurret = document.getElementById("playerTankTurret")
+let playerTank;
+let playerTankTurret;
 let speed = 1.5;
 const rotateTank = 1;
 const rotateTurret = 1.5;
@@ -11,8 +11,8 @@ let trackFrameLeft = 1;
 let trackFrameRight = 1;
 let speedX = 0;
 let speedY = 1;
-            const tank = document.getElementById("playerTank");
-            const object =  tank.getBoundingClientRect();
+            let tank = document.getElementById("playerTank");
+            // const object =  tank.getBoundingClientRect();
 let curPositionX;
 let curPositionY;
 let curTankRotate;
@@ -178,14 +178,10 @@ if (socket.readyState === WebSocket.OPEN) {
 function colliziia(object){
     const Object = object.getBoundingClientRect();
     for (const wall of walls) {
-          if(Object.top < 100){
-            // console.log(wall.bottom)
-          }
         if(Object.right > (wall.left) && 
             Object.left < (wall.right) && 
             Object.bottom > (wall.top) && 
             Object.top < (wall.bottom)){
-            // console.log(Object.top)
             return true;
         } 
     }
@@ -234,19 +230,26 @@ if (data.type === 'welcome') {
      document.getElementById("ping").style.color = "#770000"
   }
   document.getElementById("ping").textContent = "ping: "+ping;
-}else if (data.type === 'movement'){
+}else if (data.type === 'startposition'){
+    curPositionX = data.X;
+    curPositionY = data.Y;
+    curTankRotate = data.Rotate;
+    const parent = document.getElementById("body");
+    parent['append'](Object.assign(document.createElement("div"), {id: "playerTank", style: "height: " + data.Height + "px; width: " + data.Width + "px; translate("+curPositionX +"px, "+curPositionY+"px) rotate("+curTankRotate+"deg)"}));
+    playerTank = document.getElementById("playerTank");
+    playerTank['append'](Object.assign(document.createElement("div"), {id: "leftTrack", className: "playerTankTrack trackFrame7"}));
+    playerTank['append'](Object.assign(document.createElement("div"), {id: "rightTrack", className: "playerTankTrack trackFrame7"}));
+    playerTank['append'](Object.assign(document.createElement("div"), {id: "playerTankBody", style: "height: " + data.Height + "px; width: " + data.Width + "px;)"}));
+    playerTank['append'](Object.assign(document.createElement("div"), {id: "playerTankTurret"}));
+    playerTankTurret = document.getElementById("playerTankTurret")
+    playerTank['append'](Object.assign(document.createElement("div"), {id: "gunpointTank"}));
+} else if (data.type === 'movement'){
     curTurretRotate = data.turretRotate;
     curPositionX = data.positionX;
     curPositionY = data.positionY;
     curTankRotate = data.tankRotate;
     playerTank.style.transform = "translate("+curPositionX +"px, "+curPositionY+"px) rotate("+curTankRotate+"deg)";
     playerTankTurret.style.transform = "translateX(-50%) rotate("+curTurretRotate+"deg)";
-}else if (data.type === 'startposition'){
-    curPositionX = data.X;
-    curPositionY = data.Y;
-    curTankRotate = data.Rotate;
-    const parent = document.getElementById("body");
-    parent['append'](Object.assign(document.createElement("div"), {id: "playerTank", style: "height: " + data.Height + "px; width: " + data.Width + "px; top:" + curPositionY + "px; left:" + curPositionX + "px; transform: rotate(" + curTankRotate + ")"}));
 } else if (data.type === 'map') {
     for(let key in data.map.walls){
         const parent = document.getElementById("body");

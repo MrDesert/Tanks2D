@@ -42,8 +42,7 @@ wss.on('connection', (ws, req) => {
   const randomSpawnPoint = Math.floor(Math.random()*spawnPoints.length)
   ws.send(JSON.stringify({type: 'map', map: mapGame}))
   
-  // Сохраняем userId на сокете
-  ws.userId = userId;
+  ws.userId = userId; // Сохраняем userId на сокете
   ws.tankPositionY = mapGame.spawnPoints[spawnPoints[randomSpawnPoint]].Top;
   ws.tankPositionX = mapGame.spawnPoints[spawnPoints[randomSpawnPoint]].Left;
   ws.tankRotate = mapGame.spawnPoints[spawnPoints[randomSpawnPoint]].Rotate;
@@ -103,6 +102,28 @@ wss.on('connection', (ws, req) => {
           if(data.Z){ws.turretRotate -= rotateTurret;} 
           if(data.X){ws.turretRotate += rotateTurret;}
           
+          //Переводим в OBB
+          const centerX = ws.tankPositionX + tankWidth/2;
+          const centerY = ws.tankPositionY + tankHeight/2;
+          const halfWidth = width / 2;
+          const halfHeight = height / 2;
+          const angleRad = radian;
+
+          // Локальные вершины (до поворота)
+          const localVertices = [
+            { x: -halfWidth, y: -halfHeight },  // левый верхний
+            { x:  halfWidth, y: -halfHeight },  // правый верхний
+            { x:  halfWidth, y:  halfHeight },  // правый нижний
+            { x: -halfWidth, y:  halfHeight }   // левый нижний
+          ];
+
+          const localVerticesRotate = []
+          for(let i = 0; i < 4; i++){
+            const newX = localVertices[i].x * cos(angleRad) - localVertices[i].y * sin(angleRad);
+            const newY = localVertices[i].x * sin(angleRad) + localVertices[i].y * cos(angleRad);
+            localVerticesRotate.push({x: newX, y: newY});
+          }
+
           for(let key in mapGame.walls){
             if(ws.tankPositionX+43 > (mapGame.walls[key].Left) && 
               ws.tankPositionX < (mapGame.walls[key].Left+mapGame.walls[key].Width) && 
