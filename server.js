@@ -20,10 +20,11 @@ app.get('/stats', (req, res) => {
 
 const server = http.createServer(app);
 const wss = new WebSocket.Server({ server });
-const map = fs.readFileSync('map1.json', 'utf8');
-const mapObj = JSON.parse(map);
+
+// const map = fs.readFileSync('map1.json', 'utf8');
+// const mapObj = JSON.parse(map);
+const mapObj = JSON.parse(fs.readFileSync('map1.json', 'utf8'));
 const spawnPoints = Object.keys(mapObj.spawnPoints);
-// const spawnPoints = [[60, 40, 180], [380, 40, 180], [700, 40, 180], [60, 470, 0], [380, 470, 0], [700, 470, 0], [220, 250, 180], [550, 250, 0]];
 const rotateTurret = 1.5;
 let tankSpeed = 1.5;
 const rotateTank = 1;
@@ -34,7 +35,6 @@ wss.on('connection', (ws, req) => {
   nextUserId++;
   activeConnections++;
   const randomSpawnPoint = Math.floor(Math.random()*spawnPoints.length)
-  // const randomSpawnPoint = Math.floor(Math.random()*mapObj.spawnPoints.length)
   ws.send(JSON.stringify({type: 'map', map: mapObj}))
   console.log(`Новый пользователь: ID=${userId}, Номер=${userNumber}. Активных: ${activeConnections}`);
   
