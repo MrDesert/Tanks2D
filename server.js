@@ -22,7 +22,8 @@ const server = http.createServer(app);
 const wss = new WebSocket.Server({ server });
 const map = fs.readFileSync('map1.json', 'utf8');
 const mapObj = JSON.parse(map);
-const spawnPoints = [[60, 40, 180], [380, 40, 180], [700, 40, 180], [60, 470, 0], [380, 470, 0], [700, 470, 0], [220, 250, 180], [550, 250, 0]];
+const spawnPoints = Object.keys(mapObj.spawnPoints);
+// const spawnPoints = [[60, 40, 180], [380, 40, 180], [700, 40, 180], [60, 470, 0], [380, 470, 0], [700, 470, 0], [220, 250, 180], [550, 250, 0]];
 const rotateTurret = 1.5;
 let tankSpeed = 1.5;
 const rotateTank = 1;
@@ -32,7 +33,8 @@ wss.on('connection', (ws, req) => {
   const userNumber = nextUserId;
   nextUserId++;
   activeConnections++;
-  const randomSpawnPoint = Math.floor(Math.random()*mapObj.spawnPoints.length)
+  const randomSpawnPoint = Math.floor(Math.random()*spawnPoints.length)
+  // const randomSpawnPoint = Math.floor(Math.random()*mapObj.spawnPoints.length)
   ws.send(JSON.stringify({type: 'map', map: mapObj}))
   console.log(`Новый пользователь: ID=${userId}, Номер=${userNumber}. Активных: ${activeConnections}`);
   
@@ -43,9 +45,9 @@ wss.on('connection', (ws, req) => {
   ws.userId = userId;
   ws.userNumber = userNumber;
   ws.turretRotate = 0;
-  ws.tankPositionX = mapObj.spawnPoints[randomSpawnPoint].Top;
-  ws.tankPositionY = mapObj.spawnPoints[randomSpawnPoint].Left;
-  ws.tankRotate = mapObj.spawnPoints[randomSpawnPoint].Rotate;
+  ws.tankPositionX = mapObj.spawnPoints[spawnPoints[randomSpawnPoint]].Top;
+  ws.tankPositionY = mapObj.spawnPoints[spawnPoints[randomSpawnPoint]].Left;
+  ws.tankRotate = mapObj.spawnPoints[spawnPoints[randomSpawnPoint]].Rotate;
   ws.send(JSON.stringify({type:'startposition', X:ws.tankPositionX, Y:ws.tankPositionY, Rotate:ws.tankRotate}))
   
   // Отправляем новому клиенту данные обо всех существующих танках
