@@ -45,8 +45,8 @@ wss.on('connection', (ws, req) => {
   ws.userId = userId;
   ws.userNumber = userNumber;
   ws.turretRotate = 0;
-  ws.tankPositionX = mapObj.spawnPoints[spawnPoints[randomSpawnPoint]].Top;
-  ws.tankPositionY = mapObj.spawnPoints[spawnPoints[randomSpawnPoint]].Left;
+  ws.tankPositionY = mapObj.spawnPoints[spawnPoints[randomSpawnPoint]].Top;
+  ws.tankPositionX = mapObj.spawnPoints[spawnPoints[randomSpawnPoint]].Left;
   ws.tankRotate = mapObj.spawnPoints[spawnPoints[randomSpawnPoint]].Rotate;
   ws.send(JSON.stringify({type:'startposition', X:ws.tankPositionX, Y:ws.tankPositionY, Rotate:ws.tankRotate}))
   
