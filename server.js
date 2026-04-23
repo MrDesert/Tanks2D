@@ -104,34 +104,6 @@ wss.on('connection', (ws, req) => {
             ws.tankRotate = oldR;
           }
 
-          function OBB(X, Y, Width, Height, Rotate){
-            //Переводим в OBB
-            const halfWidth = Width / 2;
-            const halfHeight = Height / 2;
-            const centerX = X + halfWidth;
-            const centerY = Y + halfHeight;
-            const angleRad = Rotate * Math.PI / 180;
-            const cos = Math.cos(angleRad);
-            const sin = Math.sin(angleRad);
-
-            // Локальные вершины (до поворота)
-            const local = [
-              { x: -halfWidth, y: -halfHeight },  // левый верхний
-              { x:  halfWidth, y: -halfHeight },  // правый верхний
-              { x:  halfWidth, y:  halfHeight },  // правый нижний
-              { x: -halfWidth, y:  halfHeight }   // левый нижний
-            ];
-
-            // Делаем поворот и переводим в мировые координаты
-            const world = [];
-            for(let i = 0; i < 4; i++){
-              const newX = local[i].x * cos - local[i].y * sin + centerX;
-              const newY = local[i].x * sin + local[i].y * cos + centerY;
-              world.push({x: newX, y: newY});
-            }
-            return world
-          }
-
 function SAT(verticesA, verticesB) {
     const axes = [...getAxes(verticesA), ...getAxes(verticesB)];
     for (let i = 0; i < axes.length; i++) {
@@ -232,3 +204,31 @@ function SAT(verticesA, verticesB) {
 server.listen(port, () => {
   console.log(`Сервер запущен на порту ${port}`);
 });
+
+function OBB(X, Y, Width, Height, Rotate){
+            //Переводим в OBB
+            const halfWidth = Width / 2;
+            const halfHeight = Height / 2;
+            const centerX = X + halfWidth;
+            const centerY = Y + halfHeight;
+            const angleRad = Rotate * Math.PI / 180;
+            const cos = Math.cos(angleRad);
+            const sin = Math.sin(angleRad);
+
+            // Локальные вершины (до поворота)
+            const local = [
+              { x: -halfWidth, y: -halfHeight },  // левый верхний
+              { x:  halfWidth, y: -halfHeight },  // правый верхний
+              { x:  halfWidth, y:  halfHeight },  // правый нижний
+              { x: -halfWidth, y:  halfHeight }   // левый нижний
+            ];
+
+            // Делаем поворот и переводим в мировые координаты
+            const world = [];
+            for(let i = 0; i < 4; i++){
+              const newX = local[i].x * cos - local[i].y * sin + centerX;
+              const newY = local[i].x * sin + local[i].y * cos + centerY;
+              world.push({x: newX, y: newY});
+            }
+            return world
+          }
