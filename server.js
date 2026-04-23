@@ -104,10 +104,10 @@ wss.on('connection', (ws, req) => {
               function getClosestTankSide(tankAngle, wallAngle) {
     // Углы сторон танка
     const sides = [
-        { name: "front", angle: tankAngle },
-        { name: "right", angle: tankAngle + 90 },
-        { name: "back",  angle: tankAngle + 180 },
-        { name: "left",  angle: tankAngle + 270 }
+        { name: "front", angle: tankAngle, plus: 0 },
+        { name: "right", angle: tankAngle + 90, plus: 90 },
+        { name: "back",  angle: tankAngle + 180, plus: 180 },
+        { name: "left",  angle: tankAngle + 270, plus: 270 }
     ];
     
     // Нормализуем углы в 0..360
@@ -130,28 +130,28 @@ wss.on('connection', (ws, req) => {
         }
     }
     
-    return closest.name; // 'front', 'right', 'back', 'left'
+    return closest.plus; // 'front', 'right', 'back', 'left'
 }
 
                 const wallAngle = wall.Width > wall.Height ? 0 : 90;
 
  const closestSide = getClosestTankSide(ws.tankRotate, wallAngle);
     
-    let targetAngle;
-    switch (closestSide) {
-        case 'front':
-            targetAngle = wallAngle;
-            break;
-        case 'right':
-            targetAngle = wallAngle - 90;
-            break;
-        case 'back':
-            targetAngle = wallAngle - 180;
-            break;
-        case 'left':
-            targetAngle = wallAngle - 270;
-            break;
-    }
+    let targetAngle = wallAngle - closestSide;
+    // switch (closestSide) {
+    //     case 'front':
+    //         targetAngle = wallAngle;
+    //         break;
+    //     case 'right':
+    //         targetAngle = wallAngle - 90;
+    //         break;
+    //     case 'back':
+    //         targetAngle = wallAngle - 180;
+    //         break;
+    //     case 'left':
+    //         targetAngle = wallAngle - 270;
+    //         break;
+    // }
     
     // Нормализуем targetAngle в 0..360
     targetAngle = targetAngle % 360;
