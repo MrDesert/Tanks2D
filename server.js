@@ -108,11 +108,11 @@ wss.on('connection', (ws, req) => {
     let diff = wallAngle - ws.tankRotate;
     if (diff > 180) diff -= 360;
     if (diff < -180) diff += 360;
-        if (Math.abs(diff) > rotateTank) {
-        ws.tankRotate += Math.sign(diff) * rotateTank * 0.5;
-    } else {
-        ws.tankRotate = wallAngle;
-    }
+        // if (Math.abs(diff) > rotateTank) {
+        ws.tankRotate += Math.sign(diff) * rotateTank * 0.4;
+    // } else {
+    //     ws.tankRotate = wallAngle;
+    // }
 
                 ws.tankPositionX = oldX;
                 ws.tankPositionY = oldY;
