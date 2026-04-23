@@ -51,43 +51,43 @@
     },
     "spawnPoints": {
         "top_left": {
-            "Top": 40,
-            "Left": 60,
+            "Top": 50,
+            "Left": 50,
             "Rotate": 180 
         },
         "top_center": {
-            "Top": 40,
-            "Left": 380,
+            "Top": 50,
+            "Left": 370,
             "Rotate": 180 
         },
         "tor_right": {
-            "Top": 40,
-            "Left": 700,
+            "Top": 50,
+            "Left": 690,
             "Rotate": 180 
         },
         "center_left": {
-            "Top": 470,
-            "Left": 60,
+            "Top": 480,
+            "Left": 50,
             "Rotate": 0
         },
         "center_right": {
-            "Top": 470,
-            "Left": 380,
+            "Top": 480,
+            "Left": 370,
             "Rotate": 0
         },
         "bottom_left": {
-            "Top": 470,
-            "Left": 700,
+            "Top": 480,
+            "Left": 690,
             "Rotate": 0
         },
         "bottom_center": {
-            "Top": 250,
-            "Left": 220,
+            "Top": 260,
+            "Left": 210,
             "Rotate": 180
         },
         "bottom_right": {
-            "Top": 250,
-            "Left": 550,
+            "Top": 260,
+            "Left": 540,
             "Rotate": 0
         }
     }
