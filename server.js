@@ -115,6 +115,7 @@ wss.on('connection', (ws, req) => {
               { x: -halfWidth, y:  halfHeight }   // левый нижний
             ];
 
+            // Делаем поворот и переводим в мировые координаты
             const world = [];
             for(let i = 0; i < 4; i++){
               const newX = local[i].x * cos - local[i].y * sin + centerX;
@@ -123,38 +124,6 @@ wss.on('connection', (ws, req) => {
             }
             return world
           }
-
-          function getAxes(vertices) {
-    const axes = [];
-    for (let i = 0; i < vertices.length; i++) {
-        const p1 = vertices[i];
-        const p2 = vertices[(i + 1) % vertices.length];
-        const edgeX = p2.x - p1.x;
-        const edgeY = p2.y - p1.y;
-        const axisX = -edgeY;
-        const axisY = edgeX;
-        const length = Math.sqrt(axisX * axisX + axisY * axisY);
-        if (length !== 0) {
-            axes.push({ x: axisX / length, y: axisY / length });
-        }
-    }
-    return axes;
-}
-
-function project(vertices, axisX, axisY) {
-    let min = Infinity;
-    let max = -Infinity;
-    for (let i = 0; i < vertices.length; i++) {
-        const projection = vertices[i].x * axisX + vertices[i].y * axisY;
-        min = Math.min(min, projection);
-        max = Math.max(max, projection);
-    }
-    return { min, max };
-}
-
-function overlap(proj1, proj2) {
-    return !(proj1.max < proj2.min || proj2.max < proj1.min);
-}
 
 function SAT(verticesA, verticesB) {
     const axes = [...getAxes(verticesA), ...getAxes(verticesB)];
@@ -166,11 +135,37 @@ function SAT(verticesA, verticesB) {
         }
     }
     return true;
+
+    function overlap(proj1, proj2) {return !(proj1.max < proj2.min || proj2.max < proj1.min)}
+    
+    function project(vertices, axisX, axisY) {
+      let min = Infinity;
+      let max = -Infinity;
+      for (let i = 0; i < vertices.length; i++) {
+        const projection = vertices[i].x * axisX + vertices[i].y * axisY;
+        min = Math.min(min, projection);
+        max = Math.max(max, projection);
+      }
+      return { min, max };
+    }
+
+    function getAxes(vertices) {
+      const axes = [];
+      for (let i = 0; i < vertices.length; i++) {
+        const p1 = vertices[i];
+        const p2 = vertices[(i + 1) % vertices.length];
+        const edgeX = p2.x - p1.x;
+        const edgeY = p2.y - p1.y;
+        const axisX = -edgeY;
+        const axisY = edgeX;
+        const length = Math.sqrt(axisX * axisX + axisY * axisY);
+        if (length !== 0) {
+          axes.push({ x: axisX / length, y: axisY / length });
+        }
+      }
+      return axes;
+    }
 }
-
-
-
-
 
           // for(let key in mapGame.walls){
           //   if(ws.tankPositionX+43 > (mapGame.walls[key].Left) && 
