@@ -163,7 +163,7 @@ if (data.A || data.D) {
     } else {
         // Отъезжаем влево или вправо
         const sign = (ws.tankPositionX < wall.left) ? -1 : 1;
-        ws.tankPositionX += sign;
+        ws.tankPositionX += sign * 0.5;
     }
 }
                 break
