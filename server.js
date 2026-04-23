@@ -101,22 +101,72 @@ wss.on('connection', (ws, req) => {
               const wallVertices = OBB(wall.Left, wall.Top, wall.Width, wall.Height, 0)
               if(SAT(tankVertices, wallVertices)){
 
+              function getClosestTankSide(tankAngle, wallAngle) {
+    // Углы сторон танка
+    const sides = [
+        { name: "front", angle: tankAngle },
+        { name: "right", angle: tankAngle + 90 },
+        { name: "back",  angle: tankAngle + 180 },
+        { name: "left",  angle: tankAngle + 270 }
+    ];
+    
+    // Нормализуем углы в 0..360
+    for (let side of sides) {
+        side.angle = side.angle % 360;
+        if (side.angle < 0) side.angle += 360;
+    }
+    
+    // Находим сторону с минимальной разницей к wallAngle
+    let closest = sides[0];
+    let minDiff = Math.abs(wallAngle - closest.angle);
+    minDiff = Math.min(minDiff, 360 - minDiff);
+    
+    for (let side of sides) {
+        let diff = Math.abs(wallAngle - side.angle);
+        diff = Math.min(diff, 360 - diff);
+        if (diff < minDiff) {
+            minDiff = diff;
+            closest = side;
+        }
+    }
+    
+    return closest.name; // 'front', 'right', 'back', 'left'
+}
 
                 const wallAngle = wall.Width > wall.Height ? 0 : 90;
 
-    // Плавный поворот к стене
-    let diff = wallAngle - oldR;
+ const closestSide = getClosestTankSide(ws.tankRotate, wallAngle);
+    
+    let targetAngle;
+    switch (closestSide) {
+        case 'front':
+            targetAngle = wallAngle;
+            break;
+        case 'right':
+            targetAngle = wallAngle - 90;
+            break;
+        case 'back':
+            targetAngle = wallAngle - 180;
+            break;
+        case 'left':
+            targetAngle = wallAngle - 270;
+            break;
+    }
+    
+    // Нормализуем targetAngle в 0..360
+    targetAngle = targetAngle % 360;
+    if (targetAngle < 0) targetAngle += 360;
+    
+    // Плавный поворот к targetAngle
+    let diff = targetAngle - ws.tankRotate;
     if (diff > 180) diff -= 360;
     if (diff < -180) diff += 360;
-        if (Math.abs(diff) > rotateTank) {
-        oldR += Math.sign(diff) * rotateTank * 0.4;
-    } else {
-        oldR = wallAngle;
-    }
+    
+    ws.tankRotate += Math.sign(diff) * rotateTank * 0.5;
 
                 ws.tankPositionX = oldX;
                 ws.tankPositionY = oldY;
-                ws.tankRotate = oldR;
+                // ws.tankRotate = oldR;
                 break
               }
             } 
