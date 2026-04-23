@@ -99,9 +99,9 @@ wss.on('connection', (ws, req) => {
           const wallVertices7 = OBB(mapGame.walls.inner_left.Left, mapGame.walls.inner_left.Top, mapGame.walls.inner_left.Width, mapGame.walls.inner_left.Height, 0)
 
           if(SAT(tankVertices, wallVertices) || SAT(tankVertices, wallVertices1) || SAT(tankVertices, wallVertices2) || SAT(tankVertices, wallVertices3) || SAT(tankVertices, wallVertices4) || SAT(tankVertices, wallVertices5) || SAT(tankVertices, wallVertices6) || SAT(tankVertices, wallVertices7)){
-            ws.tankPositionX = oldX;
-            ws.tankPositionY = oldY;
-            ws.tankRotate = oldR;
+            // ws.tankPositionX = oldX;
+            // ws.tankPositionY = oldY;
+            // ws.tankRotate = oldR;
           }
 
           // for(let key in mapGame.walls){
