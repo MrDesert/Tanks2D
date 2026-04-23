@@ -59,7 +59,7 @@ wss.on('connection', (ws, req) => {
   ws.on('message', (message) => {
     try {
       const data = JSON.parse(message);
-      if (data.type === 'tankState') {
+      // if (data.type === 'tankState') {
         // Сохраняем данные танка этого пользователя
 
         // tanks.set(userId, {
@@ -81,7 +81,8 @@ wss.on('connection', (ws, req) => {
         //     client.send(JSON.stringify(broadcastData));
         //   }
         // });
-      } else if(data.type === 'ping'){
+      // } else
+      if(data.type === 'ping'){
          ws.send(JSON.stringify({ type: 'pong', clientTime: data.clientTime, serverTime: Date.now()}));
       } 
       else if (data.type === 'keysDown'){
