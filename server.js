@@ -69,7 +69,7 @@ wss.on('connection', (ws, req) => {
           const oldR = ws.tankRotate;
           const radian = ws.tankRotate * Math.PI / 180;
           let speed = tankSpeed;
-          
+
           if(data.A){
             ws.tankRotate -= rotateTank;
             speed = 1;
@@ -100,9 +100,23 @@ wss.on('connection', (ws, req) => {
               const tankVertices = OBB(ws.tankPositionX, ws.tankPositionY, tankWidth, tankHeight, ws.tankRotate);
               const wallVertices = OBB(wall.Left, wall.Top, wall.Width, wall.Height, 0)
               if(SAT(tankVertices, wallVertices)){
+
+
+                const wallAngle = wall.Width > wall.Height ? 0 : 90;
+
+    // Плавный поворот к стене
+    let diff = wallAngle - ws.tankRotate;
+    if (diff > 180) diff -= 360;
+    if (diff < -180) diff += 360;
+        if (Math.abs(diff) > rotateTank) {
+        ws.tankRotate += Math.sign(diff) * rotateTank * 0.5;
+    } else {
+        ws.tankRotate = wallAngle;
+    }
+
                 ws.tankPositionX = oldX;
                 ws.tankPositionY = oldY;
-                ws.tankRotate = oldR;
+                // ws.tankRotate = oldR;
                 break
               }
             } 
