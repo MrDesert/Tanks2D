@@ -82,8 +82,7 @@ if (socket.readyState === WebSocket.OPEN) {
     positionX: curPositionX,
     positionY: curPositionY,
     tankRotate: curTankRotate,
-    turretRotate: curTurretRotate,
-    timestamp: time
+    turretRotate: curTurretRotate
   };
   socket.send(JSON.stringify(tankData));
   socket.send(JSON.stringify(keysDown));
@@ -231,21 +230,15 @@ if (data.type === 'welcome') {
     numberDiv.innerHTML = `Номер: ${data.number}`;
   }
 } else if(data.type === 'pong'){
-  const ping = Math.ceil((Date.now() - data.clientTime)/2);
-  if(ping < 60){
-    document.getElementById("ping").style.color = "#00ff00";
-  }else if(ping < 100){
-     document.getElementById("ping").style.color = "#aaff00"
-  }else if(ping < 150){
-     document.getElementById("ping").style.color = "#ffdd00"
-  }else if(ping < 250){
-     document.getElementById("ping").style.color = "#ff8800"
-  }else if(ping < 400){
-     document.getElementById("ping").style.color = "#ff3300"
-  }else{
-     document.getElementById("ping").style.color = "#770000"
-  }
-  document.getElementById("ping").textContent = "ping: "+ping;
+    const ping = Math.ceil((Date.now() - data.clientTime)/2);
+    const pingText = document.getElementById("ping");
+    if      (ping < 60) {pingText.style.color = "#00ff00"}
+    else if (ping < 100){pingText.style.color = "#aaff00"}
+    else if (ping < 150){pingText.style.color = "#ffdd00"}
+    else if (ping < 250){pingText.style.color = "#ff8800"}
+    else if (ping < 400){pingText.style.color = "#ff3300"}
+    else                {pingText.style.color = "#770000"}
+    pingText.textContent = "ping: "+ping;
 }else if (data.type === 'startposition'){
     curPositionX = data.X;
     curPositionY = data.Y;

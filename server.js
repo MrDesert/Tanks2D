@@ -62,26 +62,25 @@ wss.on('connection', (ws, req) => {
       if (data.type === 'tankState') {
         // Сохраняем данные танка этого пользователя
 
-        tanks.set(userId, {
-          userId: userId,
-          positionX: data.positionX,
-          positionY: data.positionY,
-          tankRotate: data.tankRotate,
-          turretRotate: data.turretRotate,
-          timestamp: data.timestamp
-        });
+        // tanks.set(userId, {
+        //   userId: userId,
+        //   positionX: data.positionX,
+        //   positionY: data.positionY,
+        //   tankRotate: data.tankRotate,
+        //   turretRotate: data.turretRotate
+        // });
         
-        // Рассылаем данные о ВСЕХ танках ВСЕМ подключённым клиентам
-        const broadcastData = {
-          type: 'allTanks',
-          tanks: Array.from(tanks.values())
-        };
+        // // Рассылаем данные о ВСЕХ танках ВСЕМ подключённым клиентам
+        // const broadcastData = {
+        //   type: 'allTanks',
+        //   tanks: Array.from(tanks.values())
+        // };
         
-        wss.clients.forEach(client => {
-          if (client.readyState === WebSocket.OPEN) {
-            client.send(JSON.stringify(broadcastData));
-          }
-        });
+        // wss.clients.forEach(client => {
+        //   if (client.readyState === WebSocket.OPEN) {
+        //     client.send(JSON.stringify(broadcastData));
+        //   }
+        // });
       } else if(data.type === 'ping'){
          ws.send(JSON.stringify({ type: 'pong', clientTime: data.clientTime, serverTime: Date.now()}));
       } 
@@ -203,6 +202,26 @@ function SAT(verticesA, verticesB) {
           // }
 
           ws.send(JSON.stringify({ type: 'movement', turretRotate: ws.turretRotate, tankRotate: ws.tankRotate, positionX: ws.tankPositionX, positionY: ws.tankPositionY}));
+                  
+          tanks.set(userId, {
+          userId: userId,
+          positionX: ws.tankPositionX,
+          positionY: ws.tankPositionY,
+          tankRotate: ws.tankRotate,
+          turretRotate: ws.turretRotate
+        });
+        
+        // Рассылаем данные о ВСЕХ танках ВСЕМ подключённым клиентам
+        const broadcastData = {
+          type: 'allTanks',
+          tanks: Array.from(tanks.values())
+        };
+        
+        wss.clients.forEach(client => {
+          if (client.readyState === WebSocket.OPEN) {
+            client.send(JSON.stringify(broadcastData));
+          }
+        });
       }
     } catch (err) {
       console.error('Ошибка парсинга сообщения:', err);
