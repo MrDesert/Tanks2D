@@ -109,14 +109,14 @@ wss.on('connection', (ws, req) => {
     if (diff > 180) diff -= 360;
     if (diff < -180) diff += 360;
         // if (Math.abs(diff) > rotateTank) {
-        ws.tankRotate += Math.sign(diff) * rotateTank * 0.4;
+        oldR += Math.sign(diff) * rotateTank * 0.4;
     // } else {
     //     ws.tankRotate = wallAngle;
     // }
 
                 ws.tankPositionX = oldX;
                 ws.tankPositionY = oldY;
-                // ws.tankRotate = oldR;
+                ws.tankRotate = oldR;
                 break
               }
             } 
