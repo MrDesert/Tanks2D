@@ -66,17 +66,17 @@
             "Rotate": 180 
         },
         "bottom_left": {
-            "Top": 470,
+            "Top": 460,
             "Left": 70,
             "Rotate": 0
         },
         "bottom_center": {
-            "Top": 470,
+            "Top": 460,
             "Left": 390,
             "Rotate": 0
         },
         "bottom_right": {
-            "Top": 470,
+            "Top": 460,
             "Left": 720,
             "Rotate": 0
         },

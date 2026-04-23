@@ -68,16 +68,23 @@ wss.on('connection', (ws, req) => {
           const oldY = ws.tankPositionY;
           const oldR = ws.tankRotate;
           const radian = ws.tankRotate * Math.PI / 180;
+          let speed = tankSpeed;
           if(data.W){
-            ws.tankPositionX += tankSpeed * Math.sin(radian);
-            ws.tankPositionY -= tankSpeed * Math.cos(radian);
+            ws.tankPositionX += speed * Math.sin(radian);
+            ws.tankPositionY -= speed * Math.cos(radian);
           };
           if(data.S){
-            ws.tankPositionX -= tankSpeed * Math.sin(radian);
-            ws.tankPositionY += tankSpeed * Math.cos(radian);
+            ws.tankPositionX -= speed * Math.sin(radian);
+            ws.tankPositionY += speed * Math.cos(radian);
           };
-          if(data.A){ws.tankRotate -= rotateTank;};
-          if(data.D){ws.tankRotate += rotateTank;};
+          if(data.A){
+            ws.tankRotate -= rotateTank;
+            speed = 1;
+          } else {speed = tankSpeed};
+          if(data.D){
+            ws.tankRotate += rotateTank;
+            speed = 1;
+          } else {speed = tankSpeed};
           if(data.Z){ws.turretRotate -= rotateTurret;} 
           if(data.X){ws.turretRotate += rotateTurret;}
           
