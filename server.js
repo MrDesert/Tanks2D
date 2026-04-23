@@ -159,11 +159,11 @@ if (data.A || data.D) {
     if (wallAngle === 0) {
         // Отъезжаем вверх или вниз
         const sign = (ws.tankPositionY < wall.top) ? -1 : 1;
-        ws.tankPositionY += sign * 4;
+        ws.tankPositionY += sign * 3;
     } else {
         // Отъезжаем влево или вправо
         const sign = (ws.tankPositionX < wall.left) ? -1 : 1;
-        ws.tankPositionX += sign * 4;
+        ws.tankPositionX += sign * 3;
     }
 }
                 break
