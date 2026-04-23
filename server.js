@@ -88,7 +88,7 @@ wss.on('connection', (ws, req) => {
           if(data.Z){ws.turretRotate -= rotateTurret;} 
           if(data.X){ws.turretRotate += rotateTurret;}
           
-          const tankVertices = OBB(ws.tankPositionX, ws.tankPositionY, tankWidth, tankHeight, ws.tankRotate)
+          // const tankVertices = OBB(ws.tankPositionX, ws.tankPositionY, tankWidth, tankHeight, ws.tankRotate)
           const wallVertices = OBB(mapGame.walls.kontur_top.Left, mapGame.walls.kontur_top.Top, mapGame.walls.kontur_top.Width, mapGame.walls.kontur_top.Height, 0)
           const wallVertices1 = OBB(mapGame.walls.kontur_right.Left, mapGame.walls.kontur_right.Top, mapGame.walls.kontur_right.Width, mapGame.walls.kontur_right.Height, 0)
           const wallVertices2 = OBB(mapGame.walls.kontur_bottom.Left, mapGame.walls.kontur_bottom.Top, mapGame.walls.kontur_bottom.Width, mapGame.walls.kontur_bottom.Height, 0)
@@ -98,17 +98,32 @@ wss.on('connection', (ws, req) => {
           const wallVertices6 = OBB(mapGame.walls.inner_bottom.Left, mapGame.walls.inner_bottom.Top, mapGame.walls.inner_bottom.Width, mapGame.walls.inner_bottom.Height, 0)
           const wallVertices7 = OBB(mapGame.walls.inner_left.Left, mapGame.walls.inner_left.Top, mapGame.walls.inner_left.Width, mapGame.walls.inner_left.Height, 0)
 
-          if(SAT(tankVertices, wallVertices) || SAT(tankVertices, wallVertices1) || SAT(tankVertices, wallVertices2) || SAT(tankVertices, wallVertices3) || SAT(tankVertices, wallVertices4) || SAT(tankVertices, wallVertices5) || SAT(tankVertices, wallVertices6) || SAT(tankVertices, wallVertices7)){
-            // ws.tankPositionX = oldX;
-            // ws.tankPositionY = oldY;
-            // ws.tankRotate = oldR;
-          }
+          // if(SAT(tankVertices, wallVertices) || SAT(tankVertices, wallVertices1) || SAT(tankVertices, wallVertices2) || SAT(tankVertices, wallVertices3) || SAT(tankVertices, wallVertices4) || SAT(tankVertices, wallVertices5) || SAT(tankVertices, wallVertices6) || SAT(tankVertices, wallVertices7)){
+          //   // ws.tankPositionX = oldX;
+          //   // ws.tankPositionY = oldY;
+          //   // ws.tankRotate = oldR;
+          // }
 
           for(let key in mapGame.walls){
-            const firstColliz = AABB({Left: (ws.tankPositionX-19), Top: ws.tankPositionY, Width: (tankWidth+38), Height: tankHeight}, {Left: mapGame.walls[key].Left, Top: mapGame.walls[key].Top, Width: mapGame.walls[key].Width, Height: mapGame.walls[key].Height})
+            const firstColliz = AABB({
+              Left: (ws.tankPositionX-19), 
+              Top: ws.tankPositionY, 
+              Width: (tankWidth+38), 
+              Height: tankHeight}, {
+              Left: mapGame.walls[key].Left, 
+              Top: mapGame.walls[key].Top, 
+              Width: mapGame.walls[key].Width, 
+              Height: mapGame.walls[key].Height
+            })
+
             if(firstColliz){
-              ws.tankPositionX = oldX;
-              ws.tankPositionY = oldY;
+              const tankVertices = OBB(ws.tankPositionX, ws.tankPositionY, tankWidth, tankHeight, ws.tankRotate);
+              const wallVertices = OBB(mapGame.walls[key].Left, mapGame.walls[key].Top, mapGame.walls[key].Width, mapGame.walls[key].Height, 0)
+              if(SAT(tankVertices, wallVertices)){
+                ws.tankPositionX = oldX;
+                ws.tankPositionY = oldY;
+                ws.tankRotate = oldR;
+              }
             } 
           }
           // console.log(AABB({Left: ws.tankPositionX, Top: ws.tankPositionY, Width: tankWidth, Height: tankHeight}, {Left: mapGame.walls.kontur_top.Left, Top: mapGame.walls.kontur_top.Top, Width: mapGame.walls.kontur_top.Width, Height: mapGame.walls.kontur_top.Height}))
