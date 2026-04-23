@@ -132,3 +132,32 @@ footer {
   background-repeat: no-repeat;
   transform: translateX(-50%);
 }
+
+#gui {
+    top: 700px;
+    left: 100px;
+    position: absolute;
+    z-index: 1001;
+    height: 100%;
+    width: 100%;
+}
+
+.btnArrows {
+    position: relative;
+    height: 40px;
+    width: 40px;
+    background-color: rgba(100, 100, 100, 0.5);
+    font-size: 35px;
+}
+#topArrow {
+    left: 40px;
+}
+#bottomArrow {
+    left: 40px;
+}
+#rightArrow {
+    left: 80px;
+}
+#leftArrow {
+    top: -80px;
+}

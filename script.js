@@ -55,6 +55,18 @@ document.addEventListener('keyup', (e)=> {
         else if(e.code === 'Space'){keysDown.Space = false}
 });
 
+function keyDownSensor(key, heldDown){
+    if(key === "w"){
+        keysDown.W = heldDown;
+    }else if(key === "s"){
+        keysDown.S = heldDown;
+    }else if(key === "d"){
+        keysDown.D = heldDown;
+    }else if(key === "a"){
+        keysDown.A = heldDown;
+    }
+}
+
 const fps = document.getElementById("fps");
 tick(performance.now());
 function tick(time){
