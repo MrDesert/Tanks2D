@@ -104,16 +104,14 @@ wss.on('connection', (ws, req) => {
             // ws.tankRotate = oldR;
           }
 
-          // for(let key in mapGame.walls){
-          //   if(ws.tankPositionX+43 > (mapGame.walls[key].Left) && 
-          //     ws.tankPositionX < (mapGame.walls[key].Left+mapGame.walls[key].Width) && 
-          //     ws.tankPositionY+80 > (mapGame.walls[key].Top) && 
-          //     ws.tankPositionY < (mapGame.walls[key].Top+mapGame.walls[key].Height)){
-          //     ws.tankPositionX = oldX;
-          //     ws.tankPositionY = oldY;
-          //   } 
-          // }
-          console.log(AABB({Left: ws.tankPositionX, Top: ws.tankPositionY, Width: tankWidth, Height: tankHeight}, {Left: mapGame.walls.kontur_top.Left, Top: mapGame.walls.kontur_top.Top, Width: mapGame.walls.kontur_top.Width, Height: mapGame.walls.kontur_top.Height}))
+          for(let key in mapGame.walls){
+            const firstColliz = AABB({Left: ws.tankPositionX, Top: ws.tankPositionY, Width: tankWidth, Height: tankHeight}, {Left: mapGame.walls[key].Left, Top: mapGame.walls[key].Top, Width: mapGame.walls[key].Width, Height: mapGame.walls[key].Height})
+            if(firstColliz){
+              ws.tankPositionX = oldX;
+              ws.tankPositionY = oldY;
+            } 
+          }
+          // console.log(AABB({Left: ws.tankPositionX, Top: ws.tankPositionY, Width: tankWidth, Height: tankHeight}, {Left: mapGame.walls.kontur_top.Left, Top: mapGame.walls.kontur_top.Top, Width: mapGame.walls.kontur_top.Width, Height: mapGame.walls.kontur_top.Height}))
           function AABB(obj1, obj2){
             return (
               (obj1.Left + obj1.Width) > obj2.Left &&
