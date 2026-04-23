@@ -113,7 +113,7 @@ wss.on('connection', (ws, req) => {
           //     ws.tankPositionY = oldY;
           //   } 
           // }
-          console.log(AABB({Left: ws.tankPositionX, Top: ws.tankPositionY, Width: ws.tankWidth, Height: ws.tankHeight}, {Left: mapGame.walls.kontur_top.Left, Top: mapGame.walls.kontur_top.Top, Width: mapGame.walls.kontur_top.Width, Height: mapGame.walls.kontur_top.Height}))
+          console.log(AABB({Left: ws.tankPositionX, Top: ws.tankPositionY, Width: tankWidth, Height: tankHeight}, {Left: mapGame.walls.kontur_top.Left, Top: mapGame.walls.kontur_top.Top, Width: mapGame.walls.kontur_top.Width, Height: mapGame.walls.kontur_top.Height}))
           function AABB(obj1, obj2){
             return (
               (obj1.Left + obj1.Width) > obj2.Left &&
