@@ -236,7 +236,7 @@ if (data.type === 'welcome') {
     curPositionY = data.Y;
     curTankRotate = data.Rotate;
     const parent = document.getElementById("body");
-    parent['append'](Object.assign(document.createElement("div"), {id: "playerTank", style: "height: " + data.Height + "px; width: " + data.Width + "px; translate("+curPositionX +"px, "+curPositionY+"px) rotate("+curTankRotate+"deg)"}));
+    parent['append'](Object.assign(document.createElement("div"), {id: "playerTank", style: ` height: ${data.Height}px; width: ${data.Width}px; top: ${curPositionY}px; left: ${curPositionX}px; transform: rotate(${curTankRotate}deg); `}));
     playerTank = document.getElementById("playerTank");
     playerTank['append'](Object.assign(document.createElement("div"), {id: "leftTrack", className: "playerTankTrack trackFrame7"}));
     playerTank['append'](Object.assign(document.createElement("div"), {id: "rightTrack", className: "playerTankTrack trackFrame7"}));
@@ -249,13 +249,14 @@ if (data.type === 'welcome') {
     curPositionX = data.positionX;
     curPositionY = data.positionY;
     curTankRotate = data.tankRotate;
-    playerTank.style.transform = "translate("+curPositionX +"px, "+curPositionY+"px) rotate("+curTankRotate+"deg)";
+    playerTank.style.top = `${curPositionY}px`;
+    playerTank.style.left = `${curPositionX}px`;
+    playerTank.style.transform = "rotate("+curTankRotate+"deg)"
     playerTankTurret.style.transform = "translateX(-50%) rotate("+curTurretRotate+"deg)";
 } else if (data.type === 'map') {
     for(let key in data.map.walls){
         const parent = document.getElementById("body");
         parent['append'](Object.assign(document.createElement("div"), {id: "wall"+key, className: "cement", style: "height: " + data.map.walls[key].Height + "px; width: " + data.map.walls[key].Width + "px; top:" + data.map.walls[key].Top + "px; left:" + data.map.walls[key].Left + "px;"}));
-        console.log(document.getElementById("wall"+key).getBoundingClientRect())
         walls.push(document.getElementById("wall"+key).getBoundingClientRect());
     }
 
