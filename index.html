@@ -16,10 +16,10 @@
         <div id="ping" style="position: absolute; top: 10px; left: 10px; background: black; color: white; padding: 5px 10px; border-radius: 5px; font-family: monospace; z-index: 1000;">ping: --</div>
         <div id="fps" style="position: absolute; top: 30px; left: 10px; background: black; color: white; padding: 5px 10px; border-radius: 5px; font-family: monospace; z-index: 1000;">fps: --</div>
         <div id="gui">
-            <div id="topArrow" class="btnArrows" onmousedown="keyDownSensor('w', true)" onmouseup="keyDownSensor('w', false)">↑</div>
-            <div id="rightArrow" class="btnArrows" onmousedown="keyDownSensor('d', true)" onmouseup="keyDownSensor('d', false)">→</div>
-            <div id="bottomArrow" class="btnArrows" onmousedown="keyDownSensor('s', true)" onmouseup="keyDownSensor('s', false)">↓</div>
-            <div id="leftArrow" class="btnArrows" onmousedown="keyDownSensor('a', true)" onmouseup="keyDownSensor('a', false)">←</div>
+            <div id="topArrow" class="btnArrows" onmousedown="keyDownSensor('w', true)" ontouchstart="keyDownSensor('w', true)" onmouseup="keyDownSensor('w', false)" ontouchend="keyDownSensor('w', false)">↑</div>
+            <div id="rightArrow" class="btnArrows" onmousedown="keyDownSensor('d', true)" ontouchstart="keyDownSensor('d', true)" onmouseup="keyDownSensor('d', false)" ontouchend="keyDownSensor('d', false)">→</div>
+            <div id="bottomArrow" class="btnArrows" onmousedown="keyDownSensor('s', true)" ontouchstart="keyDownSensor('s', true)" onmouseup="keyDownSensor('s', false)" ontouchend="keyDownSensor('s', false)">↓</div>
+            <div id="leftArrow" class="btnArrows" onmousedown="keyDownSensor('a', true)" ontouchstart="keyDownSensor('a', true)" onmouseup="keyDownSensor('a', false)" ontouchend="keyDownSensor('a', false)">←</div>
         </div>
         <script src="script.js"></script>
     </body>
