@@ -105,36 +105,23 @@ wss.on('connection', (ws, req) => {
           // }
 
           for(let key in mapGame.walls){
-            const firstColliz = AABB({
-              Left: (ws.tankPositionX-19), 
-              Top: ws.tankPositionY, 
-              Width: (tankWidth+38), 
-              Height: tankHeight}, {
-              Left: mapGame.walls[key].Left, 
-              Top: mapGame.walls[key].Top, 
-              Width: mapGame.walls[key].Width, 
-              Height: mapGame.walls[key].Height
-            })
+            const wall = mapGame.walls[key];
+            const firstColliz = AABB(
+              {Left: (ws.tankPositionX-19), Top: ws.tankPositionY, Width: (tankWidth+38), Height: tankHeight}, 
+              {Left: wall.Left, Top: wall.Top, Width: wall.Width, Height: wall.Height}
+            )
 
             if(firstColliz){
               const tankVertices = OBB(ws.tankPositionX, ws.tankPositionY, tankWidth, tankHeight, ws.tankRotate);
-              const wallVertices = OBB(mapGame.walls[key].Left, mapGame.walls[key].Top, mapGame.walls[key].Width, mapGame.walls[key].Height, 0)
+              const wallVertices = OBB(wall.Left, wall.Top, wall.Width, wall.Height, 0)
               if(SAT(tankVertices, wallVertices)){
                 ws.tankPositionX = oldX;
                 ws.tankPositionY = oldY;
                 ws.tankRotate = oldR;
+                break
               }
             } 
           }
-          // console.log(AABB({Left: ws.tankPositionX, Top: ws.tankPositionY, Width: tankWidth, Height: tankHeight}, {Left: mapGame.walls.kontur_top.Left, Top: mapGame.walls.kontur_top.Top, Width: mapGame.walls.kontur_top.Width, Height: mapGame.walls.kontur_top.Height}))
-          function AABB(obj1, obj2){
-            return (
-              (obj1.Left + obj1.Width) > obj2.Left &&
-              obj1.Left < (obj2.Left + obj2.Width) &&
-              (obj1.Top + obj1.Height) > obj2.Top &&
-              obj1.Top < (obj2.Top + obj2.Height)
-            );
-          } 
 
           ws.send(JSON.stringify({ type: 'movement', turretRotate: ws.turretRotate, tankRotate: ws.tankRotate, positionX: ws.tankPositionX, positionY: ws.tankPositionY}));
                   
@@ -184,6 +171,15 @@ wss.on('connection', (ws, req) => {
 server.listen(port, () => {
   console.log(`Сервер запущен на порту ${port}`);
 });
+
+          function AABB(obj1, obj2){
+            return (
+              (obj1.Left + obj1.Width) > obj2.Left &&
+              obj1.Left < (obj2.Left + obj2.Width) &&
+              (obj1.Top + obj1.Height) > obj2.Top &&
+              obj1.Top < (obj2.Top + obj2.Height)
+            );
+          } 
 
 function OBB(X, Y, Width, Height, Rotate){
   //Переводим в OBB
