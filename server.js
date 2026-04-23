@@ -105,7 +105,7 @@ wss.on('connection', (ws, req) => {
           }
 
           for(let key in mapGame.walls){
-            const firstColliz = AABB({Left: ws.tankPositionX, Top: ws.tankPositionY, Width: (tankWidth+37), Height: tankHeight}, {Left: mapGame.walls[key].Left, Top: mapGame.walls[key].Top, Width: mapGame.walls[key].Width, Height: mapGame.walls[key].Height})
+            const firstColliz = AABB({Left: (ws.tankPositionX-19), Top: ws.tankPositionY, Width: (tankWidth+38), Height: tankHeight}, {Left: mapGame.walls[key].Left, Top: mapGame.walls[key].Top, Width: mapGame.walls[key].Width, Height: mapGame.walls[key].Height})
             if(firstColliz){
               ws.tankPositionX = oldX;
               ws.tankPositionY = oldY;
