@@ -77,14 +77,6 @@ function tick(time){
     if(time - (tick.lastTimeMove || 0) >= 16){
         // Отправляем данные о танке на сервер
 if (socket.readyState === WebSocket.OPEN) {
-//   const tankData = {
-//     type: 'tankState',
-//     positionX: curPositionX,
-//     positionY: curPositionY,
-//     tankRotate: curTankRotate,
-//     turretRotate: curTurretRotate
-//   };
-//   socket.send(JSON.stringify(tankData));
   socket.send(JSON.stringify(keysDown));
 }     
         let oldX = curPositionX;

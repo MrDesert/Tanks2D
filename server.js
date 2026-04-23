@@ -59,35 +59,14 @@ wss.on('connection', (ws, req) => {
   ws.on('message', (message) => {
     try {
       const data = JSON.parse(message);
-      // if (data.type === 'tankState') {
-        // Сохраняем данные танка этого пользователя
 
-        // tanks.set(userId, {
-        //   userId: userId,
-        //   positionX: data.positionX,
-        //   positionY: data.positionY,
-        //   tankRotate: data.tankRotate,
-        //   turretRotate: data.turretRotate
-        // });
-        
-        // // Рассылаем данные о ВСЕХ танках ВСЕМ подключённым клиентам
-        // const broadcastData = {
-        //   type: 'allTanks',
-        //   tanks: Array.from(tanks.values())
-        // };
-        
-        // wss.clients.forEach(client => {
-        //   if (client.readyState === WebSocket.OPEN) {
-        //     client.send(JSON.stringify(broadcastData));
-        //   }
-        // });
-      // } else
       if(data.type === 'ping'){
          ws.send(JSON.stringify({ type: 'pong', clientTime: data.clientTime, serverTime: Date.now()}));
       } 
       else if (data.type === 'keysDown'){
           const oldX = ws.tankPositionX;
           const oldY = ws.tankPositionY;
+          const oldR = ws.rotateTank;
           const radian = ws.tankRotate * Math.PI / 180;
           if(data.W){
             ws.tankPositionX += tankSpeed * Math.sin(radian);
@@ -115,6 +94,7 @@ wss.on('connection', (ws, req) => {
           if(SAT(tankVertices, wallVertices) || SAT(tankVertices, wallVertices1) || SAT(tankVertices, wallVertices2) || SAT(tankVertices, wallVertices3) || SAT(tankVertices, wallVertices4) || SAT(tankVertices, wallVertices5) || SAT(tankVertices, wallVertices6) || SAT(tankVertices, wallVertices7)){
             ws.tankPositionX = oldX;
             ws.tankPositionY = oldY;
+            ws.rotateTank = oldR;
           }
 
           function OBB(X, Y, Width, Height, Rotate){
