@@ -69,14 +69,7 @@ wss.on('connection', (ws, req) => {
           const oldR = ws.tankRotate;
           const radian = ws.tankRotate * Math.PI / 180;
           let speed = tankSpeed;
-          if(data.W){
-            ws.tankPositionX += speed * Math.sin(radian);
-            ws.tankPositionY -= speed * Math.cos(radian);
-          };
-          if(data.S){
-            ws.tankPositionX -= speed * Math.sin(radian);
-            ws.tankPositionY += speed * Math.cos(radian);
-          };
+          
           if(data.A){
             ws.tankRotate -= rotateTank;
             speed = 1;
@@ -85,24 +78,16 @@ wss.on('connection', (ws, req) => {
             ws.tankRotate += rotateTank;
             speed = 1;
           } else {speed = tankSpeed};
+          if(data.W){
+            ws.tankPositionX += speed * Math.sin(radian);
+            ws.tankPositionY -= speed * Math.cos(radian);
+          };
+          if(data.S){
+            ws.tankPositionX -= speed * Math.sin(radian);
+            ws.tankPositionY += speed * Math.cos(radian);
+          };
           if(data.Z){ws.turretRotate -= rotateTurret;} 
           if(data.X){ws.turretRotate += rotateTurret;}
-          
-          // const tankVertices = OBB(ws.tankPositionX, ws.tankPositionY, tankWidth, tankHeight, ws.tankRotate)
-          const wallVertices = OBB(mapGame.walls.kontur_top.Left, mapGame.walls.kontur_top.Top, mapGame.walls.kontur_top.Width, mapGame.walls.kontur_top.Height, 0)
-          const wallVertices1 = OBB(mapGame.walls.kontur_right.Left, mapGame.walls.kontur_right.Top, mapGame.walls.kontur_right.Width, mapGame.walls.kontur_right.Height, 0)
-          const wallVertices2 = OBB(mapGame.walls.kontur_bottom.Left, mapGame.walls.kontur_bottom.Top, mapGame.walls.kontur_bottom.Width, mapGame.walls.kontur_bottom.Height, 0)
-          const wallVertices3 = OBB(mapGame.walls.kontur_left.Left, mapGame.walls.kontur_left.Top, mapGame.walls.kontur_left.Width, mapGame.walls.kontur_left.Height, 0)
-          const wallVertices4 = OBB(mapGame.walls.inner_top.Left, mapGame.walls.inner_top.Top, mapGame.walls.inner_top.Width, mapGame.walls.inner_top.Height, 0)
-          const wallVertices5 = OBB(mapGame.walls.inner_right.Left, mapGame.walls.inner_right.Top, mapGame.walls.inner_right.Width, mapGame.walls.inner_right.Height, 0)
-          const wallVertices6 = OBB(mapGame.walls.inner_bottom.Left, mapGame.walls.inner_bottom.Top, mapGame.walls.inner_bottom.Width, mapGame.walls.inner_bottom.Height, 0)
-          const wallVertices7 = OBB(mapGame.walls.inner_left.Left, mapGame.walls.inner_left.Top, mapGame.walls.inner_left.Width, mapGame.walls.inner_left.Height, 0)
-
-          // if(SAT(tankVertices, wallVertices) || SAT(tankVertices, wallVertices1) || SAT(tankVertices, wallVertices2) || SAT(tankVertices, wallVertices3) || SAT(tankVertices, wallVertices4) || SAT(tankVertices, wallVertices5) || SAT(tankVertices, wallVertices6) || SAT(tankVertices, wallVertices7)){
-          //   // ws.tankPositionX = oldX;
-          //   // ws.tankPositionY = oldY;
-          //   // ws.tankRotate = oldR;
-          // }
 
           for(let key in mapGame.walls){
             const wall = mapGame.walls[key];
@@ -172,14 +157,14 @@ server.listen(port, () => {
   console.log(`Сервер запущен на порту ${port}`);
 });
 
-          function AABB(obj1, obj2){
-            return (
-              (obj1.Left + obj1.Width) > obj2.Left &&
-              obj1.Left < (obj2.Left + obj2.Width) &&
-              (obj1.Top + obj1.Height) > obj2.Top &&
-              obj1.Top < (obj2.Top + obj2.Height)
-            );
-          } 
+function AABB(obj1, obj2){
+  return (
+    (obj1.Left + obj1.Width) > obj2.Left &&
+    obj1.Left < (obj2.Left + obj2.Width) &&
+    (obj1.Top + obj1.Height) > obj2.Top &&
+    obj1.Top < (obj2.Top + obj2.Height)
+  );
+} 
 
 function OBB(X, Y, Width, Height, Rotate){
   //Переводим в OBB
@@ -241,9 +226,7 @@ function SAT(verticesA, verticesB) {
       const axisX = -edgeY;
       const axisY = edgeX;
       const length = Math.sqrt(axisX * axisX + axisY * axisY);
-      if (length !== 0) {
-        axes.push({ x: axisX / length, y: axisY / length });
-      }
+      if (length !== 0){axes.push({ x: axisX / length, y: axisY / length })}
     }
     return axes;
   }
