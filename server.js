@@ -153,6 +153,19 @@ wss.on('connection', (ws, req) => {
                 ws.tankPositionX = oldX;
                 ws.tankPositionY = oldY;
                 // ws.tankRotate = oldR;
+
+                // При повороте у стены
+if (data.A || data.D) {
+    if (wallAngle === 0) {
+        // Отъезжаем вверх или вниз
+        const sign = (ws.tankPositionY < wall.top) ? -1 : 1;
+        ws.tankPositionY += sign * 4;
+    } else {
+        // Отъезжаем влево или вправо
+        const sign = (ws.tankPositionX < wall.left) ? -1 : 1;
+        ws.tankPositionX += sign * 4;
+    }
+}
                 break
               }
             } 
