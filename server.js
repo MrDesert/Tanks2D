@@ -105,14 +105,14 @@ wss.on('connection', (ws, req) => {
                 const wallAngle = wall.Width > wall.Height ? 0 : 90;
 
     // Плавный поворот к стене
-    let diff = wallAngle - ws.tankRotate;
+    let diff = wallAngle - oldR;
     if (diff > 180) diff -= 360;
     if (diff < -180) diff += 360;
-        // if (Math.abs(diff) > rotateTank) {
+        if (Math.abs(diff) > rotateTank) {
         oldR += Math.sign(diff) * rotateTank * 0.4;
-    // } else {
-    //     ws.tankRotate = wallAngle;
-    // }
+    } else {
+        oldR = wallAngle;
+    }
 
                 ws.tankPositionX = oldX;
                 ws.tankPositionY = oldY;
