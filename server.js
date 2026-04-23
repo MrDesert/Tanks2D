@@ -63,10 +63,10 @@ wss.on('connection', (ws, req) => {
       if(data.type === 'ping'){
          ws.send(JSON.stringify({ type: 'pong', clientTime: data.clientTime, serverTime: Date.now()}));
       } 
-      else if (data.type === 'keysDown'){
+      if (data.type === 'keysDown'){
           const oldX = ws.tankPositionX;
           const oldY = ws.tankPositionY;
-          const oldR = ws.rotateTank;
+          const oldR = ws.tankRotate;
           const radian = ws.tankRotate * Math.PI / 180;
           if(data.W){
             ws.tankPositionX += tankSpeed * Math.sin(radian);
@@ -94,7 +94,7 @@ wss.on('connection', (ws, req) => {
           if(SAT(tankVertices, wallVertices) || SAT(tankVertices, wallVertices1) || SAT(tankVertices, wallVertices2) || SAT(tankVertices, wallVertices3) || SAT(tankVertices, wallVertices4) || SAT(tankVertices, wallVertices5) || SAT(tankVertices, wallVertices6) || SAT(tankVertices, wallVertices7)){
             ws.tankPositionX = oldX;
             ws.tankPositionY = oldY;
-            ws.rotateTank = oldR;
+            ws.tankRotate = oldR;
           }
 
           function OBB(X, Y, Width, Height, Rotate){

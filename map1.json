@@ -52,42 +52,42 @@
     "spawnPoints": {
         "top_left": {
             "Top": 50,
-            "Left": 50,
+            "Left": 70,
             "Rotate": 180 
         },
         "top_center": {
             "Top": 50,
-            "Left": 370,
+            "Left": 390,
             "Rotate": 180 
         },
         "tor_right": {
             "Top": 50,
-            "Left": 690,
+            "Left": 710,
             "Rotate": 180 
         },
         "center_left": {
             "Top": 480,
-            "Left": 50,
+            "Left": 70,
             "Rotate": 0
         },
         "center_right": {
             "Top": 480,
-            "Left": 370,
+            "Left": 390,
             "Rotate": 0
         },
         "bottom_left": {
             "Top": 480,
-            "Left": 690,
+            "Left": 710,
             "Rotate": 0
         },
         "bottom_center": {
             "Top": 260,
-            "Left": 210,
+            "Left": 230,
             "Rotate": 180
         },
         "bottom_right": {
             "Top": 260,
-            "Left": 540,
+            "Left": 560,
             "Rotate": 0
         }
     }

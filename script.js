@@ -61,18 +61,14 @@ function tick(time){
     tick.countTank = (tick.countTank || 0)
 
     if(time - (tick.lastFPS || 0) >= 1000){
+        if (socket.readyState === WebSocket.OPEN) {
+            socket.send(JSON.stringify({type: "ping", clientTime: Date.now()}));
+        } 
       fps.textContent = "fps: " + tick.FPScount;
       tick.FPScount = 0;
       tick.lastFPS = time;
     }
     tick.FPScount = (tick.FPScount || 0) + 1;
-
-    if(time - (tick.lastTimePing || 0) >= 500){
-      if (socket.readyState === WebSocket.OPEN) {
-  socket.send(JSON.stringify({type: "ping", clientTime: Date.now()}));
-      }   
-       tick.lastTimePing = time; 
-}
 
     if(time - (tick.lastTimeMove || 0) >= 16){
         // Отправляем данные о танке на сервер
