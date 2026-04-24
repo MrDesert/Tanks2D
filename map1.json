@@ -4,49 +4,57 @@
             "Top": 0,
             "Left": 0,
             "Height": 30,
-            "Width": 800
+            "Width": 800,
+            "Rotate": 0
         },
         "kontur_right": {
             "Top": 0,
             "Left": 800,
             "Height": 590,
-            "Width": 30
+            "Width": 30,
+            "Rotate": 0
         },
         "kontur_bottom": {
             "Top": 570,
             "Left": 0,
             "Height": 30,
-            "Width": 800
+            "Width": 800,
+            "Rotate": 0
         },
         "kontur_left": {
             "Top": 0,
             "Left": 0,
             "Height": 590,
-            "Width": 30
+            "Width": 30,
+            "Rotate": 0
         },
         "inner_top": {
             "Top": 140,
             "Left": 150,
             "Height": 30,
-            "Width": 360
+            "Width": 360,
+            "Rotate": 0
         },
         "inner_right": {
             "Top": 140,
             "Left": 650,
             "Height": 290,
-            "Width": 30
+            "Width": 30,
+            "Rotate": 0
         },
         "inner_bottom": {
             "Top": 420,
             "Left": 320,
             "Height": 30,
-            "Width": 360
+            "Width": 360,
+            "Rotate": 0
         },
         "inner_left": {
             "Top": 170,
             "Left": 150,
             "Height": 290,
-            "Width": 30
+            "Width": 30,
+            "Rotate": 0
         }
     },
     "spawnPoints": {
