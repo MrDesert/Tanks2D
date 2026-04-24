@@ -92,29 +92,22 @@ wss.on('connection', (ws, req) => {
               // Проверка коллизии с другими танками
 for (let [otherUserId, otherTank] of tanks) {
     if (otherUserId === userId) continue; // пропускаем себя
-    
+
     const tankVertices = OBB(ws.tankPositionX, ws.tankPositionY, tankWidth, tankHeight, ws.tankRotate);
-    const otherVertices = OBB(
-        otherTank.positionX, 
-        otherTank.positionY, 
-        tankWidth, tankHeight, 
-        otherTank.tankRotate
-    );
+    const otherVertices = OBB(otherTank.positionX, otherTank.positionY, tankWidth, tankHeight, otherTank.tankRotate);
     
     if (SAT(tankVertices, otherVertices)) {
-        // Коллизия с другим танком
-        // Откатываем позицию и поворот
         ws.tankPositionX = oldX;
         ws.tankPositionY = oldY;
         ws.tankRotate = oldR;
         
         
         // Опционально: отталкивание
-        // const dx = ws.tankPositionX - otherTank.positionX;
-        // const dy = ws.tankPositionY - otherTank.positionY;
-        // const angle = Math.atan2(dy, dx);
-        // ws.tankPositionX += Math.cos(angle) * 2;
-        // ws.tankPositionY += Math.sin(angle) * 2;
+        const dx = ws.tankPositionX - otherTank.positionX;
+        const dy = ws.tankPositionY - otherTank.positionY;
+        const angle = Math.atan2(dy, dx);
+        ws.tankPositionX += Math.cos(angle) * 2;
+        ws.tankPositionY += Math.sin(angle) * 2;
         
         break; // достаточно одного столкновения
     }
