@@ -103,6 +103,7 @@ wss.on('connection', (ws, req) => {
 for (let [otherUserId, otherTank] of tanks) {
     if (otherUserId === userId) continue; // пропускаем себя
     
+    let cons = 0;
     const otherVertices = OBB(
         otherTank.positionX, 
         otherTank.positionY, 
@@ -110,6 +111,16 @@ for (let [otherUserId, otherTank] of tanks) {
         tankHeight, 
         otherTank.tankRotate
     );
+
+    if(cons < 1){
+      cons++
+      console.log(otherUserId);
+      console.log(otherTank.positionX);
+      console.log(otherTank.positionY);
+      console.log(tankWidth);
+      console.log(tankHeight);
+      console.log(otherTank.tankRotate);
+    }
     
     if (SAT(tankVertices, otherVertices)) {
         // Коллизия с другим танком
@@ -117,7 +128,7 @@ for (let [otherUserId, otherTank] of tanks) {
         ws.tankPositionX = oldX;
         ws.tankPositionY = oldY;
         ws.tankRotate = oldR;
-        console.log("столкновение")
+        
         
         // Опционально: отталкивание
         // const dx = ws.tankPositionX - otherTank.positionX;
