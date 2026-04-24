@@ -109,11 +109,19 @@ for (let [otherUserId, otherTank] of tanks) {
         ws.tankPositionX += Math.cos(angle) * 0.5;
         ws.tankPositionY += Math.sin(angle) * 0.5;
 
+            // Поворот от столкновения (удар разворачивает танки)
+    const rotateFromCollision = (Math.random() - 0.5) * 30; // случайный разворот ±15°
+    otherTank.tankRotate = (otherTank.tankRotate + rotateFromCollision)  % 360;
+    if (otherTank.tankRotate < 0) otherTank.tankRotate += 360;
+    ws.tankRotate = (ws.tankRotate - rotateFromCollision) % 360;
+    if (ws.tankRotate < 0) ws.tankRotate += 360;
+
         // Меняем позицию другого танка в самой Map
         tanks.set(otherUserId, {
           ...otherTank,
           positionX: otherTank.positionX - Math.cos(angle) * 3,
-          positionY: otherTank.positionY - Math.sin(angle) * 3
+          positionY: otherTank.positionY - Math.sin(angle) * 3,
+          tankRotate: otherTank.tankRotate
         });
     
     // Обновляем данные в текущей переменной (для дальнейшего использования)
