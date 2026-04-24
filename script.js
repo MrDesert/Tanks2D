@@ -89,9 +89,9 @@ if (socket.readyState === WebSocket.OPEN) {
 }     
         for (const key in keysDown){
             if(key == "W" && keysDown[key]){
-                const radian = curTankRotate * Math.PI / 180;
-                curPositionX += speed * Math.sin(radian);
-                curPositionY -= speed * Math.cos(radian);
+                // const radian = curTankRotate * Math.PI / 180;
+                // curPositionX += speed * Math.sin(radian);
+                // curPositionY -= speed * Math.cos(radian);
                 if(trackFrameLeft >= 7){trackFrameLeft = 1;
                 }else{trackFrameLeft++;}
                 if(trackFrameRight >= 7){trackFrameRight = 1;
@@ -102,9 +102,9 @@ if (socket.readyState === WebSocket.OPEN) {
                 document.getElementById("rightTrack").classList.add("trackFrame"+trackFrameRight);
             } 
             if(key == "S" && keysDown[key]){
-                const radian = curTankRotate * Math.PI / 180;
-                curPositionX -= speed * Math.sin(radian);
-                curPositionY += speed * Math.cos(radian);
+                // const radian = curTankRotate * Math.PI / 180;
+                // curPositionX -= speed * Math.sin(radian);
+                // curPositionY += speed * Math.cos(radian);
                 if(trackFrameLeft <= 1){trackFrameLeft = 7;
                 }else{trackFrameLeft--;}
                 if(trackFrameRight <= 1){trackFrameRight = 7;
@@ -115,7 +115,7 @@ if (socket.readyState === WebSocket.OPEN) {
                 document.getElementById("rightTrack").classList.add("trackFrame"+trackFrameRight);
             } 
             if(key == "A" && keysDown[key]){
-                curTankRotate -= rotateTank;
+                // curTankRotate -= rotateTank;
                 if(trackFrameLeft <= 1){trackFrameLeft = 7;
                 }else{trackFrameLeft--;}
                 if(trackFrameRight >= 7){trackFrameRight = 1;
@@ -126,7 +126,7 @@ if (socket.readyState === WebSocket.OPEN) {
                 document.getElementById("rightTrack").classList.add("trackFrame"+trackFrameRight);
             } 
             if(key == "D" && keysDown[key]){
-                curTankRotate += rotateTank;
+                // curTankRotate += rotateTank;
                 if(trackFrameLeft >= 7){trackFrameLeft = 1;
                 }else{trackFrameLeft++;}
                 if(trackFrameRight <= 1){trackFrameRight = 7;
@@ -290,7 +290,9 @@ if (data.type === 'welcome') {
     
     const tankElement = otherTanks.get(tankData.userId);
     if (tankElement) {
-      tankElement.style.transform = `translate(${tankData.positionX}px, ${tankData.positionY}px) rotate(${tankData.tankRotate}deg)`;
+      tankElement.style.top = `${tankData.positionY}px`;
+      tankElement.style.left = `${tankData.positionX}px`;
+      tankElement.style.transform = `rotate(${tankData.tankRotate}deg)`;
       const turret = tankElement.querySelector('.otherTankTurret');
       if (turret) {
         turret.style.transform = `translateX(-50%) rotate(${tankData.turretRotate}deg)`;

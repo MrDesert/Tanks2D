@@ -89,38 +89,16 @@ wss.on('connection', (ws, req) => {
           if(data.Z){ws.turretRotate -= rotateTurret;} 
           if(data.X){ws.turretRotate += rotateTurret;}
 
-          for(let key in mapGame.walls){
-            const wall = mapGame.walls[key];
-            const firstColliz = AABB(
-              {Left: (ws.tankPositionX-19), Top: ws.tankPositionY, Width: (tankWidth+38), Height: tankHeight}, 
-              {Left: wall.Left, Top: wall.Top, Width: wall.Width, Height: wall.Height}
-            )
-
-            if(firstColliz){
-              const tankVertices = OBB(ws.tankPositionX, ws.tankPositionY, tankWidth, tankHeight, ws.tankRotate);
-              const wallVertices = OBB(wall.Left, wall.Top, wall.Width, wall.Height, wall.Rotate)
               // Проверка коллизии с другими танками
 for (let [otherUserId, otherTank] of tanks) {
     if (otherUserId === userId) continue; // пропускаем себя
     
-    let cons = 0;
     const otherVertices = OBB(
         otherTank.positionX, 
         otherTank.positionY, 
         tankWidth, tankHeight, 
         otherTank.tankRotate
     );
-
-    if(cons < 1){
-      cons++
-      console.log(otherUserId);
-      console.log(otherTank.positionX);
-      console.log(otherTank.positionY);
-      console.log(userId);
-      console.log(ws.tankPositionX);
-      console.log(ws.tankPositionY);
-      console.log(SAT(tankVertices, otherVertices));
-    }
     
     if (SAT(tankVertices, otherVertices)) {
         // Коллизия с другим танком
@@ -140,6 +118,17 @@ for (let [otherUserId, otherTank] of tanks) {
         break; // достаточно одного столкновения
     }
 }
+
+          for(let key in mapGame.walls){
+            const wall = mapGame.walls[key];
+            const firstColliz = AABB(
+              {Left: (ws.tankPositionX-19), Top: ws.tankPositionY, Width: (tankWidth+38), Height: tankHeight}, 
+              {Left: wall.Left, Top: wall.Top, Width: wall.Width, Height: wall.Height}
+            )
+
+            if(firstColliz){
+              const tankVertices = OBB(ws.tankPositionX, ws.tankPositionY, tankWidth, tankHeight, ws.tankRotate);
+              const wallVertices = OBB(wall.Left, wall.Top, wall.Width, wall.Height, wall.Rotate)
               if(SAT(tankVertices, wallVertices)){
 
                 function getClosestTankSide(tankAngle, wallAngle) {
