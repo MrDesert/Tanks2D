@@ -107,8 +107,7 @@ for (let [otherUserId, otherTank] of tanks) {
     const otherVertices = OBB(
         otherTank.positionX, 
         otherTank.positionY, 
-        tankWidth, 
-        tankHeight, 
+        tankWidth, tankHeight, 
         otherTank.tankRotate
     );
 
@@ -117,9 +116,10 @@ for (let [otherUserId, otherTank] of tanks) {
       console.log(otherUserId);
       console.log(otherTank.positionX);
       console.log(otherTank.positionY);
-      console.log(tankWidth);
-      console.log(tankHeight);
-      console.log(otherTank.tankRotate);
+      console.log(userId);
+      console.log(ws.tankPositionX);
+      console.log(ws.tankPositionY);
+      console.log(SAT(tankVertices, otherVertices));
     }
     
     if (SAT(tankVertices, otherVertices)) {
