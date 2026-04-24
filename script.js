@@ -252,6 +252,8 @@ if (data.type === 'welcome') {
     for (let bullet of data.bullets) {
         drawBullet(bullet.id, bullet.positionX, bullet.positionY, bullet.angle);
     }
+}else if(data.type === 'delBullet'){
+  document.getElementById("bull" + data.id)?.remove();
 }else if (data.type === 'startposition'){
     curPositionX = data.X;
     curPositionY = data.Y;

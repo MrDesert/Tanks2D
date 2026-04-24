@@ -429,6 +429,11 @@ for (let [id, bullet] of bullets) {
 // Удаляем пули
 for (let id of toDelete) {
     bullets.delete(id);
+    wss.clients.forEach(client => {
+      if (client.readyState === WebSocket.OPEN) {
+        client.send(JSON.stringify({type: "delBullet", id: id}));
+      }
+    });
 }
 
 // Рассылаем обновления
