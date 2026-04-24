@@ -25,6 +25,8 @@ let nextBulletId = 0;
 //Карта
 const mapGame = JSON.parse(fs.readFileSync('map1.json', 'utf8'));
 const spawnPoints = Object.keys(mapGame.spawnPoints);
+let mapWidth = 800;
+let mapHeight = 590;
 
 //Танк
 const tankHeight = 80;
