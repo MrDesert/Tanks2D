@@ -148,14 +148,14 @@ wss.on('connection', (ws, req) => {
     if (diff > 180) diff -= 360;
     if (diff < -180) diff += 360;
     
-    ws.tankRotate += Math.sign(diff) * rotateTank * 0.5;
-
+                ws.tankRotate += Math.sign(diff) * rotateTank * 0.5;
                 ws.tankPositionX = oldX;
                 ws.tankPositionY = oldY;
-                // ws.tankRotate = oldR;
+
 
                 // При повороте у стены
 if (data.A || data.D) {
+                  ws.tankRotate = oldR;
     if (wallAngle === 0) {
         // Отъезжаем вверх или вниз
         const sign = (ws.tankPositionY < wall.top) ? -1 : 1;
