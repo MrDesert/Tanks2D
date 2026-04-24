@@ -19,6 +19,8 @@ const wss = new WebSocket.Server({ server });
 let nextUserId = 0;
 let activeConnections = 0;
 const tanks = new Map(); // userId -> данные танка
+const bullets = new Map(); // bulletId -> данные пули
+let nextBulletId = 0;
 
 //Карта
 const mapGame = JSON.parse(fs.readFileSync('map1.json', 'utf8'));
@@ -86,8 +88,34 @@ wss.on('connection', (ws, req) => {
             ws.tankPositionX -= speed * Math.sin(radian);
             ws.tankPositionY += speed * Math.cos(radian);
           };
-          if(data.Z){ws.turretRotate -= rotateTurret;} 
-          if(data.X){ws.turretRotate += rotateTurret;}
+          if(data.Z){ws.turretRotate -= rotateTurret;};
+          if(data.X){ws.turretRotate += rotateTurret;};
+          if(data.Space){
+
+            if (data.type === 'shoot') {
+          // Получаем координаты дула из танка игрока
+    const angleRad = (ws.turretRotate + ws.tankRotate) * Math.PI / 180;
+    const offset = 40; // смещение от центра танка до дула
+    
+    const startX = ws.tankPositionX + tankWidth/2 + Math.sin(angleRad) * offset;
+    const startY = ws.tankPositionY + tankHeight/2 - Math.cos(angleRad) * offset;
+    
+    const bullet = {
+        id: nextBulletId++,
+        ownerId: userId,
+        positionX: startX,
+        positionY: startY,
+        angle: ws.turretRotate + ws.tankRotate,
+        distance: 0,
+        maxDistance: 500 // дальность полёта
+    };
+    
+    bullets.set(bullet.id, bullet);
+    
+    // Рассылаем всем клиентам
+    broadcastBullets();
+}
+          }
 
               // Проверка коллизии с другими танками
 for (let [otherUserId, otherTank] of tanks) {
