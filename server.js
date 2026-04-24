@@ -119,7 +119,7 @@ for (let [otherUserId, otherTank] of tanks) {
 const rotate1 = (diff1 > 180 ? diff1 - 360 : diff1) * 0.3;
 const rotate2 = (diff2 > 180 ? diff2 - 360 : diff2) * 0.3;
 
-ws.tankRotate = (ws.tankRotate + rotate1) % 360;
+// ws.tankRotate = (ws.tankRotate + rotate1) % 360;
 otherTank.tankRotate = (otherTank.tankRotate + rotate2) % 360;
 
         // Меняем позицию другого танка в самой Map
