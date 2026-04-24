@@ -112,8 +112,8 @@ for (let [otherUserId, otherTank] of tanks) {
         // Меняем позицию другого танка в самой Map
         tanks.set(otherUserId, {
           ...otherTank,
-          positionX: otherTank.positionX - Math.cos(angle) * pushForce,
-          positionY: otherTank.positionY - Math.sin(angle) * pushForce
+          positionX: otherTank.positionX - Math.cos(angle) * 2,
+          positionY: otherTank.positionY - Math.sin(angle) * 2
         });
     
     // Обновляем данные в текущей переменной (для дальнейшего использования)
