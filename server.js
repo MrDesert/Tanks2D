@@ -390,7 +390,7 @@ function broadcastBullets() {
     });
 }
 
-setInterval(moveBullet, 500)
+setInterval(moveBullet, 400)
 function moveBullet(){          
 const bulletSpeed = 1;
 const toDelete = [];
@@ -417,12 +417,12 @@ for (let [id, bullet] of bullets) {
         const bulletPoint = [{x: bullet.positionX, y: bullet.positionY}]; // пуля как точка
         
         // Упрощённая проверка (можно использовать SAT или point-in-polygon)
-        if (isPointInOBB(bullet.positionX, bullet.positionY, tankVertices)) {
-            toDelete.push(id);
-            console.log(`Попадание! Танк ${tankId} уничтожен`);
-            // Уменьшаем HP или удаляем танк
-            break;
-        }
+        // if (isPointInOBB(bullet.positionX, bullet.positionY, tankVertices)) {
+        //     toDelete.push(id);
+        //     console.log(`Попадание! Танк ${tankId} уничтожен`);
+        //     // Уменьшаем HP или удаляем танк
+        //     break;
+        // }
     }
 }
 
