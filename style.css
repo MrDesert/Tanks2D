@@ -10,8 +10,9 @@ footer {
     font-size: 0.8rem;
 }
 #playerTank{
-    position: absolute;
-
+        position: absolute;
+        width: auto;
+         min-width: max-content;
     /* border:  1px black solid; */
 }
 #playerTankBody {
@@ -67,7 +68,7 @@ footer {
     background-position: -103px -13px;
 }
 .trackFrame7 {
-    background-position: -122px -13px;
+    background-position: -120px -13px;
 }
 #leftTrack {
     left: -4px;
