@@ -485,18 +485,25 @@ for (let [id, bullet] of bullets) {
         });
 
             // Отправляем принудительное обновление ВЛАДЕЛЬЦУ танка
-    for (let client of wss.clients) {
-        if (client.userId === tankId && client.readyState === WebSocket.OPEN) {
-            client.send(JSON.stringify({
-                type: 'forceUpdate',
-                positionX: spawn.X,
-                positionY: spawn.Y,
-                tankRotate: spawn.Rotate,
-                turretRotate: 0
-            }));
-            break;
-        }
-    }
+for (let client of wss.clients) {
+                if (client.userId === tankId && client.readyState === WebSocket.OPEN) {
+                    // Обновляем данные в сокете (это критически важно!)
+                    client.tankPositionX = spawn.X;
+                    client.tankPositionY = spawn.Y;
+                    client.tankRotate = spawn.Rotate;
+                    client.turretRotate = 0;
+                    
+                    // Отправляем forceUpdate владельцу
+                    client.send(JSON.stringify({
+                        type: 'forceUpdate',
+                        positionX: spawn.X,
+                        positionY: spawn.Y,
+                        tankRotate: spawn.Rotate,
+                        turretRotate: 0
+                    }));
+                    break;
+                }
+            }
 
         const broadcastData = {
     type: 'allTanks',
