@@ -157,11 +157,11 @@ wss.on('connection', (ws, req) => {
 if (data.A || data.D) {
     if (wallAngle === 0) {
         // Отъезжаем вверх или вниз
-        const sign = (ws.tankPositionY < wall.top) ? -1 : 1;
+        const sign = (ws.tankPositionY < wall.Top) ? -1 : 1;
         ws.tankPositionY += sign;
     } else {
         // Отъезжаем влево или вправо
-        const sign = (ws.tankPositionX < wall.left) ? -1 : 1;
+        const sign = (ws.tankPositionX < wall.Left) ? -1 : 1;
         ws.tankPositionX += sign * 0.5;
     }
     ws.tankRotate = oldR;
