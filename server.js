@@ -332,6 +332,35 @@ function OBB(X, Y, Width, Height, Rotate){
   return world
 }
 
+function isPointInOBB(px, py, vertices) {
+    // Проверяем, находится ли точка внутри выпуклого многоугольника (OBB)
+    let inside = true;
+    
+    for (let i = 0; i < vertices.length; i++) {
+        const a = vertices[i];
+        const b = vertices[(i + 1) % vertices.length];
+        
+        // Вектор ребра
+        const edgeX = b.x - a.x;
+        const edgeY = b.y - a.y;
+        
+        // Вектор от вершины к точке
+        const pointX = px - a.x;
+        const pointY = py - a.y;
+        
+        // Вычисляем перпендикулярное произведение (cross product)
+        const cross = edgeX * pointY - edgeY * pointX;
+        
+        // Если точка справа от любого ребра (для CCW обхода) — она снаружи
+        if (cross < 0) {
+            inside = false;
+            break;
+        }
+    }
+    
+    return inside;
+}
+
 function SAT(verticesA, verticesB) {
   const axes = [...getAxes(verticesA), ...getAxes(verticesB)];
   for (let i = 0; i < axes.length; i++) {
@@ -417,12 +446,20 @@ for (let [id, bullet] of bullets) {
         const bulletPoint = [{x: bullet.positionX, y: bullet.positionY}]; // пуля как точка
         
         // Упрощённая проверка (можно использовать SAT или point-in-polygon)
-        // if (isPointInOBB(bullet.positionX, bullet.positionY, tankVertices)) {
-        //     toDelete.push(id);
-        //     console.log(`Попадание! Танк ${tankId} уничтожен`);
+        if (isPointInOBB(bullet.positionX, bullet.positionY, tankVertices)) {
+            toDelete.push(id);
         //     // Уменьшаем HP или удаляем танк
-        //     break;
-        // }
+          break;
+        }
+    }
+    for(let key in mapGame.walls){
+      const wall = mapGame.walls[key];
+      const wallVertices = OBB(wall.Left, wall.Top, wall.Width, wall.Height, wall.Rotate)
+        
+      if (isPointInOBB(bullet.positionX, bullet.positionY, wallVertices)) {
+        toDelete.push(id);
+        break;
+      }
     }
 }
 
