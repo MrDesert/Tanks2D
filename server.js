@@ -42,26 +42,13 @@ wss.on('connection', (ws, req) => {
   activeConnections++;
   console.log(`Новый пользователь: ID=${userId}, Активных: ${activeConnections}`);
   ws.send(JSON.stringify({ type: 'welcome', userId: userId }));    // Отправляем приветствие с номером
-
-  function spawnPoint(){
-    const randomSpawnPoint = Math.floor(Math.random()*spawnPoints.length)
-    const x = mapGame.spawnPoints[spawnPoints[randomSpawnPoint]].Left;
-    const y = mapGame.spawnPoints[spawnPoints[randomSpawnPoint]].Top;
-    const rotate = mapGame.spawnPoints[spawnPoints[randomSpawnPoint]].Rotate;
-    return {X: x, Y: y, Rotate: rotate}
-  }
+  ws.send(JSON.stringify({type: 'map', map: mapGame}))
+  
+  ws.userId = userId; // Сохраняем userId на сокете
   const spawn = spawnPoint();
   ws.tankPositionY = spawn.Y;
   ws.tankPositionX = spawn.X;
   ws.tankRotate = spawn.Rotate;
-
-  // const randomSpawnPoint = Math.floor(Math.random()*spawnPoints.length)
-  ws.send(JSON.stringify({type: 'map', map: mapGame}))
-  
-  ws.userId = userId; // Сохраняем userId на сокете
-  // ws.tankPositionY = mapGame.spawnPoints[spawnPoints[randomSpawnPoint]].Top;
-  // ws.tankPositionX = mapGame.spawnPoints[spawnPoints[randomSpawnPoint]].Left;
-  // ws.tankRotate = mapGame.spawnPoints[spawnPoints[randomSpawnPoint]].Rotate;
   ws.turretRotate = 0;
   ws.readyToFire = true;
   ws.send(JSON.stringify({type:'startposition', X:ws.tankPositionX, Y:ws.tankPositionY, Rotate:ws.tankRotate, Height:tankHeight, Width:tankWidth}))
@@ -307,6 +294,14 @@ server.listen(port, () => {
   console.log(`Сервер запущен на порту ${port}`);
 });
 
+  function spawnPoint(){
+    const randomSpawnPoint = Math.floor(Math.random()*spawnPoints.length)
+    const x = mapGame.spawnPoints[spawnPoints[randomSpawnPoint]].Left;
+    const y = mapGame.spawnPoints[spawnPoints[randomSpawnPoint]].Top;
+    const rotate = mapGame.spawnPoints[spawnPoints[randomSpawnPoint]].Rotate;
+    return {X: x, Y: y, Rotate: rotate}
+  }
+
 function AABB(obj1, obj2){
   return (
     (obj1.Left + obj1.Width) > obj2.Left &&
@@ -460,7 +455,10 @@ for (let [id, bullet] of bullets) {
         // Упрощённая проверка (можно использовать SAT или point-in-polygon)
         if (isPointInOBB(bullet.positionX, bullet.positionY, tankVertices)) {
             toDelete.push(id);
-        //     // Уменьшаем HP или удаляем танк
+            const spawn = spawnPoint();
+            tank.tankPositionY = spawn.Y;
+            tank.tankPositionX = spawn.X;
+            tank.tankRotate = spawn.Rotate;
           break;
         }
     }
