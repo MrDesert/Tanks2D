@@ -106,14 +106,14 @@ for (let [otherUserId, otherTank] of tanks) {
         const dx = ws.tankPositionX - otherTank.positionX;
         const dy = ws.tankPositionY - otherTank.positionY;
         const angle = Math.atan2(dy, dx);
-        ws.tankPositionX += Math.cos(angle) * 1;
-        ws.tankPositionY += Math.sin(angle) * 1;
+        ws.tankPositionX += Math.cos(angle) * 0.5;
+        ws.tankPositionY += Math.sin(angle) * 0.5;
 
         // Меняем позицию другого танка в самой Map
         tanks.set(otherUserId, {
           ...otherTank,
-          positionX: otherTank.positionX - Math.cos(angle) * 2,
-          positionY: otherTank.positionY - Math.sin(angle) * 2
+          positionX: otherTank.positionX - Math.cos(angle) * 3,
+          positionY: otherTank.positionY - Math.sin(angle) * 3
         });
     
     // Обновляем данные в текущей переменной (для дальнейшего использования)
