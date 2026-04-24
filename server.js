@@ -426,6 +426,25 @@ function broadcastBullets() {
     });
 }
 
+function broadcastTanks() {
+    const message = JSON.stringify({
+        type: 'allTanks',
+        tanks: Array.from(tanks.values()).map(t => ({
+            userId: t.userId,
+            positionX: t.positionX,
+            positionY: t.positionY,
+            tankRotate: t.tankRotate,
+            turretRotate: t.turretRotate
+        }))
+    });
+    
+    wss.clients.forEach(client => {
+        if (client.readyState === WebSocket.OPEN) {
+            client.send(message);
+        }
+    });
+}
+
 setInterval(moveBullet, 16)
 function moveBullet(){          
 const bulletSpeed = 8;
@@ -461,8 +480,25 @@ for (let [id, bullet] of bullets) {
             ...tank,
             positionX: spawn.X,
             positionY: spawn.Y,
-            tankRotate: spawn.Rotate
+            tankRotate: spawn.Rotate,
+            turretRotate: 0  // обнуляем башню
         });
+
+            // Отправляем принудительное обновление ВЛАДЕЛЬЦУ танка
+    for (let client of wss.clients) {
+        if (client.userId === tankId && client.readyState === WebSocket.OPEN) {
+            client.send(JSON.stringify({
+                type: 'forceUpdate',
+                positionX: spawn.X,
+                positionY: spawn.Y,
+                tankRotate: spawn.Rotate,
+                turretRotate: 0
+            }));
+            break;
+        }
+    }
+
+        broadcastTanks();
           break;
         }
     }
