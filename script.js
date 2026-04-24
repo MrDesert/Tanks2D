@@ -212,8 +212,16 @@ function createBullet(turret){
         }
 
 function drawBullet(id, X, Y, Rotate){
-  const parent = document.getElementById("body");
-  parent['append'](Object.assign(document.createElement("div"), {id: "bull" + id, className: "bullet", style: `top: ${Y}px; left: ${X}px; transform: rotate(${Rotate}deg); `}));
+  const bullet = document.getElementById("bull" + id);
+  if(bullet){
+    
+    bullet.style.top = `${Y}px`;
+    bullet.style.left = `${X}px`;
+    bullet.style.transform = "rotate("+Rotate+"deg)"
+  } else{
+    const parent = document.getElementById("body");
+    parent['append'](Object.assign(document.createElement("div"), {id: "bull" + id, className: "bullet", style: `top: ${Y}px; left: ${X}px; transform: rotate(${Rotate}deg); `}));
+  }
 }
 
 socket.onopen = () => {
@@ -242,7 +250,7 @@ if (data.type === 'welcome') {
 }else if(data.type === 'bullets'){
     // Отрисовываем все пули из data.bullets
     for (let bullet of data.bullets) {
-        drawBullet(id, bullet.positionX, bullet.positionY, bullet.angle);
+        drawBullet(bullet.id, bullet.positionX, bullet.positionY, bullet.angle);
     }
 }else if (data.type === 'startposition'){
     curPositionX = data.X;

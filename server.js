@@ -49,6 +49,7 @@ wss.on('connection', (ws, req) => {
   ws.tankPositionX = mapGame.spawnPoints[spawnPoints[randomSpawnPoint]].Left;
   ws.tankRotate = mapGame.spawnPoints[spawnPoints[randomSpawnPoint]].Rotate;
   ws.turretRotate = 0;
+  ws.readyToFire = true;
   ws.send(JSON.stringify({type:'startposition', X:ws.tankPositionX, Y:ws.tankPositionY, Rotate:ws.tankRotate, Height:tankHeight, Width:tankWidth}))
   
   // Отправляем новому клиенту данные обо всех существующих танках
@@ -90,7 +91,9 @@ wss.on('connection', (ws, req) => {
           };
           if(data.Z){ws.turretRotate -= rotateTurret;};
           if(data.X){ws.turretRotate += rotateTurret;};
-          if(data.Space){
+          if(data.Space && ws.readyToFire){
+            ws.readyToFire = false;
+            setTimeout( ()=>{ws.readyToFire = true}, 1000);
 
           // Получаем координаты дула из танка игрока
     const angleRad = (ws.turretRotate + ws.tankRotate) * Math.PI / 180;
