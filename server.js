@@ -93,6 +93,7 @@ wss.on('connection', (ws, req) => {
 for (let [otherUserId, otherTank] of tanks) {
     if (otherUserId === userId) continue; // пропускаем себя
     
+    const tankVertices = OBB(ws.tankPositionX, ws.tankPositionY, tankWidth, tankHeight, ws.tankRotate);
     const otherVertices = OBB(
         otherTank.positionX, 
         otherTank.positionY, 
