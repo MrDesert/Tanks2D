@@ -155,38 +155,16 @@ wss.on('connection', (ws, req) => {
 
                 // При повороте у стены
 if (data.A || data.D) {
-    // Сначала откатываем поворот
+    if (wallAngle === 0) {
+        // Отъезжаем вверх или вниз
+        const sign = (ws.tankPositionY < wall.top) ? -1 : 1;
+        ws.tankPositionY += sign;
+    } else {
+        // Отъезжаем влево или вправо
+        const sign = (ws.tankPositionX < wall.left) ? -1 : 1;
+        ws.tankPositionX += sign * 0.5;
+    }
     ws.tankRotate = oldR;
-    
-    // Проверяем коллизию с текущей позицией
-    const tankVertices = OBB(ws.tankPositionX, ws.tankPositionY, tankWidth, tankHeight, ws.tankRotate);
-    
-    let collisionWall = null;
-    for (let wall of walls) {
-        const wallVertices = OBB(wall.Left, wall.Top, wall.Width, wall.Height, 0);
-        if (SAT(tankVertices, wallVertices)) {
-            collisionWall = wall;
-            break;
-        }
-    }
-    
-    if (collisionWall) {
-        const wallAngle = getWallAngle(collisionWall);
-        const tankCenterX = ws.tankPositionX + tankWidth/2;
-        const tankCenterY = ws.tankPositionY + tankHeight/2;
-        
-        if (wallAngle === 0) { // горизонтальная стена
-            // Отъезжаем в сторону, противоположную центру стены
-            const wallCenterY = collisionWall.Top + collisionWall.Height/2;
-            const direction = (tankCenterY < wallCenterY) ? -1 : 1;
-            ws.tankPositionY += direction * 3; // отъезжаем от стены
-        } else { // вертикальная стена
-            // Отъезжаем в сторону, противоположную центру стены
-            const wallCenterX = collisionWall.Left + collisionWall.Width/2;
-            const direction = (tankCenterX < wallCenterX) ? -1 : 1;
-            ws.tankPositionX += direction * 3; // отъезжаем от стены
-        }
-    }
 }
                 break
               }
