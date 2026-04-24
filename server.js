@@ -154,18 +154,18 @@ wss.on('connection', (ws, req) => {
 
 
                 // При повороте у стены
-if (data.A || data.D) {
-    if (wallAngle === 0) {
+    if (data.A || data.D) {
+      if (wallAngle === 0) {
         // Отъезжаем вверх или вниз
         const sign = (ws.tankPositionY < wall.Top) ? -1 : 1;
-        ws.tankPositionY += sign * 0.1;
-    } else {
+        ws.tankPositionY += sign * 0.2;
+      } else {
         // Отъезжаем влево или вправо
         const sign = (ws.tankPositionX < wall.Left) ? -1 : 1;
-        ws.tankPositionX += sign * 0.1;
+        ws.tankPositionX += sign * 0.2;
+      }
+      // ws.tankRotate = oldR;
     }
-    ws.tankRotate = oldR;
-}
                 break
               }
             } 
