@@ -392,7 +392,7 @@ function broadcastBullets() {
 
 setInterval(moveBullet, 16)
 function moveBullet(){          
-const bulletSpeed = 10;
+const bulletSpeed = 8;
 const toDelete = [];
 
 for (let [id, bullet] of bullets) {
