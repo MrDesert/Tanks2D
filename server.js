@@ -456,11 +456,14 @@ for (let [id, bullet] of bullets) {
     bullet.positionX += Math.sin(rad) * bulletSpeed;
     bullet.positionY -= Math.cos(rad) * bulletSpeed;
     bullet.distance += bulletSpeed;
+    bullet.maxDistance = 800;
     
     // Проверка на вылет за границы или максимальную дальность
-    if (bullet.distance > bullet.maxDistance ||
-        bullet.positionX < 0 || bullet.positionX > mapWidth ||
-        bullet.positionY < 0 || bullet.positionY > mapHeight) {
+    if (bullet.distance > bullet.maxDistance 
+      // ||
+        // bullet.positionX < 0 || bullet.positionX > mapWidth ||
+        // bullet.positionY < 0 || bullet.positionY > mapHeight
+      ) {
         toDelete.push(id);
     }
     
