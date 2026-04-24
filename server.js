@@ -101,71 +101,63 @@ wss.on('connection', (ws, req) => {
               const wallVertices = OBB(wall.Left, wall.Top, wall.Width, wall.Height, 0)
               if(SAT(tankVertices, wallVertices)){
 
-              function getClosestTankSide(tankAngle, wallAngle) {
-    // Углы сторон танка
-    const sides = [
-        {angle: tankAngle, plus: 0 },
-        {angle: tankAngle + 90, plus: 90 },
-        {angle: tankAngle + 180, plus: 180 },
-        {angle: tankAngle + 270, plus: 270 }
-    ];
+                function getClosestTankSide(tankAngle, wallAngle) {
+                  // Углы сторон танка
+                  const sides = [
+                  {angle: tankAngle, plus: 0 },
+                  {angle: tankAngle + 90, plus: 90 },
+                  {angle: tankAngle + 180, plus: 180 },
+                  {angle: tankAngle + 270, plus: 270 }
+                  ];
     
-    // Нормализуем углы в 0..360
-    for (let side of sides) {
-        side.angle = side.angle % 360;
-        if (side.angle < 0) side.angle += 360;
-    }
+                  // Нормализуем углы в 0..360
+                  for (let side of sides) {
+                    side.angle = side.angle % 360;
+                    if (side.angle < 0) side.angle += 360;
+                  }
     
-    // Находим сторону с минимальной разницей к wallAngle
-    let closest = sides[0];
-    let minDiff = Math.abs(wallAngle - closest.angle);
-    minDiff = Math.min(minDiff, 360 - minDiff);
+                  // Находим сторону с минимальной разницей к wallAngle
+                  let closest = sides[0];
+                  let minDiff = Math.abs(wallAngle - closest.angle);
+                  minDiff = Math.min(minDiff, 360 - minDiff);
     
-    for (let side of sides) {
-        let diff = Math.abs(wallAngle - side.angle);
-        diff = Math.min(diff, 360 - diff);
-        if (diff < minDiff) {
-            minDiff = diff;
-            closest = side;
-        }
-    }
+                  for (let side of sides) {
+                    let diff = Math.abs(wallAngle - side.angle);
+                    diff = Math.min(diff, 360 - diff);
+                    if (diff < minDiff) {
+                      minDiff = diff;
+                      closest = side;
+                    }
+                  }
     
-    return closest.plus;
-}
+                  return closest.plus;
+                }
 
                 const wallAngle = wall.Width > wall.Height ? 0 : 90;
-
- const closestSide = getClosestTankSide(ws.tankRotate, wallAngle);
+                const closestSide = getClosestTankSide(ws.tankRotate, wallAngle);
+                let targetAngle = (wallAngle - closestSide) % 360; // Нормализуем в 0..360
+                if (targetAngle < 0) targetAngle += 360;
     
-    let targetAngle = wallAngle - closestSide;
-    
-    // Нормализуем targetAngle в 0..360
-    targetAngle = targetAngle % 360;
-    if (targetAngle < 0) targetAngle += 360;
-    
-    // Плавный поворот к targetAngle
-    let diff = targetAngle - ws.tankRotate;
-    if (diff > 180) diff -= 360;
-    if (diff < -180) diff += 360;
+                // Плавный поворот к targetAngle
+                let diff = targetAngle - ws.tankRotate;
+                if (diff > 180) diff -= 360;
+                if (diff < -180) diff += 360;
     
                 ws.tankRotate += Math.sign(diff) * rotateTank * 0.5;
                 ws.tankPositionX = oldX;
                 ws.tankPositionY = oldY;
 
-
                 // При повороте у стены
-    if (data.A || data.D) {
-      if (wallAngle === 0) {
-        // Отъезжаем вверх или вниз
-        const sign = (ws.tankPositionY < wall.Top) ? -1 : 1;
-        ws.tankPositionY += sign * 0.2;
-      } else {
-        // Отъезжаем влево или вправо
-        const sign = (ws.tankPositionX < wall.Left) ? -1 : 1;
-        ws.tankPositionX += sign * 0.2;
-      }
-      // ws.tankRotate = oldR;
-    }
+                if (data.A || data.D) {
+                  if (wallAngle === 0) {// Отъезжаем вверх или вниз
+                    const sign = (ws.tankPositionY < wall.Top) ? -1 : 1;
+                    ws.tankPositionY += sign * 0.2;
+                  } else {// Отъезжаем влево или вправо
+                    const sign = (ws.tankPositionX < wall.Left) ? -1 : 1;
+                    ws.tankPositionX += sign * 0.2;
+                  }
+                  ws.tankRotate = oldR;
+                }
                 break
               }
             } 
