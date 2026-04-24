@@ -99,7 +99,7 @@ wss.on('connection', (ws, req) => {
 
           // Получаем координаты дула из танка игрока
     const angleRad = (ws.turretRotate + ws.tankRotate) * Math.PI / 180;
-    const offset = 40; // смещение от центра танка до дула
+    const offset = 50; // смещение от центра танка до дула
     
     const startX = ws.tankPositionX + tankWidth/2 + Math.sin(angleRad) * offset;
     const startY = ws.tankPositionY + tankHeight/2 - Math.cos(angleRad) * offset;
@@ -392,7 +392,7 @@ function broadcastBullets() {
 
 setInterval(moveBullet, 100)
 function moveBullet(){          
-const bulletSpeed = 1.3;
+const bulletSpeed = 1.6;
 const toDelete = [];
 
 for (let [id, bullet] of bullets) {
