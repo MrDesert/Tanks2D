@@ -108,6 +108,8 @@ for (let [otherUserId, otherTank] of tanks) {
         const angle = Math.atan2(dy, dx);
         ws.tankPositionX += Math.cos(angle) * 2;
         ws.tankPositionY += Math.sin(angle) * 2;
+        otherTank.positionX += Math.cos(angle) * 2;
+        otherTank.positionY += Math.sin(angle) * 2;
         
         break; // достаточно одного столкновения
     }
