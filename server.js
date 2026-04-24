@@ -498,7 +498,15 @@ for (let [id, bullet] of bullets) {
         }
     }
 
-        broadcastTanks();
+        const broadcastData = {
+    type: 'allTanks',
+    tanks: Array.from(tanks.values())
+};
+wss.clients.forEach(client => {
+    if (client.readyState === WebSocket.OPEN) {
+        client.send(JSON.stringify(broadcastData));
+    }
+});
           break;
         }
     }
