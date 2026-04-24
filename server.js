@@ -117,6 +117,7 @@ for (let [otherUserId, otherTank] of tanks) {
         ws.tankPositionX = oldX;
         ws.tankPositionY = oldY;
         ws.tankRotate = oldR;
+        console.log("столкновение")
         
         // Опционально: отталкивание
         // const dx = ws.tankPositionX - otherTank.positionX;
