@@ -119,6 +119,8 @@ wss.on('connection', (ws, req) => {
           }
 
           // В обработчике keysDown или отдельном setInterval
+setInterval(moveBullet, 100)
+function moveBullet(){          
 const bulletSpeed = 10;
 const toDelete = [];
 
@@ -160,7 +162,7 @@ for (let id of toDelete) {
 
 // Рассылаем обновления
 broadcastBullets();
-
+}
 function broadcastBullets() {
     const bulletsData = Array.from(bullets.values()).map(b => ({
         id: b.id,
