@@ -152,9 +152,9 @@ if (socket.readyState === WebSocket.OPEN) {
     if(time - (tick.lastTimeBull || 0) >= 2){
         tick.countBul = (tick.countBul || 0)
         for (const key in keysDown){
-            if(tick.countBul >= bulletRecharge){
-                if(key == "Space" && keysDown[key]){createBullet(); tick.countBul = 0;}
-            }
+            // if(tick.countBul >= bulletRecharge){
+            //     if(key == "Space" && keysDown[key]){createBullet(); tick.countBul = 0;}
+            // }
         }
         bullets.forEach(bul => {
             const bullet = document.getElementById(bul[0]);
@@ -211,7 +211,10 @@ function createBullet(turret){
             createBullet.count++;
         }
 
-
+function drawBullet(id, X, Y, Rotate){
+  const parent = document.getElementById("body");
+  parent['append'](Object.assign(document.createElement("div"), {id: "bull" + id, className: "bullet", style: `top: ${Y}px; left: ${X}px; transform: rotate(${Rotate}deg); `}));
+}
 
 socket.onopen = () => {
   console.log('Соединение с сервером установлено');
@@ -236,6 +239,11 @@ if (data.type === 'welcome') {
     else if (ping < 400){pingText.style.color = "#ff3300"}
     else                {pingText.style.color = "#770000"}
     pingText.textContent = "ping: "+ping;
+}else if(data.type === 'bullets'){
+    // Отрисовываем все пули из data.bullets
+    for (let bullet of data.bullets) {
+        drawBullet(id, bullet.positionX, bullet.positionY, bullet.angle);
+    }
 }else if (data.type === 'startposition'){
     curPositionX = data.X;
     curPositionY = data.Y;
