@@ -106,33 +106,33 @@ for (let [otherUserId, otherTank] of tanks) {
         const dx = ws.tankPositionX - otherTank.positionX;
         const dy = ws.tankPositionY - otherTank.positionY;
         const angle = Math.atan2(dy, dx);
-        const impactAngle = Math.atan2(dy, dx) * 180 / Math.PI;
+        // const impactAngle = Math.atan2(dy, dx) * 180 / Math.PI;
 
-        // Разница между направлением танка и углом удара
-        const diff1 = (impactAngle - ws.tankRotate + 360) % 360;
-        const diff2 = (impactAngle - otherTank.tankRotate + 360) % 360;
+        // // Разница между направлением танка и углом удара
+        // const diff1 = (impactAngle - ws.tankRotate + 360) % 360;
+        // const diff2 = (impactAngle - otherTank.tankRotate + 360) % 360;
 
         ws.tankPositionX += Math.cos(angle) * 0.5;
         ws.tankPositionY += Math.sin(angle) * 0.5;
 
-// Сила разворота зависит от того, под каким углом ударили
-const rotate1 = (diff1 > 180 ? diff1 - 360 : diff1) * 0.3;
-const rotate2 = (diff2 > 180 ? diff2 - 360 : diff2) * 0.3;
+// // Сила разворота зависит от того, под каким углом ударили
+// const rotate1 = (diff1 > 180 ? diff1 - 360 : diff1) * 0.3;
+// const rotate2 = (diff2 > 180 ? diff2 - 360 : diff2) * 0.3;
 
-// ws.tankRotate = (ws.tankRotate + rotate1) % 360;
-otherTank.tankRotate = (otherTank.tankRotate + rotate2) % 360;
+// // ws.tankRotate = (ws.tankRotate + rotate1) % 360;
+// otherTank.tankRotate = (otherTank.tankRotate + rotate2) % 360;
 
         // Меняем позицию другого танка в самой Map
         tanks.set(otherUserId, {
           ...otherTank,
           positionX: otherTank.positionX - Math.cos(angle) * 3,
-          positionY: otherTank.positionY - Math.sin(angle) * 3,
-          tankRotate: otherTank.tankRotate
+          positionY: otherTank.positionY - Math.sin(angle) * 3
+          // tankRotate: otherTank.tankRotate
         });
     
     // Обновляем данные в текущей переменной (для дальнейшего использования)
-    otherTank.positionX = tanks.get(otherUserId).positionX;
-    otherTank.positionY = tanks.get(otherUserId).positionY;
+    // otherTank.positionX = tanks.get(otherUserId).positionX;
+    // otherTank.positionY = tanks.get(otherUserId).positionY;
         
         break; // достаточно одного столкновения
     }
