@@ -158,11 +158,11 @@ if (data.A || data.D) {
     if (wallAngle === 0) {
         // Отъезжаем вверх или вниз
         const sign = (ws.tankPositionY < wall.Top) ? -1 : 1;
-        ws.tankPositionY += sign;
+        ws.tankPositionY += sign * 0.1;
     } else {
         // Отъезжаем влево или вправо
         const sign = (ws.tankPositionX < wall.Left) ? -1 : 1;
-        ws.tankPositionX += sign * 0.5;
+        ws.tankPositionX += sign * 0.1;
     }
     ws.tankRotate = oldR;
 }
