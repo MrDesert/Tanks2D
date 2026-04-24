@@ -121,69 +121,7 @@ wss.on('connection', (ws, req) => {
           }
 
           // В обработчике keysDown или отдельном setInterval
-setInterval(moveBullet, 100)
-function moveBullet(){          
-const bulletSpeed = 1;
-const toDelete = [];
 
-for (let [id, bullet] of bullets) {
-    // Двигаем пулю
-    const rad = bullet.angle * Math.PI / 180;
-    bullet.positionX += Math.sin(rad) * bulletSpeed;
-    bullet.positionY -= Math.cos(rad) * bulletSpeed;
-    bullet.distance += bulletSpeed;
-    
-    // Проверка на вылет за границы или максимальную дальность
-    if (bullet.distance > bullet.maxDistance ||
-        bullet.positionX < 0 || bullet.positionX > mapWidth ||
-        bullet.positionY < 0 || bullet.positionY > mapHeight) {
-        toDelete.push(id);
-    }
-    
-    // Проверка попадания в танки
-    for (let [tankId, tank] of tanks) {
-        if (tankId === bullet.ownerId) continue; // не попадаем в себя
-        
-        const tankVertices = OBB(tank.positionX, tank.positionY, tankWidth, tankHeight, tank.tankRotate);
-        const bulletPoint = [{x: bullet.positionX, y: bullet.positionY}]; // пуля как точка
-        
-        // Упрощённая проверка (можно использовать SAT или point-in-polygon)
-        if (isPointInOBB(bullet.positionX, bullet.positionY, tankVertices)) {
-            toDelete.push(id);
-            console.log(`Попадание! Танк ${tankId} уничтожен`);
-            // Уменьшаем HP или удаляем танк
-            break;
-        }
-    }
-}
-
-// Удаляем пули
-for (let id of toDelete) {
-    bullets.delete(id);
-}
-
-// Рассылаем обновления
-broadcastBullets();
-}
-function broadcastBullets() {
-    const bulletsData = Array.from(bullets.values()).map(b => ({
-        id: b.id,
-        positionX: b.positionX,
-        positionY: b.positionY,
-        angle: b.angle
-    }));
-    
-    const message = JSON.stringify({
-        type: 'bullets',
-        bullets: bulletsData
-    });
-    
-    wss.clients.forEach(client => {
-        if (client.readyState === WebSocket.OPEN) {
-            client.send(message);
-        }
-    });
-}
 
               // Проверка коллизии с другими танками
 for (let [otherUserId, otherTank] of tanks) {
@@ -430,4 +368,69 @@ function SAT(verticesA, verticesB) {
     }
     return axes;
   }
+}
+
+function broadcastBullets() {
+    const bulletsData = Array.from(bullets.values()).map(b => ({
+        id: b.id,
+        positionX: b.positionX,
+        positionY: b.positionY,
+        angle: b.angle
+    }));
+    
+    const message = JSON.stringify({
+        type: 'bullets',
+        bullets: bulletsData
+    });
+    
+    wss.clients.forEach(client => {
+        if (client.readyState === WebSocket.OPEN) {
+            client.send(message);
+        }
+    });
+}
+
+setInterval(moveBullet, 1000)
+function moveBullet(){          
+const bulletSpeed = 1;
+const toDelete = [];
+
+for (let [id, bullet] of bullets) {
+    // Двигаем пулю
+    const rad = bullet.angle * Math.PI / 180;
+    bullet.positionX += Math.sin(rad) * bulletSpeed;
+    bullet.positionY -= Math.cos(rad) * bulletSpeed;
+    bullet.distance += bulletSpeed;
+    
+    // Проверка на вылет за границы или максимальную дальность
+    if (bullet.distance > bullet.maxDistance ||
+        bullet.positionX < 0 || bullet.positionX > mapWidth ||
+        bullet.positionY < 0 || bullet.positionY > mapHeight) {
+        toDelete.push(id);
+    }
+    
+    // Проверка попадания в танки
+    for (let [tankId, tank] of tanks) {
+        if (tankId === bullet.ownerId) continue; // не попадаем в себя
+        
+        const tankVertices = OBB(tank.positionX, tank.positionY, tankWidth, tankHeight, tank.tankRotate);
+        const bulletPoint = [{x: bullet.positionX, y: bullet.positionY}]; // пуля как точка
+        
+        // Упрощённая проверка (можно использовать SAT или point-in-polygon)
+        if (isPointInOBB(bullet.positionX, bullet.positionY, tankVertices)) {
+            toDelete.push(id);
+            console.log(`Попадание! Танк ${tankId} уничтожен`);
+            // Уменьшаем HP или удаляем танк
+            break;
+        }
+    }
+}
+
+// Удаляем пули
+for (let id of toDelete) {
+    bullets.delete(id);
+}
+
+// Рассылаем обновления
+broadcastBullets();
 }
