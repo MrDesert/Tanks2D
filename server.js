@@ -390,7 +390,7 @@ function broadcastBullets() {
     });
 }
 
-setInterval(moveBullet, 70)
+setInterval(moveBullet, 60)
 function moveBullet(){          
 const bulletSpeed = 10;
 const toDelete = [];
