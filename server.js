@@ -43,13 +43,25 @@ wss.on('connection', (ws, req) => {
   console.log(`Новый пользователь: ID=${userId}, Активных: ${activeConnections}`);
   ws.send(JSON.stringify({ type: 'welcome', userId: userId }));    // Отправляем приветствие с номером
 
-  const randomSpawnPoint = Math.floor(Math.random()*spawnPoints.length)
+  function spawnPoint(){
+    const randomSpawnPoint = Math.floor(Math.random()*spawnPoints.length)
+    const x = mapGame.spawnPoints[spawnPoints[randomSpawnPoint]].Left;
+    const y = mapGame.spawnPoints[spawnPoints[randomSpawnPoint]].Top;
+    const rotate = mapGame.spawnPoints[spawnPoints[randomSpawnPoint]].Rotate;
+    return {X: x, Y: y, Rotate: rotate}
+  }
+  const spawn = spawnPoint();
+  ws.tankPositionY = spawn.Y;
+  ws.tankPositionX = spawn.X;
+  ws.tankRotate = spawn.Rotate;
+
+  // const randomSpawnPoint = Math.floor(Math.random()*spawnPoints.length)
   ws.send(JSON.stringify({type: 'map', map: mapGame}))
   
   ws.userId = userId; // Сохраняем userId на сокете
-  ws.tankPositionY = mapGame.spawnPoints[spawnPoints[randomSpawnPoint]].Top;
-  ws.tankPositionX = mapGame.spawnPoints[spawnPoints[randomSpawnPoint]].Left;
-  ws.tankRotate = mapGame.spawnPoints[spawnPoints[randomSpawnPoint]].Rotate;
+  // ws.tankPositionY = mapGame.spawnPoints[spawnPoints[randomSpawnPoint]].Top;
+  // ws.tankPositionX = mapGame.spawnPoints[spawnPoints[randomSpawnPoint]].Left;
+  // ws.tankRotate = mapGame.spawnPoints[spawnPoints[randomSpawnPoint]].Rotate;
   ws.turretRotate = 0;
   ws.readyToFire = true;
   ws.send(JSON.stringify({type:'startposition', X:ws.tankPositionX, Y:ws.tankPositionY, Rotate:ws.tankRotate, Height:tankHeight, Width:tankWidth}))
