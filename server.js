@@ -456,9 +456,13 @@ for (let [id, bullet] of bullets) {
         if (isPointInOBB(bullet.positionX, bullet.positionY, tankVertices)) {
             toDelete.push(id);
             const spawn = spawnPoint();
-            tank.tankPositionY = spawn.Y;
-            tank.tankPositionX = spawn.X;
-            tank.tankRotate = spawn.Rotate;
+        // Обновляем танк в Map
+        tanks.set(tankId, {
+            ...tank,
+            positionX: spawn.X,
+            positionY: spawn.Y,
+            tankRotate: spawn.Rotate
+        });
           break;
         }
     }
