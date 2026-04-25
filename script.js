@@ -250,8 +250,21 @@ if (data.type === 'welcome') {
 }else if(data.type === 'spawn'){
   animationOnce(data.id, "spawn")
 }else if(data.type === 'death'){
-  document.getElementById("otherTankBody_"+data.id).classList.add("tankBodyDestroyed");
-  document.getElementById("otherTankTurret_"+data.id).classList.add("tankTurretDestroyed");
+  if(data.id === myUserId){
+    document.getElementById("playerTankBody").classList.add("tankBodyDestroyed");
+    document.getElementById("playerTankTurret").classList.add("tankTurretDestroyed");
+  }else{
+    document.getElementById("otherTankBody_"+data.id).classList.add("tankBodyDestroyed");
+    document.getElementById("otherTankTurret_"+data.id).classList.add("tankTurretDestroyed");
+  }
+}else if(data.type === 'rebirth'){
+  if(data.id === myUserId){
+    document.getElementById("playerTankBody").classList.remove("tankBodyDestroyed");
+    document.getElementById("playerTankTurret").classList.remove("tankTurretDestroyed");
+  }else{
+    document.getElementById("otherTankBody_"+data.id).classList.remove("tankBodyDestroyed");
+    document.getElementById("otherTankTurret_"+data.id).classList.remove("tankTurretDestroyed");
+  }
 }else if(data.type === 'bullets'){
     // Отрисовываем все пули из data.bullets
     for (let bullet of data.bullets) {
@@ -268,8 +281,8 @@ if (data.type === 'welcome') {
     playerTank = document.getElementById("playerTank");
     playerTank['append'](Object.assign(document.createElement("div"), {id: "leftTrack", className: "playerTankTrack trackFrame7"}));
     playerTank['append'](Object.assign(document.createElement("div"), {id: "rightTrack", className: "playerTankTrack trackFrame7"}));
-    playerTank['append'](Object.assign(document.createElement("div"), {id: "playerTankBody", style: "height: " + data.Height + "px; width: " + data.Width + "px;)"}));
-    playerTank['append'](Object.assign(document.createElement("div"), {id: "playerTankTurret"}));
+    playerTank['append'](Object.assign(document.createElement("div"), {id: "playerTankBody", className: "playerTankBody", style: "height: " + data.Height + "px; width: " + data.Width + "px;)"}));
+    playerTank['append'](Object.assign(document.createElement("div"), {id: "playerTankTurret", className: "playerTankTurret"}));
     playerTankTurret = document.getElementById("playerTankTurret")
     playerTank['append'](Object.assign(document.createElement("div"), {id: "gunpointTank"}));
 } else if (data.type === 'movement'){

@@ -515,6 +515,7 @@ for (let client of wss.clients) {
 wss.clients.forEach(client => {
     if (client.readyState === WebSocket.OPEN) {
         client.send(JSON.stringify(broadcastData));
+        client.send(JSON.stringify({type: "rebirth", id: tankId}));
     }
 });
                   }, 3000)

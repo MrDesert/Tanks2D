@@ -24,13 +24,12 @@ footer {
     /* height: 80px; */
     /* width: 43px; */
     /* border:  2px black solid; */
+    /* object-fit: cover; */
+}
+.playerTankBody {
     background: url("img/tank_body.png");
     background-size: contain;
     background-repeat: no-repeat;
-    /* object-fit: cover; */
-}
-.tankBodyDestroyed{
-    background: url("img/tank_body_destroyed.png");
 }
 #playerTankTurret {
     position: absolute;
@@ -40,13 +39,12 @@ footer {
     width: 26px;
     /* border:  1px black solid; */
     transform-origin: 50% calc(100% - 17px);
+    transform: translateX(-50%);
+}
+.playerTankTurret{
     background: url("img/tank_turret.png");
     background-size: contain;
     background-repeat: no-repeat;
-    transform: translateX(-50%);
-}
-.tankTurretDestroyed{
-    background: url("img/tank_turret_destroyed.png");
 }
 .playerTankTrack {
     position: absolute;
@@ -119,8 +117,8 @@ footer {
   position: absolute;
   height: 80px;
   width: 43px;
-  filter: hue-rotate(180deg); /* Отличаем от своего танка */
-  opacity: 0.8;
+  filter: hue-rotate(-30deg); /* Отличаем от своего танка */
+  opacity: 1;
 }
 .otherTankBody {
   position: absolute;
@@ -129,6 +127,9 @@ footer {
   background: url("img/tank_body.png");
   background-size: contain;
   background-repeat: no-repeat;
+}
+.tankBodyDestroyed{
+    background-image: url("img/tank_body_destroyed.png");
 }
 .otherTankTurret {
   position: absolute;
@@ -142,7 +143,9 @@ footer {
   background-repeat: no-repeat;
   transform: translateX(-50%);
 }
-
+.tankTurretDestroyed{
+background-image: url("img/tank_turret_destroyed.png");
+}
 #gui {
     top: 80%;
     left: 10%;
