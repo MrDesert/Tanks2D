@@ -250,20 +250,29 @@ if (data.type === 'welcome') {
 }else if(data.type === 'spawn'){
   animationOnce(data.id, "spawn")
 }else if(data.type === 'death'){
+  let turret;
   if(data.id === myUserId){
+    document.getElementById("playerTankBody").classList.add("explosion-mark");
     document.getElementById("playerTankBody").classList.add("tankBodyDestroyed");
-    document.getElementById("playerTankTurret").classList.add("tankTurretDestroyed");
+    turret = document.getElementById("playerTankTurret");
   }else{
+    document.getElementById("otherTank_"+data.id).classList.add("explosion-mark");
     document.getElementById("otherTankBody_"+data.id).classList.add("tankBodyDestroyed");
-    document.getElementById("otherTankTurret_"+data.id).classList.add("tankTurretDestroyed");
+    turret = document.getElementById("otherTankTurret_"+data.id);
+  }
+  turret.classList.add("tankTurretDestroyed");
+  if(Math.floor(Math.random()*2)> 0){
+    turret.classList.add("flyTurret"); 
   }
 }else if(data.type === 'rebirth'){
   if(data.id === myUserId){
+        document.getElementById("playerTankBody").classList.remove("explosion-mark");
     document.getElementById("playerTankBody").classList.remove("tankBodyDestroyed");
-    document.getElementById("playerTankTurret").classList.remove("tankTurretDestroyed");
+    document.getElementById("playerTankTurret").classList.remove("tankTurretDestroyed", "flyTurret");
   }else{
+    document.getElementById("otherTank_"+data.id).classList.remove("explosion-mark");
     document.getElementById("otherTankBody_"+data.id).classList.remove("tankBodyDestroyed");
-    document.getElementById("otherTankTurret_"+data.id).classList.remove("tankTurretDestroyed");
+    document.getElementById("otherTankTurret_"+data.id).classList.remove("tankTurretDestroyed", "flyTurret");
   }
 }else if(data.type === 'bullets'){
     // Отрисовываем все пули из data.bullets
@@ -292,7 +301,7 @@ if (data.type === 'welcome') {
     curTankRotate = data.tankRotate;
     playerTank.style.top = `${curPositionY}px`;
     playerTank.style.left = `${curPositionX}px`;
-    playerTank.style.transform = "rotate("+curTankRotate+"deg)"
+    playerTank.style.rotate = "rotate("+curTankRotate+"deg)"
     playerTankTurret.style.transform = "translateX(-50%) rotate("+curTurretRotate+"deg)";
 } else if (data.type === 'map') {
     for(let key in data.map.walls){
