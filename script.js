@@ -247,6 +247,11 @@ if (data.type === 'welcome') {
     else if (ping < 400){pingText.style.color = "#ff3300"}
     else                {pingText.style.color = "#770000"}
     pingText.textContent = "ping: "+ping;
+}else if(data.type === 'spawn'){
+  animationOnce(data.id, "spawn")
+}else if(data.type === 'death'){
+  document.getElementById("otherTankBody_"+data.id).classList.add("tankBodyDestroyed");
+  document.getElementById("otherTankTurret_"+data.id).classList.add("tankTurretDestroyed");
 }else if(data.type === 'bullets'){
     // Отрисовываем все пули из data.bullets
     for (let bullet of data.bullets) {
@@ -299,8 +304,8 @@ if (data.type === 'welcome') {
       tankDiv.innerHTML = `
         <div id="leftTrack" class="playerTankTrack trackFrame7"></div>
         <div id="rightTrack" class="playerTankTrack trackFrame7"></div>
-        <div class="otherTankBody"></div>
-        <div class="otherTankTurret"></div>
+        <div id="otherTankBody_${tankData.userId}" class="otherTankBody"></div>
+        <div id="otherTankTurret_${tankData.userId}" class="otherTankTurret"></div>
       `;
       document.getElementById('body').appendChild(tankDiv);
       otherTanks.set(tankData.userId, tankDiv);

@@ -9,6 +9,9 @@ footer {
     color: #475569;
     font-size: 0.8rem;
 }
+.spawn{
+    /* animation: ; */
+}
 #playerTank{
         position: absolute;
         width: auto;
@@ -26,6 +29,9 @@ footer {
     background-repeat: no-repeat;
     /* object-fit: cover; */
 }
+.tankBodyDestroyed{
+    background: url("img/tank_body_destroyed.png");
+}
 #playerTankTurret {
     position: absolute;
     left: 50%;
@@ -38,6 +44,9 @@ footer {
     background-size: contain;
     background-repeat: no-repeat;
     transform: translateX(-50%);
+}
+.tankTurretDestroyed{
+    background: url("img/tank_turret_destroyed.png");
 }
 .playerTankTrack {
     position: absolute;

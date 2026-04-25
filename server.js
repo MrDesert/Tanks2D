@@ -477,6 +477,14 @@ for (let [id, bullet] of bullets) {
         // Упрощённая проверка (можно использовать SAT или point-in-polygon)
         if (isPointInOBB(bullet.positionX, bullet.positionY, tankVertices)) {
             toDelete.push(id);
+
+            wss.clients.forEach(client => {
+              if (client.readyState === WebSocket.OPEN) {
+                client.send(JSON.stringify({type: "death", id: tankId}));
+              }
+            });
+
+            setTimeout(() => {
             const spawn = spawnPoint();
         // Обновляем танк в Map
         tanks.set(tankId, {
@@ -495,15 +503,7 @@ for (let client of wss.clients) {
                     client.tankPositionY = spawn.Y;
                     client.tankRotate = spawn.Rotate;
                     client.turretRotate = 0;
-                    
-                    // Отправляем forceUpdate владельцу
-                    client.send(JSON.stringify({
-                        type: 'forceUpdate',
-                        positionX: spawn.X,
-                        positionY: spawn.Y,
-                        tankRotate: spawn.Rotate,
-                        turretRotate: 0
-                    }));
+                  
                     break;
                 }
             }
@@ -517,7 +517,8 @@ wss.clients.forEach(client => {
         client.send(JSON.stringify(broadcastData));
     }
 });
-          break;
+                  }, 3000)
+                  break;
         }
     }
     for(let key in mapGame.walls){
