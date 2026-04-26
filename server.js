@@ -68,14 +68,14 @@ wss.on('connection', (ws, req) => {
       if(data.type === 'ping'){
          ws.send(JSON.stringify({ type: 'pong', clientTime: data.clientTime, serverTime: Date.now()}));
       } 
-      if (data.type === 'keysDown' && ws.alive){
+      if (data.type === 'keysDown'){
           const oldX = ws.tankPositionX;
           const oldY = ws.tankPositionY;
           const oldR = ws.tankRotate;
           const radian = ws.tankRotate * Math.PI / 180;
           let speed = tankSpeed;
 
-          if(data.A){
+          if(data.A && ws.alive){
             ws.tankRotate -= rotateTank;
             speed = 1;
           } else {speed = tankSpeed};
