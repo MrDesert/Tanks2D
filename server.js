@@ -494,6 +494,7 @@ for (let [id, bullet] of bullets) {
         // Упрощённая проверка (можно использовать SAT или point-in-polygon)
         if (isPointInOBB(bullet.positionX, bullet.positionY, tankVertices)) {
             toDelete.push(id);
+          
 
             const damage = Math.floor(Math.random()*22)+30;
             const HP = tank.tankCurHP - damage;
@@ -504,12 +505,14 @@ for (let [id, bullet] of bullets) {
              wss.clients.forEach(client => {
               if (client.userId === tankId && client.readyState === WebSocket.OPEN) {
                 client.tankCurHP = HP;
+                client.alive = true;
                 client.send(JSON.stringify({type: "hp", hp: HP}));
               }
             });
             if(HP <= 0){
             wss.clients.forEach(client => {
               if (client.readyState === WebSocket.OPEN) {
+                client.alive = false;
                 client.send(JSON.stringify({type: "death", id: tankId}));
               }
             });

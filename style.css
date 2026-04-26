@@ -16,6 +16,8 @@ footer {
         position: absolute;
         width: auto;
          min-width: max-content;
+       filter:         drop-shadow(0px 0px 7px rgba(0,0,0,0.7))
+        drop-shadow(0px 0px 3px rgba(0,0,0,0.9));
     /* border:  1px black solid; */
 }
 #playerTankBody {
@@ -91,6 +93,54 @@ footer {
     background: linear-gradient(135deg, #e6e6e6, #000000, #e6e6e6);
     /* transition: transform, 1s; */
 }
+.bulletDestroyed {
+    pointer-events: none;
+    animation: explode 0.2s cubic-bezier(0.5, -0.5, 0.8, 1.5) forwards;
+}
+.bulletDestroyed::after{
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle, black, orange, red);
+    border-radius: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    animation: flash 0.2s ease-out forwards;
+}
+.bulletDestroyed::before{
+        content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 100%;
+    height: 100%;
+    background: rgba(80, 80, 80, 0.4);
+    border-radius: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    filter: blur(20px);
+    animation: smokeReal 1.5s ease-out forwards;
+    pointer-events: none;
+    z-index: 2;
+}
+
+@keyframes smokeReal {
+    0% {
+        transform: translate(-50%, -50%) scale(0);
+        opacity: 0;
+        filter: blur(10px);
+    }
+    30% {
+        opacity: 0.7;
+    }
+    100% {
+        transform: translate(-50%, -150%) scale(4);
+        opacity: 0;
+        filter: blur(40px);
+    }
+}
+
 #gunpointTank {
     position: relative;
     /* border:  1px black solid; */
@@ -108,7 +158,13 @@ footer {
     background-size: contain;
     background-repeat: repeat;
 }
-
+.grass{
+    position: absolute;
+    /* border: 1px black solid; */
+    background: url(img/brick.png);
+    background-size: contain;
+    background-repeat: repeat;
+}
 #body{
     background: linear-gradient(105deg, #484848, #4a4a4a, #555555);
 }
@@ -119,6 +175,8 @@ footer {
   width: 43px;
   filter: hue-rotate(-30deg); /* Отличаем от своего танка */
   opacity: 1;
+         filter: hue-rotate(-30deg) drop-shadow(0px 0px 7px rgba(0,0,0,0.7))
+        drop-shadow(0px 0px 3px rgba(0,0,0,0.9));
 }
 .explosion-mark{
 

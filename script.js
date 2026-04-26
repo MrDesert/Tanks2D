@@ -283,7 +283,8 @@ if (data.type === 'welcome') {
         drawBullet(bullet.id, bullet.positionX, bullet.positionY, bullet.angle);
     }
 }else if(data.type === 'delBullet'){
-  document.getElementById("bull" + data.id)?.remove();
+  document.getElementById("bull" + data.id)?.classList.add("bulletDestroyed");
+  setTimeout(() => {document.getElementById("bull" + data.id)?.remove();}, 200)
 }else if (data.type === 'startposition'){
     curPositionX = data.X;
     curPositionY = data.Y;
@@ -308,6 +309,11 @@ if (data.type === 'welcome') {
     playerTank.style.rotate = "rotate("+curTankRotate+"deg)"
     playerTankTurret.style.transform = "translateX(-50%) rotate("+curTurretRotate+"deg)";
 } else if (data.type === 'map') {
+  console.log(data.map.floors)
+    for(let key in data.map.floors){
+      const parent = document.getElementById("body");
+      parent['append'](Object.assign(document.createElement("div"), {id: "floor"+key, className: data.map.floors[key].Material, style: "height: " + data.map.floors[key].Height + "px; width: " + data.map.floors[key].Width + "px; top:" + data.map.floors[key].Top + "px; left:" + data.map.floors[key].Left + "px;"}));
+    };
     for(let key in data.map.walls){
         const parent = document.getElementById("body");
         parent['append'](Object.assign(document.createElement("div"), {id: "wall"+key, className: "cement", style: "height: " + data.map.walls[key].Height + "px; width: " + data.map.walls[key].Width + "px; top:" + data.map.walls[key].Top + "px; left:" + data.map.walls[key].Left + "px;"}));
