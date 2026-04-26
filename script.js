@@ -263,18 +263,19 @@ if (data.type === 'welcome') {
     turret = document.getElementById("otherTankTurret_"+data.id);
   }
   turret.classList.add("tankTurretDestroyed");
-  if(Math.floor(Math.random()*2)> 0){
-    turret.classList.add("flyTurret"); 
+  const animation = Math.floor(Math.random()*3)
+  if(animation != 0){
+    turret.classList.add("flyTurret"+animation); 
   }
 }else if(data.type === 'rebirth'){
   if(data.id === myUserId){
         document.getElementById("playerTankBody").classList.remove("explosion-mark");
     document.getElementById("playerTankBody").classList.remove("tankBodyDestroyed");
-    document.getElementById("playerTankTurret").classList.remove("tankTurretDestroyed", "flyTurret");
+    document.getElementById("playerTankTurret").classList.remove("tankTurretDestroyed", "flyTurret1", "flyTurret2");
   }else{
     document.getElementById("otherTank_"+data.id).classList.remove("explosion-mark");
     document.getElementById("otherTankBody_"+data.id).classList.remove("tankBodyDestroyed");
-    document.getElementById("otherTankTurret_"+data.id).classList.remove("tankTurretDestroyed", "flyTurret");
+    document.getElementById("otherTankTurret_"+data.id).classList.remove("tankTurretDestroyed", "flyTurret1", "flyTurret2");
   }
 }else if(data.type === 'bullets'){
     // Отрисовываем все пули из data.bullets

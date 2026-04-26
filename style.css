@@ -196,14 +196,23 @@ footer {
 .tankTurretDestroyed{
     background-image: url("img/tank_turret_destroyed.png");
 }
-.flyTurret{
-    animation: flyTurret 3s 1 alternate;
+.flyTurret1{
+    animation: flyTurret1 3s 1 alternate;
 }
-@keyframes flyTurret{
+.flyTurret2{
+    animation: flyTurret2 3s 1 alternate;
+}
+@keyframes flyTurret1{
     0% {scale: 1; transform: translateX(0px) translateY(0px); rotate: 0deg;} 
     25% {scale: 2; transform: translateX(10px) translateY(10px); rotate: 80deg;}
     50% {scale: 1; transform: translateX(20px) translateY(20px); rotate: 160deg;}
     100% {scale: 1; transform: translateX(20px) translateY(20px); rotate: 160deg;}
+}
+@keyframes flyTurret2{
+    0% {scale: 1; transform: translateX(0px) translateY(0px); rotate: 0deg;} 
+    25% {scale: 1.5; transform: translateX(5px) translateY(5px); rotate: 60deg;}
+    50% {scale: 1; transform: translateX(10px) translateY(10px); rotate: 120deg;}
+    100% {scale: 1; transform: translateX(10px) translateY(10px); rotate: 120deg;}
 }
 #gui {
     top: 80%;
