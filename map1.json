@@ -19,15 +19,15 @@
         "grass_transition_top": {
             "Top": 140,
             "Left": 510,
-            "Height": 35,
+            "Height": 40,
             "Width": 140,
             "Rotate": 180,
             "Material": "grass_transition"
         },
         "grass_transition_bottom": {
-            "Top": 420,
+            "Top": 410,
             "Left": 180,
-            "Height": 35,
+            "Height": 40,
             "Width": 140,
             "Rotate": 0,
             "Material": "grass_transition"
