@@ -250,30 +250,40 @@ if (data.type === 'welcome') {
 }else if(data.type === 'spawn'){
   animationOnce(data.id, "spawn")
 }else if(data.type === "hp"){
+   document.getElementById("hp").style.width = (data.hp>0? data.hp : 0)  +"%"
   document.getElementById("hp").textContent = "hp: " + data.hp;
 }else if(data.type === 'death'){
+  let leftTrack;
   let turret;
+  let body;
   if(data.id === myUserId){
-    document.getElementById("playerTankBody").classList.add("explosion-mark");
-    document.getElementById("playerTankBody").classList.add("tankBodyDestroyed");
+    body = document.getElementById("playerTankBody")
+    document.getElementById("playerTank").classList.add("explosion-mark");
     turret = document.getElementById("playerTankTurret");
+    leftTrack = document.getElementById("playerLeftTrack");
   }else{
     document.getElementById("otherTank_"+data.id).classList.add("explosion-mark");
-    document.getElementById("otherTankBody_"+data.id).classList.add("tankBodyDestroyed");
+    body = document.getElementById("otherTankBody_"+data.id);
     turret = document.getElementById("otherTankTurret_"+data.id);
-    document.getElementById("leftTrack_"+data.id).classList.add("leftTrackKnockedOut");
-    document.getElementById("otherTankBody_"+data.id).classList.add("tankBodyDestroyedFallen");
+    leftTrack = document.getElementById("leftTrack_"+data.id);
   }
+  body.classList.add("tankBodyDestroyed");
   turret.classList.add("tankTurretDestroyed");
-  const animation = Math.floor(Math.random()*3)
-  if(animation != 0){
-    turret.classList.add("flyTurret"+animation); 
+  const animationTurret = Math.floor(Math.random()*3)
+  if(animationTurret != 0){
+    turret.classList.add("flyTurret"+animationTurret); 
+  }
+  const animationBody = Math.floor(Math.random()*2)
+  if(animationBody != 0){
+    body.classList.add("tankBodyDestroyedFallen");
+    leftTrack.classList.add("leftTrackKnockedOut");
   }
 }else if(data.type === 'rebirth'){
   if(data.id === myUserId){
-        document.getElementById("playerTankBody").classList.remove("explosion-mark");
+    document.getElementById("playerTank").classList.remove("explosion-mark");
     document.getElementById("playerTankBody").classList.remove("tankBodyDestroyed", "tankBodyDestroyedFallen");
     document.getElementById("playerTankTurret").classList.remove("tankTurretDestroyed", "flyTurret1", "flyTurret2");
+    document.getElementById("playerLeftTrack").classList.remove("leftTrackKnockedOut");
   }else{
     document.getElementById("otherTank_"+data.id).classList.remove("explosion-mark");
     document.getElementById("otherTankBody_"+data.id).classList.remove("tankBodyDestroyed", "tankBodyDestroyedFallen");
