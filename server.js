@@ -91,9 +91,9 @@ wss.on('connection', (ws, req) => {
             ws.tankPositionX -= speed * Math.sin(radian);
             ws.tankPositionY += speed * Math.cos(radian);
           };
-          if(data.Z){ws.turretRotate -= rotateTurret;};
-          if(data.X){ws.turretRotate += rotateTurret;};
-          if(data.Space && ws.readyToFire){
+          if(data.Z && ws.alive){ws.turretRotate -= rotateTurret;};
+          if(data.X && ws.alive){ws.turretRotate += rotateTurret;};
+          if(data.Space && ws.readyToFire && ws.alive){
             ws.readyToFire = false;
             setTimeout( ()=>{ws.readyToFire = true}, 1000);
 
