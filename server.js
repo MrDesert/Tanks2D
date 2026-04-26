@@ -79,15 +79,15 @@ wss.on('connection', (ws, req) => {
             ws.tankRotate -= rotateTank;
             speed = 1;
           } else {speed = tankSpeed};
-          if(data.D){
+          if(data.D && ws.alive){
             ws.tankRotate += rotateTank;
             speed = 1;
           } else {speed = tankSpeed};
-          if(data.W){
+          if(data.W && ws.alive){
             ws.tankPositionX += speed * Math.sin(radian);
             ws.tankPositionY -= speed * Math.cos(radian);
           };
-          if(data.S){
+          if(data.S && ws.alive){
             ws.tankPositionX -= speed * Math.sin(radian);
             ws.tankPositionY += speed * Math.cos(radian);
           };
