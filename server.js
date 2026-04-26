@@ -485,6 +485,11 @@ for (let [id, bullet] of bullets) {
               }
             });
 
+                    tanks.set(tankId, {
+            ...tank,
+            alive: false
+        });
+
             setTimeout(() => {
             const spawn = spawnPoint();
         // Обновляем танк в Map
@@ -494,7 +499,7 @@ for (let [id, bullet] of bullets) {
             positionY: spawn.Y,
             tankRotate: spawn.Rotate,
             turretRotate: 0,  // обнуляем башню
-            alive: false
+            alive: true
         });
 
             // Отправляем принудительное обновление ВЛАДЕЛЬЦУ танка
@@ -505,7 +510,7 @@ for (let client of wss.clients) {
                     client.tankPositionY = spawn.Y;
                     client.tankRotate = spawn.Rotate;
                     client.turretRotate = 0;
-                    client.alive = false;
+                    client.alive = true;
                     break;
                 }
             }
