@@ -165,11 +165,18 @@ footer {
     background-size: 50px;
     background-repeat: repeat;
 }
+.grass_transition{
+    position: absolute;
+    /* border: 1px black solid; */
+    background: url(img/grass_transition.png);
+    /* background-size: 50px; */
+    background-repeat: repeat;
+}
 .stone_path{
     position: absolute;
     /* border: 1px black solid; */
     background: url(img/stone_path.png);
-    /* background-size: 50px; */
+    background-size: 60px;
     background-repeat: repeat;
 }
 #body{

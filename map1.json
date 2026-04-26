@@ -15,6 +15,22 @@
             "Width": 530,
             "Rotate": 0,
             "Material": "stone_path"
+        },
+        "grass_transition_top": {
+            "Top": 140,
+            "Left": 510,
+            "Height": 30,
+            "Width": 140,
+            "Rotate": 180,
+            "Material": "grass_transition"
+        },
+        "grass_transition_bottom": {
+            "Top": 420,
+            "Left": 180,
+            "Height": 30,
+            "Width": 140,
+            "Rotate": 0,
+            "Material": "grass_transition"
         }
     },  
     "walls": {
