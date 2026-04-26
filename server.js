@@ -52,6 +52,8 @@ wss.on('connection', (ws, req) => {
   ws.turretRotate = 0;
   ws.readyToFire = true;
   ws.alive = true;
+  ws.tankHP = 100;
+  ws.tankCurHP = 100;
   ws.send(JSON.stringify({type:'startposition', X:ws.tankPositionX, Y:ws.tankPositionY, Rotate:ws.tankRotate, Height:tankHeight, Width:tankWidth}))
   
   // Отправляем новому клиенту данные обо всех существующих танках
@@ -479,6 +481,9 @@ for (let [id, bullet] of bullets) {
         if (isPointInOBB(bullet.positionX, bullet.positionY, tankVertices)) {
             toDelete.push(id);
 
+            tank.tankCurHP -= 50;
+
+            if(tank.tankCurHP <= 0){
             wss.clients.forEach(client => {
               if (client.readyState === WebSocket.OPEN) {
                 client.send(JSON.stringify({type: "death", id: tankId}));
@@ -528,6 +533,7 @@ wss.clients.forEach(client => {
                   }, 3000)
                   break;
         }
+      }
     }
     for(let key in mapGame.walls){
       const wall = mapGame.walls[key];
