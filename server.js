@@ -502,6 +502,7 @@ for (let [id, bullet] of bullets) {
             });
              wss.clients.forEach(client => {
               if (client.userId === tankId && client.readyState === WebSocket.OPEN) {
+                client.tankCurHP = HP;
                 client.send(JSON.stringify({type: "hp", hp: HP}));
               }
             });
