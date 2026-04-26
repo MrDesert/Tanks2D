@@ -51,6 +51,7 @@ wss.on('connection', (ws, req) => {
   ws.tankRotate = spawn.Rotate;
   ws.turretRotate = 0;
   ws.readyToFire = true;
+  ws.alive = true;
   ws.send(JSON.stringify({type:'startposition', X:ws.tankPositionX, Y:ws.tankPositionY, Rotate:ws.tankRotate, Height:tankHeight, Width:tankWidth}))
   
   // Отправляем новому клиенту данные обо всех существующих танках
@@ -67,7 +68,7 @@ wss.on('connection', (ws, req) => {
       if(data.type === 'ping'){
          ws.send(JSON.stringify({ type: 'pong', clientTime: data.clientTime, serverTime: Date.now()}));
       } 
-      if (data.type === 'keysDown'){
+      if (data.type === 'keysDown' && ws.alive){
           const oldX = ws.tankPositionX;
           const oldY = ws.tankPositionY;
           const oldR = ws.tankRotate;
@@ -492,7 +493,8 @@ for (let [id, bullet] of bullets) {
             positionX: spawn.X,
             positionY: spawn.Y,
             tankRotate: spawn.Rotate,
-            turretRotate: 0  // обнуляем башню
+            turretRotate: 0,  // обнуляем башню
+            alive: false
         });
 
             // Отправляем принудительное обновление ВЛАДЕЛЬЦУ танка
@@ -503,7 +505,7 @@ for (let client of wss.clients) {
                     client.tankPositionY = spawn.Y;
                     client.tankRotate = spawn.Rotate;
                     client.turretRotate = 0;
-                  
+                    client.alive = false;
                     break;
                 }
             }
