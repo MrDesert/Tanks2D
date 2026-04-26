@@ -255,7 +255,8 @@ for (let [otherUserId, otherTank] of tanks) {
           positionX: ws.tankPositionX,
           positionY: ws.tankPositionY,
           tankRotate: ws.tankRotate,
-          turretRotate: ws.turretRotate
+          turretRotate: ws.turretRotate,
+          tankCurHP: ws.tankCurHP
         });
         
         // Рассылаем данные о ВСЕХ танках ВСЕМ подключённым клиентам
