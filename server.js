@@ -509,6 +509,7 @@ for (let [id, bullet] of bullets) {
             positionY: spawn.Y,
             tankRotate: spawn.Rotate,
             turretRotate: 0,  // обнуляем башню
+            tankCurHP: tank.tankHP,
             alive: true
         });
 
