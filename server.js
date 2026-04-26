@@ -56,6 +56,17 @@ wss.on('connection', (ws, req) => {
   ws.tankCurHP = 100;
   ws.send(JSON.stringify({type:'startposition', X:ws.tankPositionX, Y:ws.tankPositionY, Rotate:ws.tankRotate, Height:tankHeight, Width:tankWidth, hp: ws.tankCurHP}))
   
+  tanks.set(userId, {
+    userId: userId,
+    positionX: ws.tankPositionX,
+    positionY: ws.tankPositionY,
+    tankRotate: ws.tankRotate,
+    turretRotate: ws.turretRotate,
+    tankHP: 100,        // ← добавить
+    tankCurHP: 100,     // ← добавить
+    alive: true         // ← добавить
+});
+
   // Отправляем новому клиенту данные обо всех существующих танках
   const allTanksData = {
     type: 'allTanks',
@@ -256,7 +267,9 @@ for (let [otherUserId, otherTank] of tanks) {
           positionY: ws.tankPositionY,
           tankRotate: ws.tankRotate,
           turretRotate: ws.turretRotate,
-          tankCurHP: ws.tankCurHP
+          alive: ws.alive,
+          tankCurHP: ws.tankCurHP,
+          tankHP: ws.tankHP
         });
         
         // Рассылаем данные о ВСЕХ танках ВСЕМ подключённым клиентам
@@ -487,11 +500,11 @@ for (let [id, bullet] of bullets) {
             ...tank,
             tankCurHP: HP
             });
-            //  wss.clients.forEach(client => {
-            //   if (client.userId === tankId && client.readyState === WebSocket.OPEN) {
-            //     client.send(JSON.stringify({type: "hp", hp: HP}));
-            //   }
-            // });
+             wss.clients.forEach(client => {
+              if (client.userId === tankId && client.readyState === WebSocket.OPEN) {
+                client.send(JSON.stringify({type: "hp", hp: HP}));
+              }
+            });
             if(HP <= 0){
             wss.clients.forEach(client => {
               if (client.readyState === WebSocket.OPEN) {
