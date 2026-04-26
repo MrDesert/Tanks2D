@@ -54,7 +54,7 @@ wss.on('connection', (ws, req) => {
   ws.alive = true;
   ws.tankHP = 100;
   ws.tankCurHP = 100;
-  ws.send(JSON.stringify({type:'startposition', X:ws.tankPositionX, Y:ws.tankPositionY, Rotate:ws.tankRotate, Height:tankHeight, Width:tankWidth}))
+  ws.send(JSON.stringify({type:'startposition', X:ws.tankPositionX, Y:ws.tankPositionY, Rotate:ws.tankRotate, Height:tankHeight, Width:tankWidth, hp: tankCurHP}))
   
   // Отправляем новому клиенту данные обо всех существующих танках
   const allTanksData = {
@@ -487,7 +487,11 @@ for (let [id, bullet] of bullets) {
             ...tank,
             tankCurHP: HP
             });
-            console.log(HP);
+             wss.clients.forEach(client => {
+              if (client.readyState === WebSocket.OPEN) {
+                client.send(JSON.stringify({type: "hp", hp: HP}));
+              }
+            });
             if(HP <= 0){
             wss.clients.forEach(client => {
               if (client.readyState === WebSocket.OPEN) {

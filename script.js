@@ -249,6 +249,8 @@ if (data.type === 'welcome') {
     pingText.textContent = "ping: "+ping;
 }else if(data.type === 'spawn'){
   animationOnce(data.id, "spawn")
+}else if(data.type === "hp"){
+  document.getElementById("hp").textContent = "hp: " + data.hp;
 }else if(data.type === 'death'){
   let turret;
   if(data.id === myUserId){
@@ -294,6 +296,7 @@ if (data.type === 'welcome') {
     playerTank['append'](Object.assign(document.createElement("div"), {id: "playerTankTurret", className: "playerTankTurret"}));
     playerTankTurret = document.getElementById("playerTankTurret")
     playerTank['append'](Object.assign(document.createElement("div"), {id: "gunpointTank"}));
+    document.getElementById("hp").textContent = "hp: " + data.hp;
 } else if (data.type === 'movement'){
     curTurretRotate = data.turretRotate;
     curPositionX = data.positionX;
