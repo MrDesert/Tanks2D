@@ -482,6 +482,10 @@ for (let [id, bullet] of bullets) {
             toDelete.push(id);
 
             tank.tankCurHP -= 50;
+            tanks.set(tankId, {
+            ...tank,
+            tankCurHP: tank.tankCurHP
+            });
 
             if(tank.tankCurHP <= 0){
             wss.clients.forEach(client => {
