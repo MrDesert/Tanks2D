@@ -11,8 +11,8 @@
         "stone_path": {
             "Top": 140,
             "Left": 150,
-            "Height": 280,
-            "Width": 500,
+            "Height": 310,
+            "Width": 530,
             "Rotate": 0,
             "Material": "stone_path"
         }
@@ -56,7 +56,7 @@
         "inner_right": {
             "Top": 140,
             "Left": 650,
-            "Height": 290,
+            "Height": 280,
             "Width": 30,
             "Rotate": 0
         },
@@ -70,7 +70,7 @@
         "inner_left": {
             "Top": 170,
             "Left": 150,
-            "Height": 290,
+            "Height": 280,
             "Width": 30,
             "Rotate": 0
         }
