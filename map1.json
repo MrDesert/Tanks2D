@@ -1,4 +1,5 @@
-{   "floors": {
+{   
+    "floors": {
         "grass": {
             "Top": 0,
             "Left": 0,
@@ -6,6 +7,14 @@
             "Width": 800,
             "Rotate": 0,
             "Material": "grass"
+        },
+        "stone_path": {
+            "Top": 140,
+            "Left": 150,
+            "Height": 280,
+            "Width": 500,
+            "Rotate": 0,
+            "Material": "stone_path"
         }
     },  
     "walls": {
