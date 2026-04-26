@@ -96,10 +96,10 @@ if (socket.readyState === WebSocket.OPEN) {
                 }else{trackFrameLeft++;}
                 if(trackFrameRight >= 7){trackFrameRight = 1;
                 }else{trackFrameRight++;}
-                document.getElementById("leftTrack").classList.remove("trackFrame1", "trackFrame2", "trackFrame3", "trackFrame4", "trackFrame5", "trackFrame6", "trackFrame7")
-                document.getElementById("leftTrack").classList.add("trackFrame"+trackFrameLeft);
-                document.getElementById("rightTrack").classList.remove("trackFrame1", "trackFrame2", "trackFrame3", "trackFrame4", "trackFrame5", "trackFrame6", "trackFrame7")
-                document.getElementById("rightTrack").classList.add("trackFrame"+trackFrameRight);
+                document.getElementById("playerLeftTrack").classList.remove("trackFrame1", "trackFrame2", "trackFrame3", "trackFrame4", "trackFrame5", "trackFrame6", "trackFrame7")
+                document.getElementById("playerLeftTrack").classList.add("trackFrame"+trackFrameLeft);
+                document.getElementById("playerRightTrack").classList.remove("trackFrame1", "trackFrame2", "trackFrame3", "trackFrame4", "trackFrame5", "trackFrame6", "trackFrame7")
+                document.getElementById("playerRightTrack").classList.add("trackFrame"+trackFrameRight);
             } 
             if(key == "S" && keysDown[key]){
                 // const radian = curTankRotate * Math.PI / 180;
@@ -109,10 +109,10 @@ if (socket.readyState === WebSocket.OPEN) {
                 }else{trackFrameLeft--;}
                 if(trackFrameRight <= 1){trackFrameRight = 7;
                 }else{trackFrameRight--;}
-                document.getElementById("leftTrack").classList.remove("trackFrame1", "trackFrame2", "trackFrame3", "trackFrame4", "trackFrame5", "trackFrame6", "trackFrame7")
-                document.getElementById("leftTrack").classList.add("trackFrame"+trackFrameLeft);
-                document.getElementById("rightTrack").classList.remove("trackFrame1", "trackFrame2", "trackFrame3", "trackFrame4", "trackFrame5", "trackFrame6", "trackFrame7")
-                document.getElementById("rightTrack").classList.add("trackFrame"+trackFrameRight);
+                document.getElementById("playerLeftTrack").classList.remove("trackFrame1", "trackFrame2", "trackFrame3", "trackFrame4", "trackFrame5", "trackFrame6", "trackFrame7")
+                document.getElementById("playerLeftTrack").classList.add("trackFrame"+trackFrameLeft);
+                document.getElementById("playerRightTrack").classList.remove("trackFrame1", "trackFrame2", "trackFrame3", "trackFrame4", "trackFrame5", "trackFrame6", "trackFrame7")
+                document.getElementById("playerRightTrack").classList.add("trackFrame"+trackFrameRight);
             } 
             if(key == "A" && keysDown[key]){
                 // curTankRotate -= rotateTank;
@@ -120,10 +120,10 @@ if (socket.readyState === WebSocket.OPEN) {
                 }else{trackFrameLeft--;}
                 if(trackFrameRight >= 7){trackFrameRight = 1;
                 }else{trackFrameRight++;}
-                document.getElementById("leftTrack").classList.remove("trackFrame1", "trackFrame2", "trackFrame3", "trackFrame4", "trackFrame5", "trackFrame6", "trackFrame7")
-                document.getElementById("leftTrack").classList.add("trackFrame"+trackFrameLeft);
-                document.getElementById("rightTrack").classList.remove("trackFrame1", "trackFrame2", "trackFrame3", "trackFrame4", "trackFrame5", "trackFrame6", "trackFrame7")
-                document.getElementById("rightTrack").classList.add("trackFrame"+trackFrameRight);
+                document.getElementById("playerLeftTrack").classList.remove("trackFrame1", "trackFrame2", "trackFrame3", "trackFrame4", "trackFrame5", "trackFrame6", "trackFrame7")
+                document.getElementById("playerLeftTrack").classList.add("trackFrame"+trackFrameLeft);
+                document.getElementById("playerRightTrack").classList.remove("trackFrame1", "trackFrame2", "trackFrame3", "trackFrame4", "trackFrame5", "trackFrame6", "trackFrame7")
+                document.getElementById("playerRightTrack").classList.add("trackFrame"+trackFrameRight);
             } 
             if(key == "D" && keysDown[key]){
                 // curTankRotate += rotateTank;
@@ -131,10 +131,10 @@ if (socket.readyState === WebSocket.OPEN) {
                 }else{trackFrameLeft++;}
                 if(trackFrameRight <= 1){trackFrameRight = 7;
                 }else{trackFrameRight--;}
-                document.getElementById("leftTrack").classList.remove("trackFrame1", "trackFrame2", "trackFrame3", "trackFrame4", "trackFrame5", "trackFrame6", "trackFrame7")
-                document.getElementById("leftTrack").classList.add("trackFrame"+trackFrameLeft);
-                document.getElementById("rightTrack").classList.remove("trackFrame1", "trackFrame2", "trackFrame3", "trackFrame4", "trackFrame5", "trackFrame6", "trackFrame7")
-                document.getElementById("rightTrack").classList.add("trackFrame"+trackFrameRight);
+                document.getElementById("playerLeftTrack").classList.remove("trackFrame1", "trackFrame2", "trackFrame3", "trackFrame4", "trackFrame5", "trackFrame6", "trackFrame7")
+                document.getElementById("playerLeftTrack").classList.add("trackFrame"+trackFrameLeft);
+                document.getElementById("playerRightTrack").classList.remove("trackFrame1", "trackFrame2", "trackFrame3", "trackFrame4", "trackFrame5", "trackFrame6", "trackFrame7")
+                document.getElementById("playerRightTrack").classList.add("trackFrame"+trackFrameRight);
             }             
             if(key == "Z" && keysDown[key]){curTurretRotate -= rotateTurret} 
             if(key == "X" && keysDown[key]){curTurretRotate += rotateTurret}
@@ -261,6 +261,8 @@ if (data.type === 'welcome') {
     document.getElementById("otherTank_"+data.id).classList.add("explosion-mark");
     document.getElementById("otherTankBody_"+data.id).classList.add("tankBodyDestroyed");
     turret = document.getElementById("otherTankTurret_"+data.id);
+    document.getElementById("leftTrack_"+data.id).classList.add("leftTrackKnockedOut");
+    document.getElementById("otherTankBody_"+data.id).classList.add("tankBodyDestroyedFallen");
   }
   turret.classList.add("tankTurretDestroyed");
   const animation = Math.floor(Math.random()*3)
@@ -270,12 +272,13 @@ if (data.type === 'welcome') {
 }else if(data.type === 'rebirth'){
   if(data.id === myUserId){
         document.getElementById("playerTankBody").classList.remove("explosion-mark");
-    document.getElementById("playerTankBody").classList.remove("tankBodyDestroyed");
+    document.getElementById("playerTankBody").classList.remove("tankBodyDestroyed", "tankBodyDestroyedFallen");
     document.getElementById("playerTankTurret").classList.remove("tankTurretDestroyed", "flyTurret1", "flyTurret2");
   }else{
     document.getElementById("otherTank_"+data.id).classList.remove("explosion-mark");
-    document.getElementById("otherTankBody_"+data.id).classList.remove("tankBodyDestroyed");
+    document.getElementById("otherTankBody_"+data.id).classList.remove("tankBodyDestroyed", "tankBodyDestroyedFallen");
     document.getElementById("otherTankTurret_"+data.id).classList.remove("tankTurretDestroyed", "flyTurret1", "flyTurret2");
+    document.getElementById("leftTrack_"+data.id).classList.remove("leftTrackKnockedOut");
   }
 }else if(data.type === 'bullets'){
     // Отрисовываем все пули из data.bullets
@@ -292,8 +295,8 @@ if (data.type === 'welcome') {
     const parent = document.getElementById("body");
     parent['append'](Object.assign(document.createElement("div"), {id: "playerTank", style: ` height: ${data.Height}px; width: ${data.Width}px; top: ${curPositionY}px; left: ${curPositionX}px; transform: rotate(${curTankRotate}deg); `}));
     playerTank = document.getElementById("playerTank");
-    playerTank['append'](Object.assign(document.createElement("div"), {id: "leftTrack", className: "playerTankTrack trackFrame7"}));
-    playerTank['append'](Object.assign(document.createElement("div"), {id: "rightTrack", className: "playerTankTrack trackFrame7"}));
+    playerTank['append'](Object.assign(document.createElement("div"), {id: "playerLeftTrack", className: "playerTankTrack leftTrack trackFrame7"}));
+    playerTank['append'](Object.assign(document.createElement("div"), {id: "playerRightTrack", className: "playerTankTrack rightTrack trackFrame7"}));
     playerTank['append'](Object.assign(document.createElement("div"), {id: "playerTankBody", className: "playerTankBody", style: "height: " + data.Height + "px; width: " + data.Width + "px;)"}));
     playerTank['append'](Object.assign(document.createElement("div"), {id: "playerTankTurret", className: "playerTankTurret"}));
     playerTankTurret = document.getElementById("playerTankTurret")
@@ -334,8 +337,8 @@ if (data.type === 'welcome') {
       tankDiv.className = 'otherTank';
       tankDiv.id = `otherTank_${tankData.userId}`;
       tankDiv.innerHTML = `
-        <div id="leftTrack" class="playerTankTrack trackFrame7"></div>
-        <div id="rightTrack" class="playerTankTrack trackFrame7"></div>
+        <div id="leftTrack_${tankData.userId}" class="playerTankTrack leftTrack trackFrame7"></div>
+        <div id="rightTrack_${tankData.userId}" class="playerTankTrack rightTrack trackFrame7"></div>
         <div id="otherTankBody_${tankData.userId}" class="otherTankBody"></div>
         <div id="otherTankTurret_${tankData.userId}" class="otherTankTurret"></div>
       `;

@@ -511,7 +511,7 @@ for (let [id, bullet] of bullets) {
             });
             if(HP <= 0){
             wss.clients.forEach(client => {
-              if (client.readyState === WebSocket.OPEN) {
+              if (client.userId === tankId && client.readyState === WebSocket.OPEN) {
                 client.alive = false;
                 client.send(JSON.stringify({type: "death", id: tankId}));
               }

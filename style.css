@@ -79,10 +79,10 @@ footer {
 .trackFrame7 {
     background-position: -122px -13px;
 }
-#leftTrack {
+.leftTrack {
     left: -4px;
 }
-#rightTrack {
+.rightTrack {
     left: 33px;
 }
 .bullet {
@@ -155,7 +155,7 @@ footer {
     position: absolute;
     /* border: 1px black solid; */
     background: url(img/brick.png);
-    background-size: contain;
+    background-size: 15px;
     background-repeat: repeat;
 }
 .grass{
@@ -176,7 +176,7 @@ footer {
     position: absolute;
     /* border: 1px black solid; */
     background: url(img/stone_path.png);
-    background-size: 30px;
+    background-size: 25px;
     background-repeat: repeat;
 }
 #body{
@@ -285,6 +285,18 @@ footer {
     25% {scale: 1.5; transform: translateX(5px) translateY(5px); rotate: 60deg;}
     50% {scale: 1; transform: translateX(10px) translateY(10px); rotate: 120deg;}
     100% {scale: 1; transform: translateX(10px) translateY(10px); rotate: 120deg;}
+}
+.leftTrackKnockedOut{
+    left: -12px;
+    rotate: -15deg;
+}
+.tankBodyDestroyedFallen{
+    animation: explodeFallen 0.3s cubic-bezier(0.5, -0.5, 0.8, 1.5) forwards;
+}
+@keyframes explodeFallen {
+    0% {transform: scale(1) perspective(-400px) rotate3d(0, 1, 0, 30deg); filter: brightness(1) blur(0px);}
+    30% {transform: scale(1.8) perspective(-400px) rotate3d(0, 1, 0, 30deg); filter: brightness(5) blur(10px);}
+    100% {transform: scale(1) perspective(-400px) rotate3d(0, 1, 0, 30deg); filter: brightness(1) blur(0px);}
 }
 #gui {
     top: 80%;
