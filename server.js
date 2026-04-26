@@ -481,13 +481,13 @@ for (let [id, bullet] of bullets) {
         if (isPointInOBB(bullet.positionX, bullet.positionY, tankVertices)) {
             toDelete.push(id);
 
-            tank.tankCurHP -= 50;
+            const HP = tank.tankCurHP - 50;
             tanks.set(tankId, {
             ...tank,
-            tankCurHP: tank.tankCurHP
+            tankCurHP: HP
             });
-
-            if(tank.tankCurHP <= 0){
+            console.log(HP);
+            if(HP <= 0){
             wss.clients.forEach(client => {
               if (client.readyState === WebSocket.OPEN) {
                 client.send(JSON.stringify({type: "death", id: tankId}));
