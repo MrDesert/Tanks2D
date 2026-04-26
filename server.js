@@ -539,6 +539,7 @@ for (let client of wss.clients) {
                     client.tankPositionY = spawn.Y;
                     client.tankRotate = spawn.Rotate;
                     client.turretRotate = 0;
+                    client.tankCurHP = tank.tankHP,
                     client.alive = true;
                     break;
                 }
