@@ -54,7 +54,7 @@ wss.on('connection', (ws, req) => {
   ws.alive = true;
   ws.tankHP = 100;
   ws.tankCurHP = 100;
-  ws.send(JSON.stringify({type:'startposition', X:ws.tankPositionX, Y:ws.tankPositionY, Rotate:ws.tankRotate, Height:tankHeight, Width:tankWidth, hp: tankCurHP}))
+  ws.send(JSON.stringify({type:'startposition', X:ws.tankPositionX, Y:ws.tankPositionY, Rotate:ws.tankRotate, Height:tankHeight, Width:tankWidth, hp: ws.tankCurHP}))
   
   // Отправляем новому клиенту данные обо всех существующих танках
   const allTanksData = {
