@@ -495,7 +495,8 @@ for (let [id, bullet] of bullets) {
         if (isPointInOBB(bullet.positionX, bullet.positionY, tankVertices)) {
             toDelete.push(id);
 
-            const HP = tank.tankCurHP - 50;
+            const damage = Math.floor(Math.random()*22)+30;
+            const HP = tank.tankCurHP - damage;
             tanks.set(tankId, {
             ...tank,
             tankCurHP: HP
@@ -541,6 +542,7 @@ for (let client of wss.clients) {
                     client.turretRotate = 0;
                     client.tankCurHP = tank.tankHP,
                     client.alive = true;
+                    client.send(JSON.stringify({type: "hp", hp: tank.tankHP}));
                     break;
                 }
             }
