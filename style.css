@@ -175,6 +175,7 @@ footer {
 }
 #body{
         overflow: hidden;  /* Убираем полосы прокрутки */
+        /* position: fixed; */
     background: linear-gradient(105deg, #484848, #4a4a4a, #555555);
 }
 
@@ -182,7 +183,6 @@ footer {
   position: absolute;
   height: 80px;
   width: 43px;
-  filter: hue-rotate(-30deg); /* Отличаем от своего танка */
   opacity: 1;
          filter: hue-rotate(-30deg) drop-shadow(0px 0px 7px rgba(0,0,0,0.7))
         drop-shadow(0px 0px 3px rgba(0,0,0,0.9));
