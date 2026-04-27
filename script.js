@@ -199,17 +199,17 @@ function tick(time){
 //     }
 // }
 
-function createBullet(turret){
-    createBullet.count = (createBullet.count || 0)
-            turret = document.getElementById("gunpointTank");
-            const object =  turret.getBoundingClientRect();
-            const objectX = object.left- object.width;
-            const objectY = object.top- object.height;
-            const parent = document.getElementById("map");
-            parent['append'](Object.assign(document.createElement("div"), {id: "bull" + createBullet.count, className: "bullet", style: "transform: translate(" + objectX + "px, " + objectY + "px) rotate("+(curTurretRotate+curTankRotate)%360+"deg)"}));
-            bullets.push(["bull" + createBullet.count, objectX, objectY, 150, curTurretRotate, curTankRotate])
-            createBullet.count++;
-        }
+// function createBullet(turret){
+//     createBullet.count = (createBullet.count || 0)
+//             turret = document.getElementById("gunpointTank");
+//             const object =  turret.getBoundingClientRect();
+//             const objectX = object.left- object.width;
+//             const objectY = object.top- object.height;
+//             const parent = document.getElementById("map");
+//             parent['append'](Object.assign(document.createElement("div"), {id: "bull" + createBullet.count, className: "bullet", style: "transform: translate(" + objectX + "px, " + objectY + "px) rotate("+(curTurretRotate+curTankRotate)%360+"deg)"}));
+//             bullets.push(["bull" + createBullet.count, objectX, objectY, 150, curTurretRotate, curTankRotate])
+//             createBullet.count++;
+//         }
 
 function drawBullet(id, X, Y, Rotate){
   const bullet = document.getElementById("bull" + id);
@@ -320,7 +320,7 @@ if (data.type === 'welcome') {
     playerTank['append'](Object.assign(document.createElement("div"), {id: "playerTankBody", className: "playerTankBody", style: "height: " + data.Height + "px; width: " + data.Width + "px;)"}));
     playerTank['append'](Object.assign(document.createElement("div"), {id: "playerTankTurret", className: "playerTankTurret"}));
     playerTankTurret = document.getElementById("playerTankTurret")
-    playerTank['append'](Object.assign(document.createElement("div"), {id: "gunpointTank"}));
+    // playerTank['append'](Object.assign(document.createElement("div"), {id: "gunpointTank"}));
     document.getElementById("hp").textContent = "hp: " + data.hp;
     updateCamera();
 } else if (data.type === 'movement'){
@@ -398,26 +398,27 @@ socket.onclose = () => {
   console.log('Соединение с сервером закрыто');
 };
 
-let cameraZoom = 1
+let cameraZoom = 1.7
+    const tankWidth = 43;
+    const tankHeight = 80;
+    const halfTankW = tankWidth / 2;   
+    const halfTankH = tankHeight / 2;
+    const MAP_WIDTH = 830;
+    const MAP_HEIGHT = 600;
 function updateCamera() {
     const tank = document.getElementById("playerTank");
     const map = document.getElementById("map");
     
     if (!tank || !map) return;
     
-    const tankWidth = 43;
-    const tankHeight = 80;
-    const MAP_WIDTH = 830;
-    const MAP_HEIGHT = 600;
-    
     const screenW = document.documentElement.clientWidth;
     const screenH = document.documentElement.clientHeight;
     
-    let tankX = parseFloat(tank.style.left) || 0;
-    let tankY = parseFloat(tank.style.top) || 0;
+    let tankX = parseFloat(curPositionX) || 0;
+    let tankY = parseFloat(curPositionY) || 0;
     
-    const tankCenterX = tankX + tankWidth / 2;
-    const tankCenterY = tankY + tankHeight / 2;
+    const tankCenterX = tankX + halfTankW;
+    const tankCenterY = tankY + halfTankH;
     
     // Желаемая позиция (танк по центру)
     let desiredMapX = screenW / 2 - (tankCenterX * cameraZoom);

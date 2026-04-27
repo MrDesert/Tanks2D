@@ -147,11 +147,11 @@ footer {
     /* contain: layout style paint; */
     position: absolute;
 }
-/* #map > div {
+#map > div {
     transform: translateZ(0);
     backface-visibility: hidden;
-    contain: layout style paint;
-} */
+    /* contain: layout style paint; */
+}
 .grass{
     position: absolute;
     /* border: 1px black solid; */
@@ -178,9 +178,12 @@ footer {
         position: fixed;
             height: 100%;
     width: 100%;
-    top: 0;
-    left: 0;
+        margin: 0;
+    padding: 0;
     background: linear-gradient(105deg, #484848, #4a4a4a, #555555);
+    transform: translateZ(0);
+    will-change: transform;
+    contain: strict;
 }
 
 .otherTank {
