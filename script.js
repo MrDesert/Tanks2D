@@ -205,7 +205,7 @@ function createBullet(turret){
             const object =  turret.getBoundingClientRect();
             const objectX = object.left- object.width;
             const objectY = object.top- object.height;
-            const parent = document.getElementById("body");
+            const parent = document.getElementById("map");
             parent['append'](Object.assign(document.createElement("div"), {id: "bull" + createBullet.count, className: "bullet", style: "transform: translate(" + objectX + "px, " + objectY + "px) rotate("+(curTurretRotate+curTankRotate)%360+"deg)"}));
             bullets.push(["bull" + createBullet.count, objectX, objectY, 150, curTurretRotate, curTankRotate])
             createBullet.count++;
@@ -219,7 +219,7 @@ function drawBullet(id, X, Y, Rotate){
     bullet.style.left = `${X}px`;
     bullet.style.transform = "rotate("+Rotate+"deg)"
   } else{
-    const parent = document.getElementById("body");
+    const parent = document.getElementById("map");
     parent['append'](Object.assign(document.createElement("div"), {id: "bull" + id, className: "bullet", style: `top: ${Y}px; left: ${X}px; transform: rotate(${Rotate}deg); `}));
   }
 }
@@ -302,7 +302,7 @@ if (data.type === 'welcome') {
     curPositionX = data.X;
     curPositionY = data.Y;
     curTankRotate = data.Rotate;
-    const parent = document.getElementById("body");
+    const parent = document.getElementById("map");
     parent['append'](Object.assign(document.createElement("div"), {id: "playerTank", style: ` height: ${data.Height}px; width: ${data.Width}px; top: ${curPositionY}px; left: ${curPositionX}px; transform: rotate(${curTankRotate}deg); `}));
     playerTank = document.getElementById("playerTank");
     playerTank['append'](Object.assign(document.createElement("div"), {id: "playerLeftTrack", className: "playerTankTrack leftTrack trackFrame7"}));
@@ -312,6 +312,7 @@ if (data.type === 'welcome') {
     playerTankTurret = document.getElementById("playerTankTurret")
     playerTank['append'](Object.assign(document.createElement("div"), {id: "gunpointTank"}));
     document.getElementById("hp").textContent = "hp: " + data.hp;
+    setTimeout(() => updateCamera(), 100);
 } else if (data.type === 'movement'){
     curTurretRotate = data.turretRotate;
     curPositionX = data.positionX;
@@ -321,18 +322,19 @@ if (data.type === 'welcome') {
     playerTank.style.left = `${curPositionX}px`;
     playerTank.style.rotate = "rotate("+curTankRotate+"deg)"
     playerTankTurret.style.transform = "translateX(-50%) rotate("+curTurretRotate+"deg)";
+    updateCamera();
 } else if (data.type === 'map') {
-  console.log(data.map.floors)
+    document.getElementById("body")['append'](Object.assign(document.createElement("div"), {id: "map", style: "height: " + 600 + "px; width: " + 830 + "px; top:" + 0 + "px; left:" + 0 + "px;"}));
     for(let key in data.map.floors){
-      const parent = document.getElementById("body");
+      const parent = document.getElementById("map");
       parent['append'](Object.assign(document.createElement("div"), {id: "floor"+key, className: data.map.floors[key].Material, style: "height: " + data.map.floors[key].Height + "px; width: " + data.map.floors[key].Width + "px; top:" + data.map.floors[key].Top + "px; left:" + data.map.floors[key].Left + "px; rotate:" + data.map.floors[key].Rotate + "deg;"}));
     };
     for(let key in data.map.walls){
-        const parent = document.getElementById("body");
+        const parent = document.getElementById("map");
         parent['append'](Object.assign(document.createElement("div"), {id: "wall"+key, className: "cement", style: "height: " + data.map.walls[key].Height + "px; width: " + data.map.walls[key].Width + "px; top:" + data.map.walls[key].Top + "px; left:" + data.map.walls[key].Left + "px;"}));
         walls.push(document.getElementById("wall"+key).getBoundingClientRect());
     }
-
+    setTimeout(() => updateCamera(), 50);
 } else if (data.type === 'allTanks') {
   const currentTankIds = new Set();
   
@@ -352,7 +354,7 @@ if (data.type === 'welcome') {
         <div id="otherTankBody_${tankData.userId}" class="otherTankBody"></div>
         <div id="otherTankTurret_${tankData.userId}" class="otherTankTurret"></div>
       `;
-      document.getElementById('body').appendChild(tankDiv);
+      document.getElementById('map').appendChild(tankDiv);
       otherTanks.set(tankData.userId, tankDiv);
     }
     
@@ -385,3 +387,47 @@ socket.onerror = (error) => {
 socket.onclose = () => {
   console.log('Соединение с сервером закрыто');
 };
+
+let cameraZoom = 2
+function updateCamera() {
+    const tank = document.getElementById("playerTank");
+    const map = document.getElementById("map");
+    
+    if (!tank || !map) return;
+    
+    const tankWidth = 43;
+    const tankHeight = 80;
+    const MAP_WIDTH = 830;
+    const MAP_HEIGHT = 600;
+    
+    const screenW = document.documentElement.clientWidth;
+    const screenH = document.documentElement.clientHeight;
+    
+    let tankX = parseFloat(tank.style.left) || 0;
+    let tankY = parseFloat(tank.style.top) || 0;
+    
+    const tankCenterX = tankX + tankWidth / 2;
+    const tankCenterY = tankY + tankHeight / 2;
+    
+    // Желаемая позиция (танк по центру)
+    let desiredMapX = screenW / 2 - (tankCenterX * cameraZoom);
+    let desiredMapY = screenH / 2 - (tankCenterY * cameraZoom);
+    
+    // ГРАНИЦЫ (с учётом масштаба)
+    const minMapX = screenW - (MAP_WIDTH * cameraZoom);
+    const minMapY = screenH - (MAP_HEIGHT * cameraZoom);
+    const maxMapX = 0;
+    const maxMapY = 0;
+    
+    // Ограничиваем
+    let finalMapX = Math.max(minMapX, Math.min(maxMapX, desiredMapX));
+    let finalMapY = Math.max(minMapY, Math.min(maxMapY, desiredMapY));
+    
+    // ПОПРАВКА: Смещение из-за transform-origin
+    // При scale карта увеличивается от левого верхнего угла
+    // Нужно компенсировать, чтобы карта оставалась в пределах видимости
+    const offsetX = (MAP_WIDTH * cameraZoom - MAP_WIDTH) / 2;
+    const offsetY = (MAP_HEIGHT * cameraZoom - MAP_HEIGHT) / 2;
+    
+    map.style.transform = `translate(${finalMapX + offsetX}px, ${finalMapY + offsetY}px) scale(${cameraZoom})`;
+}

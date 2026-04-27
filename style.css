@@ -157,6 +157,9 @@ footer {
            filter:         drop-shadow(0px 0px 8px rgba(0,0,0,0.7))
         drop-shadow(0px 0px 4px rgba(0,0,0,0.9));
 }
+#map{
+    position: absolute;
+}
 .grass{
     position: absolute;
     /* border: 1px black solid; */
@@ -179,6 +182,7 @@ footer {
     background-repeat: repeat;
 }
 #body{
+        overflow: hidden;  /* Убираем полосы прокрутки */
     background: linear-gradient(105deg, #484848, #4a4a4a, #555555);
 }
 
