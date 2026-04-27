@@ -20,7 +20,7 @@ let curTurretRotate = 0;
 const speedBullets = 8;
 const bulletRecharge = 70;
 let bulletRechargeCur = 10;
-const bullets = [];
+// const bullets = [];
 const keysDown = {
     type: "keysDown",
     W: false,
@@ -32,7 +32,7 @@ const keysDown = {
     Space: false
 };
 
-const walls = [];
+// const walls = [];
 
 document.addEventListener('keydown', (e)=> {
         e.preventDefault();
@@ -73,9 +73,9 @@ function tick(time){
     tick.countTank = (tick.countTank || 0)
 
     if(time - (tick.lastFPS || 0) >= 1000){
-        if (socket.readyState === WebSocket.OPEN) {
-            socket.send(JSON.stringify({type: "ping", clientTime: Date.now()}));
-        } 
+      if (socket.readyState === WebSocket.OPEN) {
+          socket.send(JSON.stringify({type: "ping", clientTime: Date.now()}));
+      } 
       fps.textContent = "fps: " + tick.FPScount;
       tick.FPScount = 0;
       tick.lastFPS = time;
@@ -84,9 +84,9 @@ function tick(time){
 
     if(time - (tick.lastTimeMove || 0) >= 16){
         // Отправляем данные о танке на сервер
-if (socket.readyState === WebSocket.OPEN) {
-  socket.send(JSON.stringify(keysDown));
-}     
+      if (socket.readyState === WebSocket.OPEN) {
+        socket.send(JSON.stringify(keysDown));
+      }     
         for (const key in keysDown){
             if(key == "W" && keysDown[key]){
                 // const radian = curTankRotate * Math.PI / 180;
@@ -149,55 +149,55 @@ if (socket.readyState === WebSocket.OPEN) {
         tick.countTank++;
         tick.lastTimeMove = time;
     }
-    if(time - (tick.lastTimeBull || 0) >= 2){
-        tick.countBul = (tick.countBul || 0)
-        for (const key in keysDown){
-            // if(tick.countBul >= bulletRecharge){
-            //     if(key == "Space" && keysDown[key]){createBullet(); tick.countBul = 0;}
-            // }
-        }
-        bullets.forEach(bul => {
-            const bullet = document.getElementById(bul[0]);
-            const oldBul1 = bul[1];
-            const oldBul2 = bul[2];
-            if(bul[3] >= 0 && bullet){
-                bul[3]--;
-                const radian = (bul[4] + bul[5]) * Math.PI / 180;
-                bul[1] += speedBullets * Math.sin(radian);
-                bul[2] -= speedBullets * Math.cos(radian);
-                bullet.style.transform = "translate("+bul[1] +"px, "+bul[2]+"px) rotate("+(bul[4]+bul[5])%360+"deg)";
-            } 
-            if(colliziia(bullet)){
-                bul[1] = oldBul1;
-                bul[2] = oldBul2;
-                bullet.style.transform = "translate("+bul[1] +"px, "+bul[2]+"px) rotate("+(bul[4]+bul[5])%360+"deg)";
-                bul[3] = 0;
-            }
-        });
-        for(let i = bullets.length - 1; i >= 0; i--) {
-            if(bullets[i][3] <= 0) {
-                // console.log(bullets[i][0])
-                document.getElementById(bullets[i][0])?.remove();
-                bullets.splice(i, 1);
-            }
-        }
-        tick.countBul++
-        tick.lastTimeBull = time;
-    }
+    // if(time - (tick.lastTimeBull || 0) >= 2){
+    //     tick.countBul = (tick.countBul || 0)
+    //     for (const key in keysDown){
+    //         // if(tick.countBul >= bulletRecharge){
+    //         //     if(key == "Space" && keysDown[key]){createBullet(); tick.countBul = 0;}
+    //         // }
+    //     }
+    //     bullets.forEach(bul => {
+    //         const bullet = document.getElementById(bul[0]);
+    //         const oldBul1 = bul[1];
+    //         const oldBul2 = bul[2];
+    //         if(bul[3] >= 0 && bullet){
+    //             bul[3]--;
+    //             const radian = (bul[4] + bul[5]) * Math.PI / 180;
+    //             bul[1] += speedBullets * Math.sin(radian);
+    //             bul[2] -= speedBullets * Math.cos(radian);
+    //             bullet.style.transform = "translate("+bul[1] +"px, "+bul[2]+"px) rotate("+(bul[4]+bul[5])%360+"deg)";
+    //         } 
+    //         if(colliziia(bullet)){
+    //             bul[1] = oldBul1;
+    //             bul[2] = oldBul2;
+    //             bullet.style.transform = "translate("+bul[1] +"px, "+bul[2]+"px) rotate("+(bul[4]+bul[5])%360+"deg)";
+    //             bul[3] = 0;
+    //         }
+    //     });
+    //     for(let i = bullets.length - 1; i >= 0; i--) {
+    //         if(bullets[i][3] <= 0) {
+    //             // console.log(bullets[i][0])
+    //             document.getElementById(bullets[i][0])?.remove();
+    //             bullets.splice(i, 1);
+    //         }
+    //     }
+    //     tick.countBul++
+    //     tick.lastTimeBull = time;
+    // }
     requestAnimationFrame(tick);
 }
 
-function colliziia(object){
-    const Object = object.getBoundingClientRect();
-    for (const wall of walls) {
-        if(Object.right > (wall.left) && 
-            Object.left < (wall.right) && 
-            Object.bottom > (wall.top) && 
-            Object.top < (wall.bottom)){
-            return true;
-        } 
-    }
-}
+// function colliziia(object){
+//     const Object = object.getBoundingClientRect();
+//     for (const wall of walls) {
+//         if(Object.right > (wall.left) && 
+//             Object.left < (wall.right) && 
+//             Object.bottom > (wall.top) && 
+//             Object.top < (wall.bottom)){
+//             return true;
+//         } 
+//     }
+// }
 
 function createBullet(turret){
     createBullet.count = (createBullet.count || 0)
@@ -226,6 +226,8 @@ function drawBullet(id, X, Y, Rotate){
 
 socket.onopen = () => {
   console.log('Соединение с сервером установлено');
+      // Запрашиваем карту
+    socket.send(JSON.stringify({ type: 'getMap' }));
 };
 
 socket.onmessage = (event) => {
@@ -247,6 +249,14 @@ if (data.type === 'welcome') {
     else if (ping < 400){pingText.style.color = "#ff3300"}
     else                {pingText.style.color = "#770000"}
     pingText.textContent = "ping: "+ping;
+}else if (data.type === 'mapImage') {
+        // Получили картинку карты
+        const img = document.createElement('img');
+        img.src = 'data:image/png;base64,' + data.imageBase64;
+        img.style.position = 'absolute';
+        img.style.width = '830px';
+        img.style.height = '600px';
+        document.getElementById('body').appendChild(img);
 }else if(data.type === 'spawn'){
   animationOnce(data.id, "spawn")
 }else if(data.type === "hp"){
@@ -312,7 +322,7 @@ if (data.type === 'welcome') {
     playerTankTurret = document.getElementById("playerTankTurret")
     playerTank['append'](Object.assign(document.createElement("div"), {id: "gunpointTank"}));
     document.getElementById("hp").textContent = "hp: " + data.hp;
-    setTimeout(() => updateCamera(), 100);
+    updateCamera();
 } else if (data.type === 'movement'){
     curTurretRotate = data.turretRotate;
     curPositionX = data.positionX;
@@ -327,14 +337,14 @@ if (data.type === 'welcome') {
     document.getElementById("body")['append'](Object.assign(document.createElement("div"), {id: "map", style: "height: " + 600 + "px; width: " + 830 + "px; top:" + 0 + "px; left:" + 0 + "px;"}));
     for(let key in data.map.floors){
       const parent = document.getElementById("map");
-      parent['append'](Object.assign(document.createElement("div"), {id: "floor"+key, className: data.map.floors[key].Material, style: "height: " + data.map.floors[key].Height + "px; width: " + data.map.floors[key].Width + "px; top:" + data.map.floors[key].Top + "px; left:" + data.map.floors[key].Left + "px; rotate:" + data.map.floors[key].Rotate + "deg;"}));
+      // parent['append'](Object.assign(document.createElement("div"), {id: "floor"+key, className: data.map.floors[key].Material, style: "height: " + data.map.floors[key].Height + "px; width: " + data.map.floors[key].Width + "px; top:" + data.map.floors[key].Top + "px; left:" + data.map.floors[key].Left + "px; rotate:" + data.map.floors[key].Rotate + "deg;"}));
     };
     for(let key in data.map.walls){
         const parent = document.getElementById("map");
-        parent['append'](Object.assign(document.createElement("div"), {id: "wall"+key, className: "cement", style: "height: " + data.map.walls[key].Height + "px; width: " + data.map.walls[key].Width + "px; top:" + data.map.walls[key].Top + "px; left:" + data.map.walls[key].Left + "px;"}));
-        walls.push(document.getElementById("wall"+key).getBoundingClientRect());
+        // parent['append'](Object.assign(document.createElement("div"), {id: "wall"+key, className: "cement", style: "height: " + data.map.walls[key].Height + "px; width: " + data.map.walls[key].Width + "px; top:" + data.map.walls[key].Top + "px; left:" + data.map.walls[key].Left + "px;"}));
+        // walls.push(document.getElementById("wall"+key).getBoundingClientRect());
     }
-    setTimeout(() => updateCamera(), 50);
+    updateCamera();
 } else if (data.type === 'allTanks') {
   const currentTankIds = new Set();
   

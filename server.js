@@ -44,6 +44,7 @@ wss.on('connection', (ws, req) => {
   ws.send(JSON.stringify({ type: 'welcome', userId: userId }));    // Отправляем приветствие с номером
   ws.send(JSON.stringify({type: 'map', map: mapGame}))
   
+  
   ws.userId = userId; // Сохраняем userId на сокете
   const spawn = spawnPoint();
   ws.tankPositionY = spawn.Y;
@@ -74,13 +75,22 @@ wss.on('connection', (ws, req) => {
   };
   ws.send(JSON.stringify(allTanksData));
   
-  ws.on('message', (message) => {
+  ws.on('message', async (message) => {
     try {
       const data = JSON.parse(message);
 
       if(data.type === 'ping'){
          ws.send(JSON.stringify({ type: 'pong', clientTime: data.clientTime, serverTime: Date.now()}));
       } 
+              // Генерация карты
+        if (data.type === 'getMap') {
+            const mapImageBuffer = await generateMapImage(globalMapData);
+            
+            ws.send(JSON.stringify({
+                type: 'mapImage',
+                imageBase64: mapImageBuffer.toString('base64')
+            }));
+        }
       if (data.type === 'keysDown'){
           const oldX = ws.tankPositionX;
           const oldY = ws.tankPositionY;

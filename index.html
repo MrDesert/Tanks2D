@@ -7,13 +7,21 @@
         <!-- <link rel="stylesheet" href="forGame.css" onerror="this.onerror=null;this.href='https://mrdesert.github.io/Tools/forGame.css'"> Локальный файл для релиза, сетевой для разработки -->
     </head>
     <body id="body">
+        <svg style="position: absolute; width: 0; height: 0; pointer-events: none;">
+            <defs>
+                <filter id="tank-shadow" x="-20%" y="-20%" width="140%" height="140%">
+                    <!-- <feDropShadow dx="0" dy="0" stdDeviation="2" flood-color="black" flood-opacity="0.9"/> -->
+                    <feDropShadow dx="0" dy="0" stdDeviation="5" flood-color="black" flood-opacity="1"/>
+                </filter>
+            </defs>
+        </svg>
     <script src="forGame.js" onerror="this.onerror=null; const newScript = document.createElement('script'); newScript.src = 'https://mrdesert.github.io/Tools/forGame.js'; document.body.appendChild(newScript);"></script><!-- Локальный файл для релиза, сетевой для разработки-->
         <!-- <div class="bullet" id="bull1"></div> -->
                  
         <div id="connectionNumber" style="position: absolute; top: 10px; right: 10px; background: black; color: white; padding: 5px 10px; border-radius: 5px; font-family: monospace; z-index: 1000;">
             Номер: --   
         </div>
-        <footer>© 2026 by MrDesert v0.0.0.1.8</footer>
+        <footer>© 2026 by MrDesert v0.0.0.1.9</footer>
         <div id="ping" style="position: absolute; top: 10px; left: 10px; background: black; color: white; padding: 5px 10px; border-radius: 5px; font-family: monospace; z-index: 1000;">ping: --</div>
         <div id="fps" style="position: absolute; top: 30px; left: 10px; background: black; color: white; padding: 5px 10px; border-radius: 5px; font-family: monospace; z-index: 1000;">fps: --</div>
         <div id="hpBar" style="position: absolute; top: 10px; left: 30%; width: 300px; background: black; border: solid 2px gray; border-radius: 5px; font-family: monospace; z-index: 1000;">

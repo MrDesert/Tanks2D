@@ -16,8 +16,9 @@ footer {
         position: absolute;
         width: auto;
          min-width: max-content;
-       filter:         drop-shadow(0px 0px 7px rgba(0,0,0,0.7))
-        drop-shadow(0px 0px 3px rgba(0,0,0,0.9));
+         filter: url(#tank-shadow);
+       /* filter:         drop-shadow(2px 2px 1px rgba(0,0,0,1))
+        drop-shadow(-2px -2px 1px rgba(0,0,0,1)); */
     /* border:  1px black solid; */
 }
 #playerTankBody {
@@ -58,33 +59,15 @@ footer {
     background-repeat: no-repeat;
     background-size: 140px 101px;
 }
-.trackFrame1 {
-    background-position: -11px -13px;
-}
-.trackFrame2 {
-    background-position: -30px -13px;
-}
-.trackFrame3 {
-    background-position: -48px -13px;
-}
-.trackFrame4 {
-    background-position: -67px -13px;
-}
-.trackFrame5 {
-    background-position: -85px -13px;
-}
-.trackFrame6 {
-    background-position: -103px -13px;
-}
-.trackFrame7 {
-    background-position: -122px -13px;
-}
-.leftTrack {
-    left: -4px;
-}
-.rightTrack {
-    left: 33px;
-}
+.trackFrame1 {background-position: -11px -13px;}
+.trackFrame2 {background-position: -30px -13px;}
+.trackFrame3 {background-position: -48px -13px;}
+.trackFrame4 {background-position: -67px -13px;}
+.trackFrame5 {background-position: -85px -13px;}
+.trackFrame6 {background-position: -103px -13px;}
+.trackFrame7 {background-position: -122px -13px;}
+.leftTrack {left: -4px;}
+.rightTrack {left: 33px;}
 .bullet {
     position: absolute;
     height: 10px;
@@ -154,12 +137,21 @@ footer {
     background: url(img/brick.png);
     background-size: 15px;
     background-repeat: repeat;
-           filter:         drop-shadow(0px 0px 8px rgba(0,0,0,0.7))
-        drop-shadow(0px 0px 4px rgba(0,0,0,0.9));
+           /* filter:         drop-shadow(2px 2px 1px rgba(0,0,0,1))
+        drop-shadow(-3px -3px 2px rgba(0,0,0,1)); */
 }
 #map{
+    will-change: transform;
+    transform: translateZ(0);
+    backface-visibility: hidden;
+    /* contain: layout style paint; */
     position: absolute;
 }
+/* #map > div {
+    transform: translateZ(0);
+    backface-visibility: hidden;
+    contain: layout style paint;
+} */
 .grass{
     position: absolute;
     /* border: 1px black solid; */
