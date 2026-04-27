@@ -1,20 +1,20 @@
 {   
-    "width": 1660,
-    "height": 1200, 
+    "width": 830,
+    "height": 600, 
     "floors": {
         "grass": {
             "Top": 0,
             "Left": 0,
-            "Height": 1200,
-            "Width": 1660,
+            "Height": 600,
+            "Width": 830,
             "Rotate": 0,
             "Material": "grass"
         },
         "stone_path": {
-            "Top": 280,
-            "Left": 300,
-            "Height": 620,
-            "Width": 1060,
+            "Top": 140,
+            "Left": 150,
+            "Height": 310,
+            "Width": 530,
             "Rotate": 0,
             "Material": "stone_path"
         },
@@ -27,10 +27,10 @@
             "Material": "grass_transition"
         },
         "grass_transition_bottom": {
-            "Top": 820,
-            "Left": 360,
-            "Height": 80,
-            "Width": 280,
+            "Top": 410,
+            "Left": 180,
+            "Height": 40,
+            "Width": 140,
             "Rotate": 0,
             "Material": "grass_transition"
         }
@@ -39,99 +39,99 @@
         "kontur_top": {
             "Top": 0,
             "Left": 0,
-            "Height": 60,
-            "Width": 1600,
+            "Height": 30,
+            "Width": 800,
             "Rotate": 0
         },
         "kontur_right": {
             "Top": 0,
-            "Left": 1600,
-            "Height": 1200,
-            "Width": 60,
+            "Left": 800,
+            "Height": 600,
+            "Width": 30,
             "Rotate": 0
         },
         "kontur_bottom": {
-            "Top": 1140,
+            "Top": 570,
             "Left": 0,
-            "Height": 60,
-            "Width": 1600,
+            "Height": 30,
+            "Width": 800,
             "Rotate": 0
         },
         "kontur_left": {
             "Top": 0,
             "Left": 0,
-            "Height": 1200,
-            "Width": 60,
+            "Height": 600,
+            "Width": 30,
             "Rotate": 0
         },
         "inner_top": {
-            "Top": 280,
-            "Left": 300,
-            "Height": 60,
-            "Width": 720,
+            "Top": 140,
+            "Left": 150,
+            "Height": 30,
+            "Width": 360,
             "Rotate": 0
         },
         "inner_right": {
-            "Top": 280,
-            "Left": 1300,
-            "Height": 560,
-            "Width": 60,
+            "Top": 140,
+            "Left": 650,
+            "Height": 280,
+            "Width": 30,
             "Rotate": 0
         },
         "inner_bottom": {
-            "Top": 840,
-            "Left": 640,
-            "Height": 60,
-            "Width": 720,
+            "Top": 420,
+            "Left": 320,
+            "Height": 30,
+            "Width": 360,
             "Rotate": 0
         },
         "inner_left": {
-            "Top": 340,
-            "Left": 300,
-            "Height": 560,
-            "Width": 60,
+            "Top": 170,
+            "Left": 150,
+            "Height": 280,
+            "Width": 30,
             "Rotate": 0
         }
     },
     "spawnPoints": {
         "top_left": {
-            "Top": 100,
-            "Left": 140,
+            "Top": 50,
+            "Left": 70,
             "Rotate": 180 
         },
         "top_center": {
-            "Top": 100,
-            "Left": 780,
+            "Top": 50,
+            "Left": 390,
             "Rotate": 180 
         },
         "tor_right": {
-            "Top": 100,
-            "Left": 1440,
+            "Top": 50,
+            "Left": 720,
             "Rotate": 180 
         },
         "bottom_left": {
-            "Top": 920,
-            "Left": 140,
+            "Top": 460,
+            "Left": 70,
             "Rotate": 0
         },
         "bottom_center": {
-            "Top": 920,
-            "Left": 780,
+            "Top": 460,
+            "Left": 390,
             "Rotate": 0
         },
         "bottom_right": {
-            "Top": 920,
-            "Left": 1440,
+            "Top": 460,
+            "Left": 720,
             "Rotate": 0
         },
         "center_left": {
-            "Top": 510,
-            "Left": 460,
+            "Top": 255,
+            "Left": 230,
             "Rotate": 180
         },
         "center_right": {
-            "Top": 510,
-            "Left": 1120,
+            "Top": 255,
+            "Left": 560,
             "Rotate": 0
         }
     }
