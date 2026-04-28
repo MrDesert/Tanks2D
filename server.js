@@ -2,6 +2,7 @@ const express = require('express');
 const http = require('http');
 const WebSocket = require('ws');
 const fs = require('fs'); //Библиотека для парса JSON
+const { generateMap } = require('./generateMap.js');
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -83,14 +84,21 @@ wss.on('connection', (ws, req) => {
          ws.send(JSON.stringify({ type: 'pong', clientTime: data.clientTime, serverTime: Date.now()}));
       } 
               // Генерация карты
-        if (data.type === 'getMap') {
-            const mapImageBuffer = await generateMapImage(mapGame);
-            
-            ws.send(JSON.stringify({
-                type: 'mapImage',
-                imageBase64: mapImageBuffer.toString('base64')
-            }));
-        }
+if (data.type === 'getMap') {
+    try {
+        const mapImageBuffer = await generateMap(mapGame); // вызываем вашу функцию
+        ws.send(JSON.stringify({
+            type: 'mapImage',
+            imageBase64: mapImageBuffer.toString('base64')
+        }));
+    } catch (err) {
+        console.error('Ошибка генерации карты:', err);
+        ws.send(JSON.stringify({
+            type: 'mapImageError',
+            error: err.message
+        }));
+    }
+}
       if (data.type === 'keysDown'){
           const oldX = ws.tankPositionX;
           const oldY = ws.tankPositionY;
