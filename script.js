@@ -414,7 +414,7 @@ socket.onclose = () => {
   console.log('Соединение с сервером закрыто');
 };
 
-let cameraZoom = 1.7
+let cameraZoom = 1.8
     const tankWidth = 43;
     const tankHeight = 80;
     const halfTankW = tankWidth / 2;   
