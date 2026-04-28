@@ -17,7 +17,7 @@ async function generateMap(mapData, options = {}) {
     const canvas = createCanvas(mapWidth, mapHeight);
     const ctx = canvas.getContext('2d');
     
-    // ОТКЛЮЧАЕМ СГЛАЖИВАНИЕ для чёткого уменьшения
+    // Отключаем сглаживание
     ctx.imageSmoothingEnabled = false;
     
     // Загружаем текстуры
@@ -25,7 +25,7 @@ async function generateMap(mapData, options = {}) {
     for (const [name, texturePath] of Object.entries(TEXTURES)) {
         try {
             textures[name] = await loadImage(path.resolve(texturePath));
-            console.log(`Загружена текстура: ${name}, размер: ${textures[name].width}x${textures[name].height}`);
+            console.log(`Загружена текстура: ${name}`);
         } catch (err) {
             console.warn(`Не удалось загрузить текстуру ${name}:`, err.message);
             textures[name] = null;
@@ -41,9 +41,9 @@ async function generateMap(mapData, options = {}) {
             const rotate = floor.Rotate || 0;
             
             if (texture) {
+                // 👇 ВОТ ЭТОТ КОД ВСТАВИТЬ ВМЕСТО СТАРОГО
                 ctx.save();
                 
-                // Для поворота
                 if (rotate !== 0) {
                     const centerX = floor.Left + floor.Width / 2;
                     const centerY = floor.Top + floor.Height / 2;
@@ -52,19 +52,22 @@ async function generateMap(mapData, options = {}) {
                     ctx.translate(-centerX, -centerY);
                 }
                 
-                // Рисуем заливку текстурой
-                const patternCanvas = createCanvas(bgSize, bgSize);
-                const patternCtx = patternCanvas.getContext('2d');
-                patternCtx.imageSmoothingEnabled = false;
+                // Рисуем каждый тайл отдельно
+                const cols = Math.ceil(floor.Width / bgSize);
+                const rows = Math.ceil(floor.Height / bgSize);
                 
-                // Рисуем текстуру в нужном размере (уменьшаем с сохранением чёткости)
-                patternCtx.drawImage(texture, 0, 0, bgSize, bgSize);
-                
-                const pattern = ctx.createPattern(patternCanvas, 'repeat');
-                ctx.fillStyle = pattern;
-                ctx.fillRect(floor.Left, floor.Top, floor.Width, floor.Height);
+                for (let i = 0; i < cols; i++) {
+                    for (let j = 0; j < rows; j++) {
+                        ctx.drawImage(
+                            texture,
+                            0, 0, texture.width, texture.height,
+                            floor.Left + i * bgSize, floor.Top + j * bgSize, bgSize, bgSize
+                        );
+                    }
+                }
                 
                 ctx.restore();
+                // 👆 КОНЕЦ ВСТАВКИ
             } else {
                 ctx.fillStyle = '#4a7c3f';
                 ctx.fillRect(floor.Left, floor.Top, floor.Width, floor.Height);
@@ -81,6 +84,7 @@ async function generateMap(mapData, options = {}) {
             const rotate = wall.Rotate || 0;
             
             if (texture) {
+                // 👇 И ДЛЯ СТЕН ТОЖЕ САМОЕ
                 ctx.save();
                 
                 if (rotate !== 0) {
@@ -91,16 +95,21 @@ async function generateMap(mapData, options = {}) {
                     ctx.translate(-centerX, -centerY);
                 }
                 
-                const patternCanvas = createCanvas(bgSize, bgSize);
-                const patternCtx = patternCanvas.getContext('2d');
-                patternCtx.imageSmoothingEnabled = false;
-                patternCtx.drawImage(texture, 0, 0, bgSize, bgSize);
+                const cols = Math.ceil(wall.Width / bgSize);
+                const rows = Math.ceil(wall.Height / bgSize);
                 
-                const pattern = ctx.createPattern(patternCanvas, 'repeat');
-                ctx.fillStyle = pattern;
-                ctx.fillRect(wall.Left, wall.Top, wall.Width, wall.Height);
+                for (let i = 0; i < cols; i++) {
+                    for (let j = 0; j < rows; j++) {
+                        ctx.drawImage(
+                            texture,
+                            0, 0, texture.width, texture.height,
+                            wall.Left + i * bgSize, wall.Top + j * bgSize, bgSize, bgSize
+                        );
+                    }
+                }
                 
                 ctx.restore();
+                // 👆
             } else {
                 ctx.fillStyle = '#555555';
                 ctx.fillRect(wall.Left, wall.Top, wall.Width, wall.Height);
@@ -108,7 +117,13 @@ async function generateMap(mapData, options = {}) {
         }
     }
     
-    return canvas.toBuffer('image/png');
+    const buffer = canvas.toBuffer('image/png');
+    
+    if (options.outputPath) {
+        fs.writeFileSync(options.outputPath, buffer);
+    }
+    
+    return buffer;
 }
 
 module.exports = { generateMap };
