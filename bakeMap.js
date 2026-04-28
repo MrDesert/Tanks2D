@@ -1,203 +1,145 @@
-// bakeMap.js - клиентская версия генерации карты
-
-const TEXTURES = {
-    grass: 'img/grass.png',
-    grass_transition: 'img/grass_transition.png',
-    stone_path: 'img/stone_path.png',
-    brick: 'img/brick.png'
-};
-
-async function generateMapOnClient(mapData, options = {}) {
-    const mapWidth = mapData.width;
-    const mapHeight = mapData.height;
+async function buildAndBakeMap(mapData) {
+    // 1. Строим DOM карты
+    const body = document.getElementById("body");
     
-    // Создаём canvas
+    // Удаляем старую карту
+    const oldMapBackground = document.getElementById("mapBackground");
+    // if (oldMapBackground) oldMapBackground.remove();
+    
+    // Создаём контейнер
+    // const mapBackground = document.createElement("div");
+    // mapBackground.id = "mapBackground";
+    // mapBackground.style.position = "absolute";
+    // mapBackground.style.width = "830px";
+    // mapBackground.style.height = "600px";
+    // mapBackground.style.top = "0px";
+    // mapBackground.style.left = "0px";
+    // body.appendChild(mapBackground);
+    
+    // Строим полы
+    for (let key in mapData.floors) {
+        console.log(mapData.floors)
+        const floor = mapData.floors[key];
+        const div = document.createElement("div");
+        div.className = floor.Material;
+        div.style.position = "absolute";
+        div.style.width = floor.Width + "px";
+        div.style.height = floor.Height + "px";
+        div.style.top = floor.Top + "px";
+        div.style.left = floor.Left + "px";
+        if (floor.Rotate) {
+            div.style.transform = "rotate(" + floor.Rotate + "deg)";
+        }
+        mapBackground.appendChild(div);
+    }
+    
+    // Строим стены
+    for (let key in mapData.walls) {
+        const wall = mapData.walls[key];
+        const div = document.createElement("div");
+        div.className = "cement";
+        div.style.position = "absolute";
+        div.style.width = wall.Width + "px";
+        div.style.height = wall.Height + "px";
+        div.style.top = wall.Top + "px";
+        div.style.left = wall.Left + "px";
+        if (wall.Rotate) {
+            div.style.transform = "rotate(" + wall.Rotate + "deg)";
+        }
+        mapBackground.appendChild(div);
+    }
+    
+    // 2. Ждём рендеринга
+    await new Promise(resolve => setTimeout(resolve, 100));
+    
+    // 3. Запекаем через DOM (getComputedStyle)
+    await bakeMapFromDOM();
+}
+
+async function bakeMapFromDOM() {
+    const mapContainer = document.getElementById("mapBackground");
+    if (!mapContainer) return;
+    
+    const bakeScale = 2;
+    const mapWidth = 830 * bakeScale;
+    const mapHeight = 600 * bakeScale;
+    
     const canvas = document.createElement('canvas');
     canvas.width = mapWidth;
     canvas.height = mapHeight;
     const ctx = canvas.getContext('2d');
-    
-    // Отключаем сглаживание
     ctx.imageSmoothingEnabled = false;
     
-    // Загружаем текстуры
-    const textures = {};
-    const loadPromises = [];
+    const elements = mapContainer.querySelectorAll('.grass, .grass_transition, .stone_path, .cement');
     
-    for (const [name, texturePath] of Object.entries(TEXTURES)) {
-        const promise = new Promise((resolve) => {
+    for (let el of elements) {
+        const rect = el.getBoundingClientRect();
+        const containerRect = mapContainer.getBoundingClientRect();
+        
+        const x = (rect.left - containerRect.left) * bakeScale;
+        const y = (rect.top - containerRect.top) * bakeScale;
+        const w = rect.width * bakeScale;
+        const h = rect.height * bakeScale;
+        
+        const bgImage = getComputedStyle(el).backgroundImage;
+        if (bgImage && bgImage !== 'none') {
             const img = new Image();
-            img.onload = () => {
-                textures[name] = img;
-                console.log(`Загружена текстура: ${name}`);
-                resolve();
-            };
-            img.onerror = () => {
-                console.warn(`Не удалось загрузить текстуру ${name}`);
-                textures[name] = null;
-                resolve();
-            };
-            img.src = texturePath;
-        });
-        loadPromises.push(promise);
-    }
-    
-    // Ждём загрузки всех текстур
-    await Promise.all(loadPromises);
-    
-    // Рисуем полы
-    if (mapData.floors) {
-        for (const key in mapData.floors) {
-            const floor = mapData.floors[key];
-            const texture = textures[floor.Material];
-            const bgSize = floor.BackgroundSize || 50;
-            const rotate = floor.Rotate || 0;
+            img.src = bgImage.slice(5, -2);
             
-            if (texture) {
-                ctx.save();
-                
-                if (rotate !== 0) {
-                    const centerX = floor.Left + floor.Width / 2;
-                    const centerY = floor.Top + floor.Height / 2;
-                    ctx.translate(centerX, centerY);
-                    ctx.rotate(rotate * Math.PI / 180);
-                    ctx.translate(-centerX, -centerY);
-                }
-                
-                // Рисуем каждый тайл отдельно
-                const cols = Math.ceil(floor.Width / bgSize);
-                const rows = Math.ceil(floor.Height / bgSize);
-                
-                for (let i = 0; i < cols; i++) {
-                    for (let j = 0; j < rows; j++) {
-                        ctx.drawImage(
-                            texture,
-                            0, 0, texture.width, texture.height,
-                            floor.Left + i * bgSize, floor.Top + j * bgSize, bgSize, bgSize
-                        );
+            await new Promise((resolve) => {
+                img.onload = () => {
+                    ctx.save();
+                    
+                    // Поворот из CSS
+                    const transform = getComputedStyle(el).transform;
+                    if (transform !== 'none') {
+                        const matrix = transform.match(/matrix\((.+)\)/);
+                        if (matrix) {
+                            const values = matrix[1].split(', ');
+                            const angle = Math.atan2(values[1], values[0]) * 180 / Math.PI;
+                            const centerX = x + w / 2;
+                            const centerY = y + h / 2;
+                            // ctx.translate(centerX, centerY);
+                            ctx.rotate(angle * Math.PI / 180);
+                            // ctx.translate(-centerX, -centerY);
+                        }
                     }
-                }
-                
-                ctx.restore();
-            } else {
-                ctx.fillStyle = '#4a7c3f';
-                ctx.fillRect(floor.Left, floor.Top, floor.Width, floor.Height);
-            }
+                    
+                    ctx.beginPath();
+                    ctx.rect(x, y, w, h);
+                    ctx.clip();
+                    
+                    const bgSize = parseInt(getComputedStyle(el).backgroundSize);
+                    const size = bgSize * bakeScale;
+                    
+                    for (let i = 0; i < w; i += size) {
+                        for (let j = 0; j < h; j += size) {
+                            ctx.drawImage(img, x + i, y + j, size, size);
+                        }
+                    }
+                    
+                    ctx.restore();
+                    resolve();
+                };
+                if (img.complete) img.onload();
+            });
         }
     }
     
-    // Рисуем стены
-    if (mapData.walls) {
-        for (const key in mapData.walls) {
-            const wall = mapData.walls[key];
-            const texture = textures.brick;
-            const bgSize = wall.BackgroundSize || 15;
-            const rotate = wall.Rotate || 0;
-            
-            if (texture) {
-                ctx.save();
-                
-                if (rotate !== 0) {
-                    const centerX = wall.Left + wall.Width / 2;
-                    const centerY = wall.Top + wall.Height / 2;
-                    ctx.translate(centerX, centerY);
-                    ctx.rotate(rotate * Math.PI / 180);
-                    ctx.translate(-centerX, -centerY);
-                }
-                
-                const cols = Math.ceil(wall.Width / bgSize);
-                const rows = Math.ceil(wall.Height / bgSize);
-                
-                for (let i = 0; i < cols; i++) {
-                    for (let j = 0; j < rows; j++) {
-                        ctx.drawImage(
-                            texture,
-                            0, 0, texture.width, texture.height,
-                            wall.Left + i * bgSize, wall.Top + j * bgSize, bgSize, bgSize
-                        );
-                    }
-                }
-                
-                ctx.restore();
-            } else {
-                ctx.fillStyle = '#555555';
-                ctx.fillRect(wall.Left, wall.Top, wall.Width, wall.Height);
-            }
-        }
-    }
+    // Создаём картинку
+    const finalImg = document.createElement('img');
+    finalImg.src = canvas.toDataURL('image/png');
+    finalImg.style.position = 'absolute';
+    finalImg.style.width = '100%';
+    finalImg.style.height = '100%';
+    finalImg.style.top = '0';
+    finalImg.style.left = '0';
+    finalImg.style.zIndex = '-1';
+    finalImg.style.imageRendering = 'pixelated';
+    // finalImg.style.scale = '2';
     
-    // Получаем dataURL
-    const imageDataURL = canvas.toDataURL('image/png');
-    
-    return imageDataURL;
-}
-
-// Функция для замены DOM-карты на запечённую картинку
-async function bakeAndReplaceMap(mapData) {
-    // Создаём map контейнер
-    let mapContainer = document.getElementById('map');
-    if (!mapContainer) {
-        mapContainer = document.createElement('div');
-        mapContainer.id = 'map';
-        mapContainer.style.position = 'absolute';
-        mapContainer.style.width = mapData.width + 'px';
-        mapContainer.style.height = mapData.height + 'px';
-        mapContainer.style.top = '0';
-        mapContainer.style.left = '0';
-        document.getElementById('body').appendChild(mapContainer);
-    }
-    
-    console.log('Начинаем запекание карты...');
-    const imageUrl = await generateMapOnClient(mapData);
-    
-    // Очищаем карту
     mapContainer.innerHTML = '';
+    mapContainer.appendChild(finalImg);
     
-    // Создаём img с запечённой картинкой
-    const img = document.createElement('img');
-    img.id = 'bakedMap';
-    img.src = imageUrl;
-    img.style.position = 'absolute';
-    img.style.width = '100%';
-    img.style.height = '100%';
-    img.style.top = '0';
-    img.style.left = '0';
-    img.style.pointerEvents = 'none';
-    img.style.zIndex = '0';
-    
-    mapContainer.appendChild(img);
-    
-    // Создаём слой для стен (невидимый, только для коллизий)
-    const wallsLayer = document.createElement('div');
-    wallsLayer.id = 'wallsLayer';
-    wallsLayer.style.position = 'absolute';
-    wallsLayer.style.top = '0';
-    wallsLayer.style.left = '0';
-    wallsLayer.style.width = '100%';
-    wallsLayer.style.height = '100%';
-    wallsLayer.style.pointerEvents = 'none';
-    wallsLayer.style.zIndex = '1';
-    
-    // Добавляем стены (невидимые, но нужны для коллизий)
-    for(let key in mapData.walls){
-        const wall = mapData.walls[key];
-        const wallDiv = document.createElement('div');
-        wallDiv.id = 'wall' + key;
-        wallDiv.style.position = 'absolute';
-        wallDiv.style.height = wall.Height + 'px';
-        wallDiv.style.width = wall.Width + 'px';
-        wallDiv.style.top = wall.Top + 'px';
-        wallDiv.style.left = wall.Left + 'px';
-        wallDiv.style.backgroundColor = 'transparent'; // Невидимые
-        wallDiv.style.pointerEvents = 'none';
-        wallsLayer.appendChild(wallDiv);
-    }
-    
-    mapContainer.appendChild(wallsLayer);
-    
-    console.log('Карта запечена!');
-    return mapContainer;
+    console.log('Карта запечена из DOM');
 }
-
-// Экспортируем для использования в основном коде
-window.bakeMap = { generateMapOnClient, bakeAndReplaceMap };

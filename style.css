@@ -16,10 +16,23 @@ footer {
         position: absolute;
         width: auto;
          min-width: max-content;
-         filter: url(#tank-shadow);
+         /* filter: url(#tank-shadow); */
        /* filter:         drop-shadow(2px 2px 1px rgba(0,0,0,1))
         drop-shadow(-2px -2px 1px rgba(0,0,0,1)); */
     /* border:  1px black solid; */
+}
+.playerTankBodyShadow{
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+        background: url("img/tank_body.png");
+    background-repeat: no-repeat;
+    background-size: 63px 87px;
+    filter: blur(1px) brightness(0);
+    opacity: 0.4;
+    will-change: filter;      /* подсказка браузеру */
+    transform: translateZ(0) translateX(-50%) translateY(-50%); /* уход на отдельный слой */
 }
 #playerTankBody {
     /* top: -100px; */
@@ -34,6 +47,29 @@ footer {
     background-size: contain;
     background-repeat: no-repeat;
 }
+.playerTankTurretShadow{
+    content: "";
+    position: absolute;
+    /* top: calc(50%-5px); */
+    left: 50%;
+        background: url("img/tank_turret.png");
+    background-repeat: no-repeat;
+    background-size: contain;
+    filter: blur(1px) brightness(0);
+    opacity: 1;
+    will-change: filter;      /* подсказка браузеру */
+    transform: translateZ(0) translateX(-50%) translateY(-5%) ; /* уход на отдельный слой */
+}
+.playerTankTurretIMG{
+    content: "";
+    position: absolute;
+    /* top: calc(50%-5px); */
+    left: 50%;
+    background: url("img/tank_turret.png");
+    background-size: contain;
+    background-repeat: no-repeat;
+    transform: translateZ(0) translateX(-50%) ; /* уход на отдельный слой */
+}
 #playerTankTurret {
     position: absolute;
     left: 50%;
@@ -43,11 +79,12 @@ footer {
     /* border:  1px black solid; */
     transform-origin: 50% calc(100% - 17px);
     transform: translateX(-50%);
+     z-index: 1;  
+     isolation: isolate;  
 }
+
 .playerTankTurret{
-    background: url("img/tank_turret.png");
-    background-size: contain;
-    background-repeat: no-repeat;
+
 }
 .playerTankTrack {
     position: absolute;
@@ -129,7 +166,6 @@ footer {
     height: 1px;
     width: 1px;
     transform: translateX(-50%);
-    /* background: linear-gradient(135deg, #19770d, #3ecc2b); */
 }
 .cement{
     position: absolute;
@@ -137,8 +173,14 @@ footer {
     background: url(img/brick.png);
     background-size: 15px;
     background-repeat: repeat;
-           /* filter:         drop-shadow(2px 2px 1px rgba(0,0,0,1))
-        drop-shadow(-3px -3px 2px rgba(0,0,0,1)); */
+    /* filter: drop-shadow(2px 2px 2px rgba(0,0,0,0.6))
+        drop-shadow(2px -2px 2px rgba(0,0,0,0.6))
+        drop-shadow(-2px 2px 2px rgba(0,0,0,0.6)) */
+        /* drop-shadow(-2px -2px 2px rgba(0,0,0,0.6))
+        drop-shadow(3px 3px 3px rgba(0,0,0,0.6))
+        drop-shadow(3px -3px 3px rgba(0,0,0,0.6))
+        drop-shadow(-3px 3px 3px rgba(0,0,0,0.6)) */
+        /* drop-shadow(-3px -3px 3px rgba(0,0,0,0.6)); */
 }
 #map{
     will-change: transform;

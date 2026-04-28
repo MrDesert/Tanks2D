@@ -232,7 +232,7 @@ socket.onopen = () => {
     // socket.send(JSON.stringify({ type: 'getMap' }));
 };
 
-socket.onmessage = (event) => {
+socket.onmessage = async (event) => {
   const data = JSON.parse(event.data);
 if (data.type === 'welcome') {
   console.log(`Сервер сказал: ${data.userId}`);
@@ -336,8 +336,11 @@ if (data.type === 'welcome') {
     playerTank = document.getElementById("playerTank");
     playerTank['append'](Object.assign(document.createElement("div"), {id: "playerLeftTrack", className: "playerTankTrack leftTrack trackFrame7"}));
     playerTank['append'](Object.assign(document.createElement("div"), {id: "playerRightTrack", className: "playerTankTrack rightTrack trackFrame7"}));
+        playerTank['append'](Object.assign(document.createElement("div"), {id: "playerTankBodyShadow", className: "playerTankBodyShadow", style: "height: " + data.Height*1.1 + "px; width: " + data.Width*1.1 + "px;)"}));
     playerTank['append'](Object.assign(document.createElement("div"), {id: "playerTankBody", className: "playerTankBody", style: "height: " + data.Height + "px; width: " + data.Width + "px;)"}));
     playerTank['append'](Object.assign(document.createElement("div"), {id: "playerTankTurret", className: "playerTankTurret"}));
+        document.getElementById("playerTankTurret")['append'](Object.assign(document.createElement("div"), {id: "playerTankTurretShadow", className: "playerTankTurretShadow", style: "height: " + 56*1.1 + "px; width: " + 26*1.1 + "px;)"}));
+        document.getElementById("playerTankTurret")['append'](Object.assign(document.createElement("div"), {id: "playerTankTurretIMG", className: "playerTankTurretIMG", style: "height: " + 56 + "px; width: " + 26 + "px;)"}));
     playerTankTurret = document.getElementById("playerTankTurret");
     document.getElementById("hp").textContent = "hp: " + data.hp;
     updateCamera();
@@ -362,21 +365,15 @@ if (data.type === 'welcome') {
         parent['append'](Object.assign(document.createElement("div"), {id: "wall"+key, className: "cement", style: "height: " + data.map.walls[key].Height + "px; width: " + data.map.walls[key].Width + "px; top:" + data.map.walls[key].Top + "px; left:" + data.map.walls[key].Left + "px;"}));
         // walls.push(document.getElementById("wall"+key).getBoundingClientRect());
     }
-    // updateCamera();
-        // Сначала создаём map контейнер
-    const mapDiv = document.createElement('div');
-    mapDiv.id = 'mapBackground';
-    mapDiv.style.position = 'absolute';
-    mapDiv.style.width = '830px';
-    mapDiv.style.height = '600px';
-    mapDiv.style.top = '0';
-    mapDiv.style.left = '0';
-    document.getElementById('map').appendChild(mapDiv);
+    updateCamera();
     
-    // Запекаем карту (асинхронно)
-    window.bakeMap.bakeAndReplaceMap(data.map).then(() => {
-        updateCamera();
-    });
+    // // ПОТОМ запекаем
+    // await window.bakeMap.bakeAndReplaceMap(data.map);
+    // document.getElementById("map")['append'](Object.assign(document.createElement("div"), {id: "mapBackground", style: "height: " + 600 + "px; width: " + 830 + "px; top:" + 0 + "px; left:" + 0 + "px;"}));
+
+    // buildAndBakeMap(data.map)
+    // updateCamera();
+    
 } else if (data.type === 'allTanks') {
   const currentTankIds = new Set();
   
