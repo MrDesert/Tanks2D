@@ -134,7 +134,7 @@ async function generateMapOnClient(mapData, options = {}) {
 
 // Функция для замены DOM-карты на запечённую картинку
 async function bakeAndReplaceMap(mapData) {
-    const mapContainer = document.getElementById('map');
+    const mapContainer = document.getElementById('mapBackground');
     if (!mapContainer) {
         console.error('Элемент #map не найден');
         return;
