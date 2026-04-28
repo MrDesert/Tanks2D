@@ -4,10 +4,10 @@ const fs = require('fs');
 const path = require('path');
 
 const TEXTURES = {
-    grass: 'public/img/grass.png',
-    grass_transition: 'public/img/grass_transition.png',
-    stone_path: 'public/img/stone_path.png',
-    brick: 'public/img/brick.png'
+    grass: 'img/grass.png',
+    grass_transition: 'img/grass_transition.png',
+    stone_path: 'img/stone_path.png',
+    brick: 'img/brick.png'
 };
 
 const WALL_SHADOW = {
