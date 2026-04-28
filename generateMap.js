@@ -14,12 +14,11 @@ async function generateMap(mapData, options = {}) {
     const mapWidth = mapData.width;
     const mapHeight = mapData.height;
     
-    if (!mapWidth || !mapHeight) {
-        throw new Error('В JSON карты должны быть поля width и height');
-    }
-    
     const canvas = createCanvas(mapWidth, mapHeight);
     const ctx = canvas.getContext('2d');
+    
+    // ОТКЛЮЧАЕМ СГЛАЖИВАНИЕ для чёткого уменьшения
+    ctx.imageSmoothingEnabled = false;
     
     // Загружаем текстуры
     const textures = {};
@@ -44,42 +43,27 @@ async function generateMap(mapData, options = {}) {
             if (texture) {
                 ctx.save();
                 
-                // Смещаемся к центру блока (для поворота)
-                const centerX = floor.Left + floor.Width / 2;
-                const centerY = floor.Top + floor.Height / 2;
-                ctx.translate(centerX, centerY);
-                
-                // Поворот
+                // Для поворота
                 if (rotate !== 0) {
+                    const centerX = floor.Left + floor.Width / 2;
+                    const centerY = floor.Top + floor.Height / 2;
+                    ctx.translate(centerX, centerY);
                     ctx.rotate(rotate * Math.PI / 180);
+                    ctx.translate(-centerX, -centerY);
                 }
                 
-                // Возвращаемся обратно
-                ctx.translate(-centerX, -centerY);
+                // Рисуем заливку текстурой
+                const patternCanvas = createCanvas(bgSize, bgSize);
+                const patternCtx = patternCanvas.getContext('2d');
+                patternCtx.imageSmoothingEnabled = false;
                 
-                // Рисуем текстуру с повторением
-                ctx.save();
-                ctx.beginPath();
-                ctx.rect(floor.Left, floor.Top, floor.Width, floor.Height);
-                ctx.clip();
+                // Рисуем текстуру в нужном размере (уменьшаем с сохранением чёткости)
+                patternCtx.drawImage(texture, 0, 0, bgSize, bgSize);
                 
-                // Рисуем тайлы текстуры
-                const cols = Math.ceil(floor.Width / bgSize);
-                const rows = Math.ceil(floor.Height / bgSize);
+                const pattern = ctx.createPattern(patternCanvas, 'repeat');
+                ctx.fillStyle = pattern;
+                ctx.fillRect(floor.Left, floor.Top, floor.Width, floor.Height);
                 
-                for (let i = 0; i < cols; i++) {
-                    for (let j = 0; j < rows; j++) {
-                        ctx.drawImage(
-                            texture,
-                            floor.Left + i * bgSize,
-                            floor.Top + j * bgSize,
-                            bgSize,
-                            bgSize
-                        );
-                    }
-                }
-                
-                ctx.restore();
                 ctx.restore();
             } else {
                 ctx.fillStyle = '#4a7c3f';
@@ -99,37 +83,22 @@ async function generateMap(mapData, options = {}) {
             if (texture) {
                 ctx.save();
                 
-                // Смещаемся к центру блока (для поворота)
-                const centerX = wall.Left + wall.Width / 2;
-                const centerY = wall.Top + wall.Height / 2;
-                ctx.translate(centerX, centerY);
-                
-                // Поворот для стены
                 if (rotate !== 0) {
+                    const centerX = wall.Left + wall.Width / 2;
+                    const centerY = wall.Top + wall.Height / 2;
+                    ctx.translate(centerX, centerY);
                     ctx.rotate(rotate * Math.PI / 180);
+                    ctx.translate(-centerX, -centerY);
                 }
                 
-                ctx.translate(-centerX, -centerY);
+                const patternCanvas = createCanvas(bgSize, bgSize);
+                const patternCtx = patternCanvas.getContext('2d');
+                patternCtx.imageSmoothingEnabled = false;
+                patternCtx.drawImage(texture, 0, 0, bgSize, bgSize);
                 
-                // Рисуем текстуру с повторением
-                ctx.beginPath();
-                ctx.rect(wall.Left, wall.Top, wall.Width, wall.Height);
-                ctx.clip();
-                
-                const cols = Math.ceil(wall.Width / bgSize);
-                const rows = Math.ceil(wall.Height / bgSize);
-                
-                for (let i = 0; i < cols; i++) {
-                    for (let j = 0; j < rows; j++) {
-                        ctx.drawImage(
-                            texture,
-                            wall.Left + i * bgSize,
-                            wall.Top + j * bgSize,
-                            bgSize,
-                            bgSize
-                        );
-                    }
-                }
+                const pattern = ctx.createPattern(patternCanvas, 'repeat');
+                ctx.fillStyle = pattern;
+                ctx.fillRect(wall.Left, wall.Top, wall.Width, wall.Height);
                 
                 ctx.restore();
             } else {
@@ -139,13 +108,7 @@ async function generateMap(mapData, options = {}) {
         }
     }
     
-    const buffer = canvas.toBuffer('image/png');
-    
-    if (options.outputPath) {
-        fs.writeFileSync(options.outputPath, buffer);
-    }
-    
-    return buffer;
+    return canvas.toBuffer('image/png');
 }
 
 module.exports = { generateMap };
