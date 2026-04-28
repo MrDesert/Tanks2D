@@ -352,17 +352,31 @@ if (data.type === 'welcome') {
     playerTankTurret.style.transform = "translateX(-50%) rotate("+curTurretRotate+"deg)";
     updateCamera();
 } else if (data.type === 'map') {
-    document.getElementById("body")['append'](Object.assign(document.createElement("div"), {id: "map", style: "height: " + 600 + "px; width: " + 830 + "px; top:" + 0 + "px; left:" + 0 + "px;"}));
-    for(let key in data.map.floors){
-      const parent = document.getElementById("map");
-      parent['append'](Object.assign(document.createElement("div"), {id: "floor"+key, className: data.map.floors[key].Material, style: "height: " + data.map.floors[key].Height + "px; width: " + data.map.floors[key].Width + "px; top:" + data.map.floors[key].Top + "px; left:" + data.map.floors[key].Left + "px; rotate:" + data.map.floors[key].Rotate + "deg;"}));
-    };
-    for(let key in data.map.walls){
-        const parent = document.getElementById("map");
-        parent['append'](Object.assign(document.createElement("div"), {id: "wall"+key, className: "cement", style: "height: " + data.map.walls[key].Height + "px; width: " + data.map.walls[key].Width + "px; top:" + data.map.walls[key].Top + "px; left:" + data.map.walls[key].Left + "px;"}));
-        // walls.push(document.getElementById("wall"+key).getBoundingClientRect());
-    }
-    updateCamera();
+    // document.getElementById("body")['append'](Object.assign(document.createElement("div"), {id: "map", style: "height: " + 600 + "px; width: " + 830 + "px; top:" + 0 + "px; left:" + 0 + "px;"}));
+    // for(let key in data.map.floors){
+    //   const parent = document.getElementById("map");
+    //   parent['append'](Object.assign(document.createElement("div"), {id: "floor"+key, className: data.map.floors[key].Material, style: "height: " + data.map.floors[key].Height + "px; width: " + data.map.floors[key].Width + "px; top:" + data.map.floors[key].Top + "px; left:" + data.map.floors[key].Left + "px; rotate:" + data.map.floors[key].Rotate + "deg;"}));
+    // };
+    // for(let key in data.map.walls){
+    //     const parent = document.getElementById("map");
+    //     parent['append'](Object.assign(document.createElement("div"), {id: "wall"+key, className: "cement", style: "height: " + data.map.walls[key].Height + "px; width: " + data.map.walls[key].Width + "px; top:" + data.map.walls[key].Top + "px; left:" + data.map.walls[key].Left + "px;"}));
+    //     // walls.push(document.getElementById("wall"+key).getBoundingClientRect());
+    // }
+    // updateCamera();
+        // Сначала создаём map контейнер
+    const mapDiv = document.createElement('div');
+    mapDiv.id = 'map';
+    mapDiv.style.position = 'absolute';
+    mapDiv.style.width = '830px';
+    mapDiv.style.height = '600px';
+    mapDiv.style.top = '0';
+    mapDiv.style.left = '0';
+    document.getElementById('body').appendChild(mapDiv);
+    
+    // Запекаем карту (асинхронно)
+    window.bakeMap.bakeAndReplaceMap(data.map).then(() => {
+        updateCamera();
+    });
 } else if (data.type === 'allTanks') {
   const currentTankIds = new Set();
   
