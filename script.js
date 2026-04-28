@@ -227,7 +227,7 @@ function drawBullet(id, X, Y, Rotate){
 socket.onopen = () => {
   console.log('Соединение с сервером установлено');
       // Запрашиваем карту
-    // socket.send(JSON.stringify({ type: 'getMap' }));
+    socket.send(JSON.stringify({ type: 'getMap' }));
 };
 
 socket.onmessage = (event) => {
@@ -249,14 +249,31 @@ if (data.type === 'welcome') {
     else if (ping < 400){pingText.style.color = "#ff3300"}
     else                {pingText.style.color = "#770000"}
     pingText.textContent = "ping: "+ping;
-}else if (data.type === 'mapImage') {
-        // Получили картинку карты
-        const img = document.createElement('img');
-        img.src = 'data:image/png;base64,' + data.imageBase64;
-        img.style.position = 'absolute';
-        img.style.width = '830px';
-        img.style.height = '600px';
-        document.getElementById('body').appendChild(img);
+} else if (data.type === 'mapImage') {
+    // Получили картинку карты
+    const map = document.getElementById('map');
+    if (!map) return;
+    
+    // Создаём img
+    const img = document.createElement('img');
+    img.src = 'data:image/png;base64,' + data.imageBase64;
+    img.style.position = 'absolute';
+    img.style.width = '100%';
+    img.style.height = '100%';
+    img.style.top = '0';
+    img.style.left = '0';
+    img.style.pointerEvents = 'none'; // чтобы не мешала кликам
+    img.style.zIndex = '0';
+    
+    // Очищаем карту от старых полов, но оставляем стены
+    const floors = map.querySelectorAll('.grass, .stone_path, .grass_transition');
+    floors.forEach(floor => floor.remove());
+    
+    // Добавляем картинку в карту
+    map.appendChild(img);
+    
+    // Опускаем картинку вниз (чтобы стены и танки были сверху)
+    img.style.zIndex = '-1';
 }else if(data.type === 'spawn'){
   animationOnce(data.id, "spawn")
 }else if(data.type === "hp"){
@@ -319,8 +336,7 @@ if (data.type === 'welcome') {
     playerTank['append'](Object.assign(document.createElement("div"), {id: "playerRightTrack", className: "playerTankTrack rightTrack trackFrame7"}));
     playerTank['append'](Object.assign(document.createElement("div"), {id: "playerTankBody", className: "playerTankBody", style: "height: " + data.Height + "px; width: " + data.Width + "px;)"}));
     playerTank['append'](Object.assign(document.createElement("div"), {id: "playerTankTurret", className: "playerTankTurret"}));
-    playerTankTurret = document.getElementById("playerTankTurret")
-    // playerTank['append'](Object.assign(document.createElement("div"), {id: "gunpointTank"}));
+    playerTankTurret = document.getElementById("playerTankTurret");
     document.getElementById("hp").textContent = "hp: " + data.hp;
     updateCamera();
 } else if (data.type === 'movement'){
@@ -337,11 +353,11 @@ if (data.type === 'welcome') {
     document.getElementById("body")['append'](Object.assign(document.createElement("div"), {id: "map", style: "height: " + 600 + "px; width: " + 830 + "px; top:" + 0 + "px; left:" + 0 + "px;"}));
     for(let key in data.map.floors){
       const parent = document.getElementById("map");
-      parent['append'](Object.assign(document.createElement("div"), {id: "floor"+key, className: data.map.floors[key].Material, style: "height: " + data.map.floors[key].Height + "px; width: " + data.map.floors[key].Width + "px; top:" + data.map.floors[key].Top + "px; left:" + data.map.floors[key].Left + "px; rotate:" + data.map.floors[key].Rotate + "deg;"}));
+    //   parent['append'](Object.assign(document.createElement("div"), {id: "floor"+key, className: data.map.floors[key].Material, style: "height: " + data.map.floors[key].Height + "px; width: " + data.map.floors[key].Width + "px; top:" + data.map.floors[key].Top + "px; left:" + data.map.floors[key].Left + "px; rotate:" + data.map.floors[key].Rotate + "deg;"}));
     };
     for(let key in data.map.walls){
         const parent = document.getElementById("map");
-        parent['append'](Object.assign(document.createElement("div"), {id: "wall"+key, className: "cement", style: "height: " + data.map.walls[key].Height + "px; width: " + data.map.walls[key].Width + "px; top:" + data.map.walls[key].Top + "px; left:" + data.map.walls[key].Left + "px;"}));
+        // parent['append'](Object.assign(document.createElement("div"), {id: "wall"+key, className: "cement", style: "height: " + data.map.walls[key].Height + "px; width: " + data.map.walls[key].Width + "px; top:" + data.map.walls[key].Top + "px; left:" + data.map.walls[key].Left + "px;"}));
         // walls.push(document.getElementById("wall"+key).getBoundingClientRect());
     }
     updateCamera();

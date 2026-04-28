@@ -84,7 +84,7 @@ wss.on('connection', (ws, req) => {
       } 
               // Генерация карты
         if (data.type === 'getMap') {
-            const mapImageBuffer = await generateMapImage(globalMapData);
+            const mapImageBuffer = await generateMapImage(mapGame);
             
             ws.send(JSON.stringify({
                 type: 'mapImage',
