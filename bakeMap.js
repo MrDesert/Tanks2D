@@ -25,7 +25,7 @@ async function generateMapOnClient(mapData, options = {}) {
     const loadPromises = [];
     
     for (const [name, texturePath] of Object.entries(TEXTURES)) {
-        const promise = new Promise((resolve, reject) => {
+        const promise = new Promise((resolve) => {
             const img = new Image();
             img.onload = () => {
                 textures[name] = img;
@@ -134,17 +134,28 @@ async function generateMapOnClient(mapData, options = {}) {
 
 // Функция для замены DOM-карты на запечённую картинку
 async function bakeAndReplaceMap(mapData) {
-    const mapContainer = document.getElementById('mapBackground');
+    // Создаём map контейнер
+    let mapContainer = document.getElementById('map');
     if (!mapContainer) {
-        console.error('Элемент #map не найден');
-        return;
+        mapContainer = document.createElement('div');
+        mapContainer.id = 'map';
+        mapContainer.style.position = 'absolute';
+        mapContainer.style.width = mapData.width + 'px';
+        mapContainer.style.height = mapData.height + 'px';
+        mapContainer.style.top = '0';
+        mapContainer.style.left = '0';
+        document.getElementById('body').appendChild(mapContainer);
     }
     
     console.log('Начинаем запекание карты...');
     const imageUrl = await generateMapOnClient(mapData);
     
-    // Создаём img и заменяем содержимое
+    // Очищаем карту
+    mapContainer.innerHTML = '';
+    
+    // Создаём img с запечённой картинкой
     const img = document.createElement('img');
+    img.id = 'bakedMap';
     img.src = imageUrl;
     img.style.position = 'absolute';
     img.style.width = '100%';
@@ -154,26 +165,38 @@ async function bakeAndReplaceMap(mapData) {
     img.style.pointerEvents = 'none';
     img.style.zIndex = '0';
     
-    // Очищаем и добавляем картинку
-    mapContainer.innerHTML = '';
     mapContainer.appendChild(img);
     
-    // Возвращаем стены (нужны для коллизий)
+    // Создаём слой для стен (невидимый, только для коллизий)
+    const wallsLayer = document.createElement('div');
+    wallsLayer.id = 'wallsLayer';
+    wallsLayer.style.position = 'absolute';
+    wallsLayer.style.top = '0';
+    wallsLayer.style.left = '0';
+    wallsLayer.style.width = '100%';
+    wallsLayer.style.height = '100%';
+    wallsLayer.style.pointerEvents = 'none';
+    wallsLayer.style.zIndex = '1';
+    
+    // Добавляем стены (невидимые, но нужны для коллизий)
     for(let key in mapData.walls){
         const wall = mapData.walls[key];
         const wallDiv = document.createElement('div');
-        wallDiv.className = 'cement';
+        wallDiv.id = 'wall' + key;
         wallDiv.style.position = 'absolute';
         wallDiv.style.height = wall.Height + 'px';
         wallDiv.style.width = wall.Width + 'px';
         wallDiv.style.top = wall.Top + 'px';
         wallDiv.style.left = wall.Left + 'px';
+        wallDiv.style.backgroundColor = 'transparent'; // Невидимые
         wallDiv.style.pointerEvents = 'none';
-        wallDiv.style.zIndex = '1';
-        mapContainer.appendChild(wallDiv);
+        wallsLayer.appendChild(wallDiv);
     }
     
+    mapContainer.appendChild(wallsLayer);
+    
     console.log('Карта запечена!');
+    return mapContainer;
 }
 
 // Экспортируем для использования в основном коде
