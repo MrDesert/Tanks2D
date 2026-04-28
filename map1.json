@@ -8,7 +8,8 @@
             "Height": 600,
             "Width": 830,
             "Rotate": 0,
-            "Material": "grass"
+            "Material": "grass",
+            "BackgroundSize": 50
         },
         "stone_path": {
             "Top": 140,
@@ -16,7 +17,8 @@
             "Height": 310,
             "Width": 530,
             "Rotate": 0,
-            "Material": "stone_path"
+            "Material": "stone_path",
+            "BackgroundSize": 25
         },
         "grass_transition_top": {
             "Top": 140,
@@ -24,7 +26,8 @@
             "Height": 40,
             "Width": 140,
             "Rotate": 180,
-            "Material": "grass_transition"
+            "Material": "grass_transition",
+            "BackgroundSize": 50
         },
         "grass_transition_bottom": {
             "Top": 410,
@@ -32,7 +35,8 @@
             "Height": 40,
             "Width": 140,
             "Rotate": 0,
-            "Material": "grass_transition"
+            "Material": "grass_transition",
+            "BackgroundSize": 50
         }
     },  
     "walls": {
@@ -41,56 +45,64 @@
             "Left": 0,
             "Height": 30,
             "Width": 800,
-            "Rotate": 0
+            "Rotate": 0,
+            "BackgroundSize": 15
         },
         "kontur_right": {
             "Top": 0,
             "Left": 800,
             "Height": 600,
             "Width": 30,
-            "Rotate": 0
+            "Rotate": 0,
+            "BackgroundSize": 15
         },
         "kontur_bottom": {
             "Top": 570,
             "Left": 0,
             "Height": 30,
             "Width": 800,
-            "Rotate": 0
+            "Rotate": 0,
+            "BackgroundSize": 15
         },
         "kontur_left": {
             "Top": 0,
             "Left": 0,
             "Height": 600,
             "Width": 30,
-            "Rotate": 0
+            "Rotate": 0,
+            "BackgroundSize": 15
         },
         "inner_top": {
             "Top": 140,
             "Left": 150,
             "Height": 30,
             "Width": 360,
-            "Rotate": 0
+            "Rotate": 0,
+            "BackgroundSize": 15
         },
         "inner_right": {
             "Top": 140,
             "Left": 650,
             "Height": 280,
             "Width": 30,
-            "Rotate": 0
+            "Rotate": 0,
+            "BackgroundSize": 15
         },
         "inner_bottom": {
             "Top": 420,
             "Left": 320,
             "Height": 30,
             "Width": 360,
-            "Rotate": 0
+            "Rotate": 0,
+            "BackgroundSize": 15
         },
         "inner_left": {
             "Top": 170,
             "Left": 150,
             "Height": 280,
             "Width": 30,
-            "Rotate": 0
+            "Rotate": 0,
+            "BackgroundSize": 15
         }
     },
     "spawnPoints": {

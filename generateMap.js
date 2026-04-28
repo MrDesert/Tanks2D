@@ -4,21 +4,13 @@ const fs = require('fs');
 const path = require('path');
 
 const TEXTURES = {
-    grass: 'img/grass.png',
-    grass_transition: 'img/grass_transition.png',
-    stone_path: 'img/stone_path.png',
-    brick: 'img/brick.png'
-};
-
-const WALL_SHADOW = {
-    color: 'rgba(0, 0, 0, 0.5)',
-    blur: 5,
-    offsetX: 3,
-    offsetY: 3
+    grass: 'public/img/grass.png',
+    grass_transition: 'public/img/grass_transition.png',
+    stone_path: 'public/img/stone_path.png',
+    brick: 'public/img/brick.png'
 };
 
 async function generateMap(mapData, options = {}) {
-    // Берём размеры из JSON
     const mapWidth = mapData.width;
     const mapHeight = mapData.height;
     
@@ -34,8 +26,9 @@ async function generateMap(mapData, options = {}) {
     for (const [name, texturePath] of Object.entries(TEXTURES)) {
         try {
             textures[name] = await loadImage(path.resolve(texturePath));
+            console.log(`Загружена текстура: ${name}`);
         } catch (err) {
-            console.warn(`Не удалось загрузить текстуру ${name}`);
+            console.warn(`Не удалось загрузить текстуру ${name}:`, err.message);
             textures[name] = null;
         }
     }
@@ -45,40 +38,56 @@ async function generateMap(mapData, options = {}) {
         for (const key in mapData.floors) {
             const floor = mapData.floors[key];
             const texture = textures[floor.Material];
+            const bgSize = floor.BackgroundSize || 50; // дефолт 50px
             
             if (texture) {
+                // 👇 ВОТ ЭТОТ КОД ВСТАВИТЬ СЮДА
+                ctx.save();
+                ctx.translate(floor.Left, floor.Top);
+                
                 const pattern = ctx.createPattern(texture, 'repeat');
                 ctx.fillStyle = pattern;
+                
+                const scale = bgSize / texture.width;
+                ctx.scale(scale, scale);
+                ctx.fillRect(0, 0, floor.Width / scale, floor.Height / scale);
+                
+                ctx.restore();
+                // 👆 КОНЕЦ ВСТАВКИ
             } else {
+                // Fallback цвет
                 ctx.fillStyle = '#4a7c3f';
+                ctx.fillRect(floor.Left, floor.Top, floor.Width, floor.Height);
             }
-            
-            ctx.fillRect(floor.Left, floor.Top, floor.Width, floor.Height);
         }
     }
     
-    // Рисуем стены с тенями
+    // Рисуем стены
     if (mapData.walls) {
-        ctx.shadowColor = WALL_SHADOW.color;
-        ctx.shadowBlur = WALL_SHADOW.blur;
-        ctx.shadowOffsetX = WALL_SHADOW.offsetX;
-        ctx.shadowOffsetY = WALL_SHADOW.offsetY;
-        
         for (const key in mapData.walls) {
             const wall = mapData.walls[key];
             const texture = textures.brick;
+            const bgSize = wall.BackgroundSize || 15; // дефолт 15px для стен
             
             if (texture) {
+                // 👇 И ДЛЯ СТЕН ТОЖЕ САМОЕ
+                ctx.save();
+                ctx.translate(wall.Left, wall.Top);
+                
                 const pattern = ctx.createPattern(texture, 'repeat');
                 ctx.fillStyle = pattern;
+                
+                const scale = bgSize / texture.width;
+                ctx.scale(scale, scale);
+                ctx.fillRect(0, 0, wall.Width / scale, wall.Height / scale);
+                
+                ctx.restore();
+                // 👆
             } else {
                 ctx.fillStyle = '#555555';
+                ctx.fillRect(wall.Left, wall.Top, wall.Width, wall.Height);
             }
-            
-            ctx.fillRect(wall.Left, wall.Top, wall.Width, wall.Height);
         }
-        
-        ctx.shadowColor = 'transparent';
     }
     
     const buffer = canvas.toBuffer('image/png');
