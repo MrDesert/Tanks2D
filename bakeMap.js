@@ -53,10 +53,10 @@ async function buildAndBakeMap(mapData) {
     await new Promise(resolve => setTimeout(resolve, 100));
     
     // 3. Запекаем через DOM (getComputedStyle)
-    await bakeMapFromDOM();
+    await bakeAndReplaceMap();
 }
 
-async function bakeMapFromDOM() {
+async function bakeAndReplaceMap() {
     const mapContainer = document.getElementById("mapBackground");
     if (!mapContainer) return;
     
@@ -90,6 +90,11 @@ async function bakeMapFromDOM() {
                 img.onload = () => {
                     ctx.save();
                     
+                            const cssFilter = getComputedStyle(el).filter;
+if (cssFilter && cssFilter !== 'none') {
+    ctx.filter = cssFilter;
+}
+
                     // Поворот из CSS
                     const transform = getComputedStyle(el).transform;
                     if (transform !== 'none') {
@@ -138,8 +143,16 @@ async function bakeMapFromDOM() {
     finalImg.style.imageRendering = 'pixelated';
     // finalImg.style.scale = '2';
     
-    mapContainer.innerHTML = '';
-    mapContainer.appendChild(finalImg);
+const mapImageSrc = canvas.toDataURL('image/png')
+
+    mapContainer.style.backgroundImage = `url(${mapImageSrc})`;
+    mapContainer.style.backgroundSize = "cover";
+    mapContainer.style.backgroundRepeat = 'no-repeat';
+    mapContainer.style.backgroundPosition = '0 0';
+
+    // const elements = mapContainer.querySelectorAll('.grass, .cement, .stone_path, grass_transition');
+    elements.forEach(el => el.remove())
+    // mapContainer.appendChild(finalImg);
     
-    console.log('Карта запечена из DOM');
+    // console.log('Карта запечена из DOM');
 }

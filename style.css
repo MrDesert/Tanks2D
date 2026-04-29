@@ -173,6 +173,7 @@ footer {
     background: url(img/brick.png);
     background-size: 15px;
     background-repeat: repeat;
+    filter: brightness(0);
     /* filter: drop-shadow(2px 2px 2px rgba(0,0,0,0.6))
         drop-shadow(2px -2px 2px rgba(0,0,0,0.6))
         drop-shadow(-2px 2px 2px rgba(0,0,0,0.6)) */
@@ -193,6 +194,10 @@ footer {
     transform: translateZ(0);
     backface-visibility: hidden;
     /* contain: layout style paint; */
+}
+#mapBackground {
+    position: absolute;
+    background-size: contain;
 }
 .grass{
     position: absolute;

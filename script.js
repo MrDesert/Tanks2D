@@ -368,7 +368,7 @@ if (data.type === 'welcome') {
     // updateCamera();
     
     // // ПОТОМ запекаем
-    await window.bakeMap.bakeAndReplaceMap(data.map);
+    await bakeAndReplaceMap(data.map);
     document.getElementById("map")['append'](Object.assign(document.createElement("div"), {id: "mapBackground", style: "height: " + 600 + "px; width: " + 830 + "px; top:" + 0 + "px; left:" + 0 + "px;"}));
 
     buildAndBakeMap(data.map)
@@ -432,6 +432,7 @@ let cameraZoom = 2
     const tankHeight = 80;
     const halfTankW = tankWidth / 2;   
     const halfTankH = tankHeight / 2;
+    
     const MAP_WIDTH = 830;
     const MAP_HEIGHT = 600;
 function updateCamera() {
