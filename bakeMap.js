@@ -99,9 +99,9 @@ async function bakeMapFromDOM() {
                             const angle = Math.atan2(values[1], values[0]) * 180 / Math.PI;
                             const centerX = x + w / 2;
                             const centerY = y + h / 2;
-                            // ctx.translate(centerX, centerY);
+                            ctx.translate(centerX, centerY);
                             ctx.rotate(angle * Math.PI / 180);
-                            // ctx.translate(-centerX, -centerY);
+                            ctx.translate(-centerX, -centerY);
                         }
                     }
                     
